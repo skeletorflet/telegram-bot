@@ -1,0 +1,1 @@
+{"sampler_name": "LCM", "steps": 6, "cfg_scale": 1.5, "aspect_ratio": "1:1", "base_size": 512, "n_iter": 1, "pre_mode": "random", "pre_value": "", "post_mode": "none", "post_value": "", "loras": ["lcmv15"], "scheduler": "karras", "pre_modifiers": []}

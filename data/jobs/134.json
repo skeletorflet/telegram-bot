@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "masterpiece, best quality, ultra-detailed, masterpiece, best quality, anime style, monkey penis, looking at grass, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 4,
+  "cfg_scale": 2.0,
+  "sampler_name": "LCM",
+  "scheduler": "Automatic",
+  "seed": 3599300297,
+  "file_id": "BQACAgEAAxkDAAOGaR4EZ2vjoIVYdYdYR9JxPCjX0eoAAsoMAAKGavBEIF-wgnCt5YE2BA",
+  "message_id": 134,
+  "timestamp": 1763574887.6145701
+}

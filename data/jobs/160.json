@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "sky and mountain, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 6,
+  "cfg_scale": 2.0,
+  "sampler_name": "LCM",
+  "scheduler": "karras",
+  "seed": 388862744,
+  "file_id": "BQACAgEAAxkDAAOgaR4ahNzOxdkr4CsVhto_RpkNncEAAtoMAAKGavBEpGXtPK2Dixg2BA",
+  "message_id": 160,
+  "timestamp": 1763580548.5799773
+}

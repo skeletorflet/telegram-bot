@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "best quality, 4k, uhd, masterpiece, best quality, anime style, beautiful flower, looking at grass, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 4,
+  "cfg_scale": 2.0,
+  "sampler_name": "LCM",
+  "scheduler": "karras",
+  "seed": 3643385793,
+  "file_id": "BQACAgEAAxkDAAOLaR4UYNbtYA83J7XfrwsqqYF_YdcAAtIMAAKGavBEP527t1__DZ02BA",
+  "message_id": 139,
+  "timestamp": 1763578976.9788754
+}

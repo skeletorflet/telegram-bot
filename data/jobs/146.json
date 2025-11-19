@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "masterpiece, best quality, anime style, cat, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 4,
+  "cfg_scale": 2.0,
+  "sampler_name": "LCM",
+  "scheduler": "karras",
+  "seed": 2311049205,
+  "file_id": "BQACAgEAAxkDAAOSaR4UticUvXU7b2ZHFSEfBSbaXZ0AAtMMAAKGavBEkhbhN7J3iOQ2BA",
+  "message_id": 146,
+  "timestamp": 1763579063.3713622
+}

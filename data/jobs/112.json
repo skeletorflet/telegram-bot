@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "cinematic lighting, dramatic shadows, masterpiece, best quality, anime style, Perro, looking at grass, <lora:lcmv15:1>",
+  "width": 704,
+  "height": 512,
+  "steps": 4,
+  "cfg_scale": 1.0,
+  "sampler_name": "LCM",
+  "scheduler": "Automatic",
+  "seed": 3216895434,
+  "file_id": "BQACAgEAAxkDAANwaR3nzxxnM9xHwvYiOxclSOaHkyQAAsIMAAKGavBEX3qID2OWL5g2BA",
+  "message_id": 112,
+  "timestamp": 1763567567.4548373
+}
