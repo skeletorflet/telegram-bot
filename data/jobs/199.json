@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "mountain forest, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 4,
+  "cfg_scale": 1.5,
+  "sampler_name": "LCM",
+  "scheduler": "karras",
+  "seed": 4131175761,
+  "file_id": "BQACAgEAAxkDAAPHaR41HIEKO2DM9Odmi7MqqbcI1GYAAusMAAKGavBEQrhDwxJyNHs2BA",
+  "message_id": 199,
+  "timestamp": 1763587356.9897594
+}
