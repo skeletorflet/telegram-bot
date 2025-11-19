@@ -11,11 +11,12 @@ from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMark
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 from jobqueue.jobs import JobQueue, GenJob
 import re
-from services.a1111 import a1111_extra_single_image
+from services.a1111 import a1111_extra_single_image, get_current_model
 from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
 from utils.prompt_generator import prompt_generator
 from utils.process_manager import process_manager
 from storage.jobs import save_job, get_job, delete_job
+from pressets.pressets import Preset, get_preset_for_model
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -296,18 +297,23 @@ def main_menu_keyboard(s: dict) -> InlineKeyboardMarkup:
 async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
     s = load_user_settings(user_id)
+    model_name = await get_current_model()
+    preset = get_preset_for_model(model_name)
     await update.message.reply_text(settings_summary(s), reply_markup=main_menu_keyboard(s))
 
-def submenu_keyboard_static(kind: str) -> InlineKeyboardMarkup:
+def submenu_keyboard_static(kind: str, preset: Preset) -> InlineKeyboardMarkup:
     rows = []
     if kind == "aspect":
         rows = [[InlineKeyboardButton(r, callback_data=f"set:aspect:{r}")] for r in ASPECT_CHOICES]
     elif kind == "base":
-        rows = [[InlineKeyboardButton(str(b), callback_data=f"set:base:{b}")] for b in BASE_CHOICES]
+        recommended = preset.resolutions if preset else []
+        rows = [[InlineKeyboardButton(f"{str(b)} {'👌' if b in recommended else ''}".strip(), callback_data=f"set:base:{b}")] for b in BASE_CHOICES]
     elif kind == "steps":
-        rows = [[InlineKeyboardButton(str(v), callback_data=f"set:steps:{v}")] for v in STEPS_CHOICES]
+        recommended = preset.steps if preset else []
+        rows = [[InlineKeyboardButton(f"{str(v)} {'👌' if v in recommended else ''}".strip(), callback_data=f"set:steps:{v}")] for v in STEPS_CHOICES]
     elif kind == "cfg":
-        rows = [[InlineKeyboardButton(str(v), callback_data=f"set:cfg:{v}")] for v in CFG_CHOICES]
+        recommended = preset.cfg if preset else []
+        rows = [[InlineKeyboardButton(f"{str(v)} {'👌' if v in recommended else ''}".strip(), callback_data=f"set:cfg:{v}")] for v in CFG_CHOICES]
     elif kind == "niter":
         rows = [[InlineKeyboardButton(str(v), callback_data=f"set:niter:{v}")] for v in range(1, 9)]
     rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
@@ -338,7 +344,7 @@ def modifiers_page_keyboard(kind: str, modifiers: list[str], selected: set[str],
     rows = []
     for name in items:
         mark = "✅" if name in selected else "⛔️"
-        rows.append([InlineKeyboardButton(f"{mark} {name}", callback_data=f"mod:{kind}:toggle:{name}:{page}")])
+        rows.append([InlineKeyboardButton(f"{mark} {name}".strip(), callback_data=f"mod:{kind}:toggle:{name}:{page}")])
     
     nav = []
     if start > 0:
@@ -357,6 +363,10 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     q = update.callback_query
     data = q.data
     user_id = update.effective_user.id
+
+    # Obtener el preset para el modelo actual
+    model_name = await get_current_model()
+    preset = get_preset_for_model(model_name)
 
     submenu_texts = {
         "aspect": "📐 Elige la proporción de la imagen (ancho:alto).",
@@ -452,7 +462,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             if kind == "sampler":
                 try:
                     samplers = await fetch_samplers()
-                    rows = [[InlineKeyboardButton(v, callback_data=f"set:sampler:{v}")] for v in samplers]
+                    recommended = [r.lower() for r in (preset.samplers if preset else [])]
+                    rows = [[InlineKeyboardButton(f"{v} {'👌' if v.lower() in recommended else ''}".strip(), callback_data=f"set:sampler:{v}")] for v in samplers]
                     rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
                     kb = InlineKeyboardMarkup(rows)
                 except Exception as e:
@@ -461,7 +472,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             elif kind == "scheduler":
                 sched = await fetch_schedulers()
                 items = sched or [{"name": "none", "label": "none"}]
-                rows = [[InlineKeyboardButton(it["label"], callback_data=f"set:scheduler:{it['name']}")] for it in items]
+                recommended = [r.lower() for r in (preset.schedulers if preset else [])]
+                rows = [[InlineKeyboardButton(f"{it['label']} {'👌' if it['name'].lower() in recommended else ''}".strip(), callback_data=f"set:scheduler:{it['name']}")] for it in items]
                 rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
                 kb = InlineKeyboardMarkup(rows)
             elif kind == "loras":
@@ -481,7 +493,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 await q.answer()
                 return
             else:
-                kb = submenu_keyboard_static(kind)
+                kb = submenu_keyboard_static(kind, preset)
             
             await q.edit_message_text(text, reply_markup=kb)
             await q.answer()
@@ -549,7 +561,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             save_user_settings(user_id, s)
             names = await fetch_loras()
             kb = loras_page_keyboard(names, cur, page)
-            await q.edit_message_text(f"Loras ({len(names)})", reply_markup=kb)
+            await q.edit_message_text(submenu_texts["loras"], reply_markup=kb)
             await q.answer(("Lora + " if added else "Lora - ") + _truncate(name) + f" (total {len(cur)})")
             return
         if action == "page":
