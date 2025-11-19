@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "dog eating meat, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 6,
+  "cfg_scale": 1.5,
+  "sampler_name": "LCM",
+  "scheduler": "karras",
+  "seed": 2403263728,
+  "file_id": "BQACAgEAAxkDAAO3aR4v4VYl1mjp1S-VVFYp1xVReTIAAuQMAAKGavBEDBVbTCEGQSQ2BA",
+  "message_id": 183,
+  "timestamp": 1763586018.451275
+}

@@ -568,7 +568,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             page = int(parts[2])
             names = await fetch_loras()
             kb = loras_page_keyboard(names, set(s.get("loras", [])), page)
-            await q.edit_message_text(f"Loras ({len(names)})", reply_markup=kb)
+            await q.edit_message_text(submenu_texts["loras"], reply_markup=kb)
             await q.answer()
             return
     if data.startswith("edit:"):

@@ -110,8 +110,7 @@ class JobQueue:
                             f"• {FormatText.bold('Scheduler:')} {FormatText.code(params.get('scheduler', scheduler))}\n"
                             f"• {FormatText.bold('CFG:')} {FormatText.code(str(params.get('cfg_scale', cfg)))}\n"
                             f"• {FormatText.bold('Seed:')} {FormatText.code(str(seed))}\n"
-                            f"• {FormatText.bold('Tamaño:')} {FormatText.code(f'{params.get("width", w)}x{params.get("height", h)}')}\n\n"
-                            f"{FormatText.italic('Usa los botones debajo para más acciones...')}"
+                            f"• {FormatText.bold('Tamaño:')} {FormatText.code(f'{params.get("width", w)}x{params.get("height", h)}')}"
                         )
                         payload = {
                             "prompt": job.prompt,
