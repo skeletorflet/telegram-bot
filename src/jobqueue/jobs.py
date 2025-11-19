@@ -24,11 +24,12 @@ def ratio_to_dims(ratio: str, base: int) -> tuple[int, int]:
     return width, height
 
 class GenJob:
-    def __init__(self, user_id: int, chat_id: int, prompt: str, status_message_id: int, overrides: Optional[dict] = None, hr_options: Optional[dict] = None):
+    def __init__(self, user_id: int, chat_id: int, prompt: str, status_message_id: int, user_name: str, overrides: Optional[dict] = None, hr_options: Optional[dict] = None):
         self.user_id = user_id
         self.chat_id = chat_id
         self.prompt = prompt
         self.status_message_id = status_message_id
+        self.user_name = user_name
         self.overrides = overrides
         self.hr_options = hr_options
 
@@ -110,7 +111,8 @@ class JobQueue:
                             f"• {FormatText.bold('Scheduler:')} {FormatText.code(params.get('scheduler', scheduler))}\n"
                             f"• {FormatText.bold('CFG:')} {FormatText.code(str(params.get('cfg_scale', cfg)))}\n"
                             f"• {FormatText.bold('Seed:')} {FormatText.code(str(seed))}\n"
-                            f"• {FormatText.bold('Tamaño:')} {FormatText.code(f'{params.get("width", w)}x{params.get("height", h)}')}"
+                            f"• {FormatText.bold('Tamaño:')} {FormatText.code(f'{params.get("width", w)}x{params.get("height", h)}')}\n\n"
+                            f"{FormatText.bold(FormatText.emoji('👤 Autor:', ''))} {FormatText.code(job.user_name)}"
                         )
                         payload = {
                             "prompt": job.prompt,

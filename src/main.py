@@ -215,7 +215,7 @@ async def txt2img(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         )
         
         status_message = await update.message.reply_text(queue_message, parse_mode="HTML")
-        await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt, status_message_id=status_message.message_id))
+        await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt, status_message_id=status_message.message_id, user_name=update.effective_user.first_name))
     except Exception as e:
         error_msg = format_error_message(str(e))
         err_msg = await update.message.reply_text(
@@ -758,7 +758,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 f"{FormatText.italic('Generando con configuración idéntica pero seed diferente...')}"
             )
             status_message = await update.effective_chat.send_message(repeat_message, parse_mode="HTML")
-            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, status_message_id=status_message.message_id))
+            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, status_message_id=status_message.message_id, user_name=update.effective_user.first_name))
             return
         if action == "upscale":
             logging.info(f"Ejecutando UPSCALE con HR")
