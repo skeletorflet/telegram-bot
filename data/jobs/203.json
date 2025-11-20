@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "cat, <lora:lcmv15:1>",
+  "width": 512,
+  "height": 512,
+  "steps": 4,
+  "cfg_scale": 1.5,
+  "sampler_name": "LCM",
+  "scheduler": "karras",
+  "seed": 3415206196,
+  "file_id": "BQACAgEAAxkDAAPLaR5JTSowzxUILfTPqckIzYKEl8YAAvAMAAKGavBECZHEsyO_AAEQNgQ",
+  "message_id": 203,
+  "timestamp": 1763592526.2448535
+}

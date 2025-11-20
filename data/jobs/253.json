@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "ultra-detailed, intricate details, rei ayanami, cute, 1girl, sexy, studio lighting, softbox",
+  "width": 1024,
+  "height": 1856,
+  "steps": 25,
+  "cfg_scale": 4.0,
+  "sampler_name": "Euler a",
+  "scheduler": "normal",
+  "seed": 2509007375,
+  "file_id": "BQACAgEAAxkDAAP9aR5Rt2ApXdEN9HXuys7iCJI_dFEAAvsMAAKGavBEpQLgVP30lWA2BA",
+  "message_id": 253,
+  "timestamp": 1763594679.8750145
+}

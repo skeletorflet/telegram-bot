@@ -33,7 +33,7 @@ def log_callback_payload(payload: dict):
     except Exception as e:
         logging.error(f"Error guardando log de callback: {e}")
 
-A1111_URL = os.environ.get("A1111_URL", "http://127.0.0.1:7860")
+from config import A1111_URL
 BOT_TOKEN_DEFAULT = os.environ.get("BOT_TOKEN", "7126310269:AAGiMx_x9jZzOpMWzoKFYfV82-YSx2oG44w")
 
 USER_DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "users"
@@ -193,6 +193,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def txt2img(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
     settings = load_user_settings(user_id)
+
+    # Validate and clean selected LoRAs
+    try:
+        available_loras = await fetch_loras()
+        user_loras = settings.get("loras", [])
+        valid_loras = [lora for lora in user_loras if lora in available_loras]
+        
+        if len(valid_loras) < len(user_loras):
+            settings["loras"] = valid_loras
+            save_user_settings(user_id, settings)
+            logging.info(f"Removed invalid LoRAs for user {user_id}. Kept: {valid_loras}")
+
+    except Exception as e:
+        logging.error(f"Failed to fetch or validate LoRAs: {e}")
+
     prompt_raw = " ".join(context.args).strip() if getattr(context, "args", None) else (update.message.text if update.message else "")
     prompt = compose_prompt(settings, prompt_raw)
     if not prompt:
@@ -267,6 +282,19 @@ def settings_summary(s: dict) -> str:
 def _truncate(text: str, limit: int = 60) -> str:
     return text if len(text) <= limit else text[:limit] + "…"
 
+def are_settings_compliant(settings: dict, preset: Preset) -> bool:
+    if settings.get("steps") not in preset.steps:
+        return False
+    if settings.get("cfg_scale") not in preset.cfg:
+        return False
+    if settings.get("sampler_name") not in preset.samplers:
+        return False
+    if settings.get("scheduler") not in preset.schedulers:
+        return False
+    if settings.get("base_size") not in preset.resolutions:
+        return False
+    return True
+
 def _tip_for_set(key: str, s: dict) -> str:
     if key == "aspect" or key == "base":
         w, h = ratio_to_dims(s.get("aspect_ratio", "1:1"), s.get("base_size", 512))
@@ -283,13 +311,15 @@ def _tip_for_set(key: str, s: dict) -> str:
         return f"Images {s.get('n_iter')}"
     return "Guardado"
 
-def main_menu_keyboard(s: dict) -> InlineKeyboardMarkup:
+def main_menu_keyboard(s: dict, is_compliant: bool) -> InlineKeyboardMarkup:
+    icon = "✅" if is_compliant else "🔴"
     kb = [
         [InlineKeyboardButton("📐 Aspect", callback_data="menu:aspect"), InlineKeyboardButton("📏 Base", callback_data="menu:base")],
         [InlineKeyboardButton("⚡ Steps", callback_data="menu:steps"), InlineKeyboardButton("🎛️ CFG", callback_data="menu:cfg")],
         [InlineKeyboardButton("🎨 Sampler", callback_data="menu:sampler"), InlineKeyboardButton("⏰ Scheduler", callback_data="menu:scheduler")],
         [InlineKeyboardButton("🔢 Imagenes", callback_data="menu:niter"), InlineKeyboardButton("🎲 Pre", callback_data="menu:pre")],
         [InlineKeyboardButton("✨ Post", callback_data="menu:post"), InlineKeyboardButton("🎭 Loras", callback_data="menu:loras:0")],
+        [InlineKeyboardButton(f"{icon} Auto Configurar", callback_data="menu:autoconfig")],
         [InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")],
     ]
     return InlineKeyboardMarkup(kb)
@@ -299,7 +329,8 @@ async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     s = load_user_settings(user_id)
     model_name = await get_current_model()
     preset = get_preset_for_model(model_name)
-    await update.message.reply_text(settings_summary(s), reply_markup=main_menu_keyboard(s))
+    is_compliant = are_settings_compliant(s, preset)
+    await update.message.reply_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
 
 def submenu_keyboard_static(kind: str, preset: Preset) -> InlineKeyboardMarkup:
     rows = []
@@ -443,8 +474,35 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     if data.startswith("menu:"):
         parts = data.split(":")
         kind = parts[1]
+        if kind == "autoconfig":
+            s["steps"] = random.choice(preset.steps)
+            s["cfg_scale"] = random.choice(preset.cfg)
+            s["sampler_name"] = random.choice(preset.samplers)
+            s["scheduler"] = random.choice(preset.schedulers)
+            
+            base_size = random.choice(preset.resolutions)
+            s["base_size"] = base_size
+            
+            # For aspect ratio, let's try to find a suitable one or default to 1:1
+            if base_size in [512, 768, 1024]:
+                s["aspect_ratio"] = "1:1"
+            else:
+                # A simple logic to find a suitable aspect ratio, can be improved
+                s["aspect_ratio"] = random.choice(["1:1", "4:3", "3:4", "16:9", "9:16"])
+
+            save_user_settings(user_id, s)
+            
+            await q.answer("✅ Configuración automática aplicada")
+            
+            # Update the message with new settings
+            text = settings_summary(s)
+            # After autoconfig, settings are compliant
+            kb = main_menu_keyboard(s, is_compliant=True)
+            await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
+            return
         if kind == "main":
-            await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s))
+            is_compliant = are_settings_compliant(s, preset)
+            await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
             await q.answer()
             return
 
@@ -523,7 +581,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             if val == "none":
                 s["post_value"] = ""
         save_user_settings(user_id, s)
-        await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s))
+        is_compliant = are_settings_compliant(s, preset)
+        await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
         
         # Enhanced settings update message with emojis
         setting_emoji = {
@@ -800,7 +859,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 f"{FormatText.italic('Generando versión de alta resolución...')}"
             )
             status_message = await update.effective_chat.send_message(upscale_message, parse_mode="HTML")
-            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, hr_options=hr, status_message_id=status_message.message_id))
+            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, hr_options=hr, status_message_id=status_message.message_id, user_name=update.effective_user.first_name))
             return
         if action == "newseed":
             logging.info(f"Ejecutando NEWSEED con seed aleatorio")
@@ -816,8 +875,6 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 "n_iter": int(load_user_settings(user_id).get("n_iter", 1)),
             }
             logging.info(f"newseed action overrides: {overrides}")
-            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides))
-            
             # Enhanced message with emojis
             seed_message = (
                 f"{FormatText.bold(FormatText.emoji('🎲 Nueva generación con seed aleatorio', '✨'))}\n"
@@ -825,7 +882,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 f"{FormatText.bold('Imágenes:')} {FormatText.code(str(overrides['n_iter']))}\n"
                 f"{FormatText.italic('Se usará un seed diferente para variar el resultado...')}"
             )
-            await update.effective_chat.send_message(seed_message, parse_mode="HTML")
+            status_message = await update.effective_chat.send_message(seed_message, parse_mode="HTML")
+            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, status_message_id=status_message.message_id, user_name=update.effective_user.first_name))
             await q.answer("Nuevo seed en cola")
             return
         if action == "final":

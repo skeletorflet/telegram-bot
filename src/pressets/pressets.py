@@ -40,11 +40,22 @@ DREAMSHAPER_PRESET = Preset(
     resolutions=[512, 768, 640]  # Simplificado
 )
 
+# Preset para el modelo Janku
+JANKU_PRESET = Preset(
+    model_name="janku",
+    steps=[25, 30],
+    cfg=[3, 5],
+    samplers=["Euler", "Euler a"],
+    schedulers=["Normal", "Simple"],
+    resolutions=[768, 1024]  # Simplificado
+)
+
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
 # Ejemplo: "dreamshaper" coincidirá con "dreamshaper_8_93211.safetensors"
 PRESETS = {
     "dreamshaper": DREAMSHAPER_PRESET,
+    "janku": JANKU_PRESET,
 }
 
 def get_preset_for_model(model_name: str) -> Preset:

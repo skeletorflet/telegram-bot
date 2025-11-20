@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "vsy, <lora:lcmv15:1>",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 4.0,
+  "sampler_name": "Euler a",
+  "scheduler": "normal",
+  "seed": 3141331033,
+  "file_id": "BQACAgEAAxkDAAPWaR5NVVqLWdSgYArxH_rK_aH8djAAAvMMAAKGavBEViacVki9AVA2BA",
+  "message_id": 214,
+  "timestamp": 1763593558.4203734
+}

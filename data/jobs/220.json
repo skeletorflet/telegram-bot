@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "1girl, ayanami rei, looking at moon, EVANGLION anime, <lora:lcmv15:1>",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 4.0,
+  "sampler_name": "Euler a",
+  "scheduler": "normal",
+  "seed": 3116908613,
+  "file_id": "BQACAgEAAxkDAAPcaR5Npek3xpissdnugCe8yvYCTJsAAvUMAAKGavBEcn05zCqNsGQ2BA",
+  "message_id": 220,
+  "timestamp": 1763593638.268672
+}

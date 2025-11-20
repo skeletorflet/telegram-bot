@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "Makima from Chainsaw Man, intense yandere stare, faint controlled smile, red hair with sidelocks, white dress shirt, black necktie, grey jacket, depicted in a low-angle shot with a slight torso twist, one hand in her jacket pocket and the other extended forward as if enforcing an unavoidable contract, inside an endless collapsing government corridor with papers drifting in slow motion and harsh white light slicing through broken windows, her shadow behind her warped into an ominous form, jacket fluttering from the airflow, cinematic cold-toned lighting with metallic highlights, full dominance directed at the viewer.",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 5.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 4202755743,
+  "file_id": "BQACAgEAAxkDAAIBE2keZn5vo5Q75UGfFIRJ-xMmW0ebAAIGDQAChmrwRNXTz06DaMpsNgQ",
+  "message_id": 275,
+  "timestamp": 1763599999.289744
+}

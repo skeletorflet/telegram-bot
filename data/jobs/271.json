@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "1girl, makima \\(chainsaw man\\), yandere stare, smile, dress shirt, grey jacket, red hair, sidelocks, black necktie, looking at viewer, jacket, long sleeves, upper body, suit, necktie, shirt, simple background, medium hair, collared shirt, ringed eyes, shaded face, braided ponytail, head tilt, braid, white background, formal, yellow eyes, holding own arm, wing collar, closed mouth, solo",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 5.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 1117382923,
+  "file_id": "BQACAgEAAxkDAAIBD2keZgUHd05s25_wR_9YraDcnst1AAIEDQAChmrwRNy2_zcrXd9eNgQ",
+  "message_id": 271,
+  "timestamp": 1763599878.001466
+}

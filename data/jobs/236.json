@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "1girl, moon",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 4.0,
+  "sampler_name": "Euler a",
+  "scheduler": "normal",
+  "seed": 1469064923,
+  "file_id": "BQACAgEAAxkDAAPsaR5QcPvuLT1VIQSQfxZ-AAHl1Uu-AAL4DAAChmrwRMCYwA9mflNFNgQ",
+  "message_id": 236,
+  "timestamp": 1763594353.3493602
+}

@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "cat, <lora:lcmv15:1>",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 4.0,
+  "sampler_name": "Euler a",
+  "scheduler": "normal",
+  "seed": 496781814,
+  "file_id": "BQACAgEAAxkDAAPhaR5OOsndIIPkVHxCkFGey6UmdzQAAvYMAAKGavBELgZpzNlGPHU2BA",
+  "message_id": 225,
+  "timestamp": 1763593787.7307947
+}

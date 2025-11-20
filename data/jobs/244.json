@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "ultra-detailed, intricate details, 1girl kicking 1boy, studio lighting, softbox",
+  "width": 1024,
+  "height": 1856,
+  "steps": 25,
+  "cfg_scale": 4.0,
+  "sampler_name": "Euler a",
+  "scheduler": "normal",
+  "seed": 2238852268,
+  "file_id": "BQACAgEAAxkDAAP0aR5RXvhcD1fpbQNRu70XJJxOT8oAAvoMAAKGavBEfiN25NwQgns2BA",
+  "message_id": 244,
+  "timestamp": 1763594591.4041743
+}

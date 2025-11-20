@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
-A1111_URL = os.environ.get("A1111_URL", "http://127.0.0.1:7860")
+from config import A1111_URL
 LOG_DIR = Path(__file__).resolve().parent.parent / "data" / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -33,7 +33,8 @@ def _log_api_call(phase: str, payload: dict | None = None, response: dict | None
 async def a1111_get_json(path: str):
     url = f"{A1111_URL}{path}"
     logging.info(f"Getting JSON from: {url}")
-    async with aiohttp.ClientSession() as session:
+    headers = {"X-Pinggy-No-Screen": "true"}
+    async with aiohttp.ClientSession(headers=headers) as session:
         async with session.get(url) as resp:
             return await resp.json()
 
@@ -42,7 +43,8 @@ async def a1111_test_connection():
     try:
         url = f"{A1111_URL}/sdapi/v1/extra-single-image"
         logging.info(f"Testing connection to A1111 API at: {url}")
-        async with aiohttp.ClientSession() as session:
+        headers = {"X-Pinggy-No-Screen": "true"}
+        async with aiohttp.ClientSession(headers=headers) as session:
             # Test with a simple GET to see if endpoint exists
             async with session.get(url) as resp:
                 logging.info(f"A1111 test response status: {resp.status}")
@@ -83,14 +85,27 @@ async def fetch_loras() -> list[str]:
 async def get_current_model() -> str | None:
     """Obtiene el nombre del checkpoint del modelo SD actual desde A1111."""
     try:
+        # First, try to get the model from the options endpoint
         options = await a1111_get_json("/sdapi/v1/options")
         model_name = options.get("sd_model_checkpoint")
         if model_name:
-            logging.info(f"Modelo actual de A1111: {model_name}")
+            logging.info(f"Modelo actual de A1111 (desde options): {model_name}")
             return model_name
         else:
-            logging.warning("No se pudo determinar el modelo actual desde /sdapi/v1/options")
+            logging.warning("No se pudo determinar el modelo actual desde /sdapi/v1/options. Intentando con /sd-models.")
+            
+            # If it fails, try to get it from the sd-models endpoint
+            models = await a1111_get_json("/sdapi/v1/sd-models")
+            if models and isinstance(models, list) and len(models) > 0:
+                first_model = models[0]
+                model_name = first_model.get("model_name")
+                if model_name:
+                    logging.info(f"Modelo actual de A1111 (desde sd-models): {model_name}")
+                    return model_name
+
+            logging.error("No se pudo determinar el modelo actual desde ninguna de las fuentes.")
             return None
+            
     except Exception as e:
         logging.error(f"Error al obtener el modelo de A1111: {e}")
         return None
@@ -129,7 +144,8 @@ async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps:
             "denoising_strength": hr_options.get("denoising_strength", 0.3),
         })
     url = f"{A1111_URL}/sdapi/v1/txt2img"
-    async with aiohttp.ClientSession() as session:
+    headers = {"X-Pinggy-No-Screen": "true"}
+    async with aiohttp.ClientSession(headers=headers) as session:
         logging.info(f"txt2img payload: {payload}")
         _log_api_call("request", payload=payload)
         async with session.post(url, json=payload) as resp:
@@ -163,7 +179,8 @@ async def a1111_extra_single_image(image_bytes: bytes, upscaler_1: str = "R-ESRG
         "image": b64,
     }
     url = f"{A1111_URL}/sdapi/v1/extra-single-image"
-    async with aiohttp.ClientSession() as session:
+    headers = {"X-Pinggy-No-Screen": "true"}
+    async with aiohttp.ClientSession(headers=headers) as session:
         logging.info(f"Llamando a extra-single-image con payload: upscaler={upscaler_1}, resize={upscaling_resize}, image_size={len(b64)} chars")
         _log_api_call("extras_request", payload=payload)
         try:
