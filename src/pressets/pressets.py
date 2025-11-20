@@ -50,12 +50,25 @@ JANKU_PRESET = Preset(
     resolutions=[768, 1024]  # Simplificado
 )
 
+# Preset para el modelo WAI Illustrious
+WAI_ILLUSTRIOUS_PRESET = Preset(
+    model_name="wai_illustrious",
+    steps=[15, 30],
+    cfg=[5, 7],
+    samplers=["Euler a"],
+    schedulers=["Normal"],
+    resolutions=[768, 1024]  # Simplificado
+)
+
+
+
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
 # Ejemplo: "dreamshaper" coincidirá con "dreamshaper_8_93211.safetensors"
 PRESETS = {
     "dreamshaper": DREAMSHAPER_PRESET,
     "janku": JANKU_PRESET,
+    "wai_illustrious": WAI_ILLUSTRIOUS_PRESET,
 }
 
 def get_preset_for_model(model_name: str) -> Preset:

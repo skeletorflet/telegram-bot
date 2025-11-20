@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "Makima from Chainsaw Man, extreme wide-angle close-up on her face with distorted perspective, yandere stare locked forward, red hair with sidelocks intact, white shirt, black necktie, grey jacket, background exploding into a psychedelic storm of neon fractals and shifting monstrous silhouettes, Pochita-like spectral creatures flickering behind her with warped jaws and glowing cores, the ground visible far below as fragmented patches of grass twist in impossible directions, space bending around her as if reality cracks under her presence, her pose unnaturally contorted yet still dominant, jacket whipping in chaotic wind, full surreal intensity aimed directly at the viewer.",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 5.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 1771495789,
+  "file_id": "BQACAgEAAxkDAAIBHGkeZ1A7c09eLykZEphPofElDWMbAAILDQAChmrwRLZp0MGsIm6ENgQ",
+  "message_id": 284,
+  "timestamp": 1763600209.0093064
+}
