@@ -52,12 +52,12 @@ JANKU_PRESET = Preset(
 
 # Preset para el modelo WAI Illustrious
 WAI_ILLUSTRIOUS_PRESET = Preset(
-    model_name="wai_illustrious",
-    steps=[15, 30],
+    model_name="waiIllustrious",
+    steps=[15, 20, 25, 30],
     cfg=[5, 7],
     samplers=["Euler a"],
     schedulers=["Normal"],
-    resolutions=[768, 1024]  # Simplificado
+    resolutions=[1024]  # Simplificado
 )
 
 
