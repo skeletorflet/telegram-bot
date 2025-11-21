@@ -363,7 +363,13 @@ def settings_summary(s: dict) -> str:
     pre_count = len(s.get("pre_modifiers", []))
     post_count = len(s.get("post_modifiers", []))
     lcount = len(s.get("loras", []))
-    return (
+    
+    # Check for preset prompts
+    preset_pre = s.get("preset_pre_prompt", "")
+    preset_post = s.get("preset_post_prompt", "")
+    preset_neg = s.get("preset_negative_prompt", "")
+    
+    summary = (
         f"🎨 Sampler: {s.get('sampler_name')}\n"
         f"⏰ Scheduler: {s.get('scheduler') or '-'}\n"
         f"⚡ Steps: {s.get('steps')}\n"
@@ -373,8 +379,14 @@ def settings_summary(s: dict) -> str:
         f"🔢 Imagenes: {s.get('n_iter')}\n"
         f"🎲 Pre: {pre_count} activados\n"
         f"✨ Post: {post_count} activados\n"
-        f"🎭 Loras: {lcount}"
+        f"🎭 Loras: {lcount}\n"
+        f"━━━━━━━━━━━━━━━━\n"
+        f"📦 Preset Prompts:\n"
+        f"  • Pre: {'✅' if preset_pre else '❌'}\n"
+        f"  • Post: {'✅' if preset_post else '❌'}\n"
+        f"  • Negative: {'✅' if preset_neg else '❌'}"
     )
+    return summary
 
 def _truncate(text: str, limit: int = 60) -> str:
     return text if len(text) <= limit else text[:limit] + "…"
@@ -599,6 +611,11 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             else:
                 # A simple logic to find a suitable aspect ratio, can be improved
                 s["aspect_ratio"] = random.choice(["1:1", "4:3", "3:4", "16:9", "9:16"])
+            
+            # Save preset prompts
+            s["preset_pre_prompt"] = preset.pre_prompt
+            s["preset_post_prompt"] = preset.post_prompt
+            s["preset_negative_prompt"] = preset.negative_prompt
 
             save_user_settings(user_id, s)
             
