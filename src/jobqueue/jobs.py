@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional
 from io import BytesIO
 from telegram import InputFile, InlineKeyboardMarkup, InlineKeyboardButton
-from services.a1111 import a1111_txt2img
+from services.a1111 import a1111_txt2img, a1111_get_progress
 from storage.users import load_user_settings
 from utils.formatting import FormatText, format_generation_complete
 import logging
@@ -42,6 +42,43 @@ class JobQueue:
     async def enqueue(self, job: GenJob):
         await self.q.put(job)
 
+    async def _progress_loop(self, job: GenJob):
+        last_progress = -1
+        while True:
+            await asyncio.sleep(1.5)
+            try:
+                prog_data = await a1111_get_progress()
+                progress = prog_data.get("progress", 0)
+                eta = prog_data.get("eta_relative", 0)
+                
+                if progress > 0 and (progress - last_progress > 0.05 or int(progress * 20) != int(last_progress * 20)):
+                    last_progress = progress
+                    bar_len = 10
+                    filled = int(progress * bar_len)
+                    bar = "▓" * filled + "░" * (bar_len - filled)
+                    pct = int(progress * 100)
+                    
+                    msg = (
+                        f"{FormatText.bold(FormatText.emoji('🎨 Generando...', '⏳'))}\n"
+                        f"{FormatText.code(f'[{bar}] {pct}%')}\n"
+                        f"{FormatText.italic(f'ETA: {int(eta)}s')}"
+                    )
+                    
+                    try:
+                        await self.bot.edit_message_text(
+                            chat_id=job.chat_id,
+                            message_id=job.status_message_id,
+                            text=msg,
+                            parse_mode="HTML"
+                        )
+                    except Exception as e:
+                        if "not modified" not in str(e).lower():
+                            logging.warning(f"Failed to update progress: {e}")
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logging.error(f"Error in progress loop: {e}")
+
     async def _worker(self):
         while True:
             job: GenJob = await self.q.get()
@@ -65,19 +102,29 @@ class JobQueue:
                     seed = int(job.overrides.get("seed", seed))
                 logging.info(f"Iniciando generación con parámetros: prompt='{job.prompt[:50]}...', width={w}, height={h}, steps={steps}, cfg={cfg}, sampler={sampler}, scheduler={scheduler}, seed={seed}, n_iter={n_images}, hr_options={job.hr_options}, alwayson_scripts={job.alwayson_scripts}")
                 
-                res = await a1111_txt2img(
-                    job.prompt,
-                    width=w,
-                    height=h,
-                    steps=steps,
-                    cfg_scale=cfg,
-                    sampler_name=sampler,
-                    n_iter=n_images,
-                    scheduler=scheduler,
-                    seed=seed,
-                    hr_options=job.hr_options,
-                    alwayson_scripts=job.alwayson_scripts,
-                )
+                # Start progress loop
+                progress_task = asyncio.create_task(self._progress_loop(job))
+                
+                try:
+                    res = await a1111_txt2img(
+                        job.prompt,
+                        width=w,
+                        height=h,
+                        steps=steps,
+                        cfg_scale=cfg,
+                        sampler_name=sampler,
+                        n_iter=n_images,
+                        scheduler=scheduler,
+                        seed=seed,
+                        hr_options=job.hr_options,
+                        alwayson_scripts=job.alwayson_scripts,
+                    )
+                finally:
+                    progress_task.cancel()
+                    try:
+                        await progress_task
+                    except asyncio.CancelledError:
+                        pass
                 logging.info(f"Generación completada. Response keys: {list(res.keys()) if res else 'None'}")
                 
                 imgs = res.get("images") or []

@@ -82,6 +82,90 @@ POST_MODIFIERS = [
     "sun rays, crepuscular rays", "glowing eyes", "smoke, atmospheric"
 ]
 
+
+import os
+import asyncio
+import logging
+import base64
+import json
+import random
+from pathlib import Path
+from io import BytesIO
+import aiohttp
+from typing import Union
+from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
+from jobqueue.jobs import JobQueue, GenJob
+import re
+from services.a1111 import a1111_extra_single_image, get_current_model, a1111_test_connection
+from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
+from utils.prompt_generator import prompt_generator
+from utils.process_manager import process_manager
+from storage.jobs import save_job, get_job, delete_job
+from pressets.pressets import Preset, get_preset_for_model
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+# Crear archivo de log para debugging de callbacks
+LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+CALLBACK_LOG_FILE = LOG_DIR / "callback_debug.jsonl"
+
+def log_callback_payload(payload: dict):
+    """Guarda payload de callback en archivo JSONL para debugging"""
+    try:
+        with open(CALLBACK_LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+    except Exception as e:
+        logging.error(f"Error guardando log de callback: {e}")
+
+from config import A1111_URL
+BOT_TOKEN_DEFAULT = os.environ.get("BOT_TOKEN", "7126310269:AAGiMx_x9jZzOpMWzoKFYfV82-YSx2oG44w")
+
+USER_DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "users"
+USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+DEFAULT_SETTINGS = {
+    "sampler_name": "LCM",
+    "scheduler": "",
+    "steps": 4,
+    "cfg_scale": 1.0,
+    "aspect_ratio": "1:1",
+    "base_size": 512,
+    "n_iter": 1,
+    "pre_modifiers": [],
+    "post_modifiers": [],
+    "loras": [],
+}
+
+JOBQ = JobQueue(concurrency=2)
+
+PRE_MODIFIERS = [
+    "masterpiece, best quality", "ultra-detailed, intricate details", "4k, 8k, uhd",
+    "photorealistic, realistic", "cinematic, movie still", "anime style, vibrant colors",
+    "concept art, digital painting", "illustration, sharp focus", "low poly, isometric",
+    "minimalist, simple background", "epic composition, dramatic", "golden hour, soft light",
+    "vivid, saturated colors", "monochrome, black and white", "surreal, dreamlike",
+    "fantasy, magical", "sci-fi, futuristic", "steampunk, mechanical details",
+    "cyberpunk, neon lights", "vintage, retro style", "watercolor painting",
+    "oil painting, classic", "sketch, charcoal drawing", "cel-shaded, cartoonish",
+    "flat design, vector art", "hdr, high dynamic range", "long exposure, motion blur",
+    "macro photography, close-up", "double exposure", "glitch effect, distorted"
+]
+
+POST_MODIFIERS = [
+    "cinematic lighting", "dramatic shadows", "volumetric lighting, god rays",
+    "studio lighting, softbox", "rim lighting, backlight", "neon glow, vibrant",
+    "underwater lighting, caustic effects", "fire and embers", "lens flare, anamorphic",
+    "bokeh, shallow depth of field", "highly detailed background", "simple background, clean",
+    "fog, mist, atmospheric", "rain, wet surface", "snow, winter scene",
+    "starry night sky", "aurora borealis", "reflections, reflective surface",
+    "dynamic angle, action shot", "fisheye lens", "vignette, dark corners",
+    "color grading, cinematic tones", "film grain, noisy", "light leaks, vintage effect",
+    "chromatic aberration", "bloom, soft glow", "particle effects, dust motes",
+    "sun rays, crepuscular rays", "glowing eyes", "smoke, atmospheric"
+]
+
 ASPECT_CHOICES = ["1:1", "4:3", "3:4", "9:16", "16:9"]
 BASE_CHOICES = [512, 640, 768, 896, 1024]
 STEPS_CHOICES = list(range(4, 51))
@@ -91,14 +175,25 @@ def ratio_to_dims(ratio: str, base: int) -> tuple[int, int]:
     w_str, h_str = ratio.split(":")
     w = int(w_str)
     h = int(h_str)
-    def round64_up(x: float) -> int:
-        return max(64, int((x + 63) // 64 * 64))
-    if w >= h:
-        height = base
-        width = round64_up(base * (w / h))
-    else:
-        width = base
-        height = round64_up(base * (h / w))
+    
+    # Calculate target area based on base size (e.g. 1024x1024)
+    target_area = base * base
+    
+    # Calculate dimensions preserving aspect ratio and approximate area
+    # w_new * h_new = target_area
+    # w_new / h_new = w / h
+    # => w_new^2 = target_area * (w / h)
+    
+    import math
+    width = int(math.sqrt(target_area * w / h))
+    height = int(math.sqrt(target_area * h / w))
+    
+    def round64(x: int) -> int:
+        return max(64, int((x + 32) // 64 * 64))
+        
+    width = round64(width)
+    height = round64(height)
+    
     return width, height
 
 def load_user_settings(user_id: int) -> dict:
@@ -896,21 +991,24 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, status_message_id=status_message.message_id, user_name=update.effective_user.first_name))
             await q.answer("Nuevo seed en cola")
             return
+
         if action == "final":
             logging.info(f"=== INICIANDO FINAL UPSCALE ===")
             logging.info(f"Ejecutando FINAL UPSCALE - data={data}, user_id={user_id}")
             
             try:
+                # Responder inmediatamente para evitar timeout
+                await q.answer("⏳ Iniciando upscale final... esto puede tardar unos segundos.")
+                
                 # Test connection to A1111 API first
                 from services.a1111 import a1111_test_connection
                 connection_ok = await a1111_test_connection()
                 if not connection_ok:
                     logging.error("No se pudo conectar a la API de A1111")
-                    await q.answer("Error: No se pudo conectar a A1111")
+                    await update.effective_chat.send_message("❌ Error: No se pudo conectar a A1111")
                     return
                 
                 logging.info("Conexión a A1111 exitosa, procediendo con FINAL UPSCALE")
-                await q.answer("⏳ Realizando upscale final... por favor espera.")
                     
                 # Si tenemos job_data con file_id, usarlo directamente
                 if job_data and 'file_id' in job_data:
@@ -922,7 +1020,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     doc = q.message.document
                     if not doc:
                         logging.warning(f"No hay documento en el mensaje actual para final upscale")
-                        await q.answer("Expirado")
+                        await update.effective_chat.send_message("❌ Error: No se encontró la imagen original.")
                         return
                     logging.info(f"Usando documento del mensaje actual: {doc.file_id}")
                     file = await context.bot.get_file(doc.file_id)
@@ -958,7 +1056,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                         
                 except Exception as e:
                     logging.error(f"Error al descargar o procesar la imagen: {e}", exc_info=True)
-                    await q.answer("Error al descargar imagen")
+                    await update.effective_chat.send_message("❌ Error al descargar la imagen para upscale.")
                     return
                 
                 logging.info(f"Llamando a a1111_extra_single_image con {len(img_bytes)} bytes")
@@ -967,7 +1065,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 # Verificar que los bytes de imagen sean válidos
                 if not img_bytes or len(img_bytes) < 100:
                     logging.error(f"Imagen descargada inválida: {len(img_bytes)} bytes")
-                    await q.answer("Error: imagen descargada inválida")
+                    await update.effective_chat.send_message("❌ Error: imagen descargada inválida.")
                     return
                 
                 # Importar la función aquí para asegurar que esté disponible
@@ -979,7 +1077,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 
                 if not out:
                     logging.error("Upscale resultó en imagen vacía")
-                    await q.answer("Error en upscale")
+                    await update.effective_chat.send_message("❌ Error: El upscale falló (imagen vacía).")
                     return
                     
                 bio = BytesIO(out); bio.seek(0)
@@ -992,7 +1090,6 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     f"{FormatText.italic('Imagen final lista para descargar...')}"
                 )
                 await update.effective_chat.send_document(InputFile(bio, filename="final_upscale.png"), caption=final_message, parse_mode="HTML")
-                await q.answer("Finalizado")
                 logging.info("=== FINAL UPSCALE COMPLETADO EXITOSAMENTE ===")
                 return
                 
@@ -1011,7 +1108,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     except Exception:
                         pass
                 
-                await q.answer(f"Error crítico en upscale: {error_details[:100]}")
+                await update.effective_chat.send_message(f"❌ Error crítico en upscale: {error_details[:100]}")
                 return
 
 async def _post_init(app):

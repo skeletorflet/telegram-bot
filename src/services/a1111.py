@@ -39,6 +39,15 @@ async def a1111_get_json(path: str):
         async with session.get(url) as resp:
             return await resp.json()
 
+async def a1111_get_progress() -> dict:
+    """Obtiene el progreso actual de la generación desde A1111."""
+    try:
+        data = await a1111_get_json("/sdapi/v1/progress")
+        return data
+    except Exception as e:
+        logging.error(f"Error al obtener progreso: {e}")
+        return {}
+
 async def a1111_test_connection():
     """Test connection to A1111 API"""
     try:

@@ -61,6 +61,16 @@ WAI_ILLUSTRIOUS_PRESET = Preset(
 )
 
 
+# Preset para el modelo Hassaku
+HASSAKU_PRESET = Preset(
+    model_name="hassaku",
+    steps=[25, 30],
+    cfg=[3, 5],
+    samplers=["Euler", "Euler a"],
+    schedulers=["Normal", "Simple"],
+    resolutions=[768, 1024]  # Simplificado
+)
+
 
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
@@ -69,6 +79,7 @@ PRESETS = {
     "dreamshaper": DREAMSHAPER_PRESET,
     "janku": JANKU_PRESET,
     "wai_illustrious": WAI_ILLUSTRIOUS_PRESET,
+    "hassaku": HASSAKU_PRESET,
 }
 
 def get_preset_for_model(model_name: str) -> Optional[Preset]:
