@@ -47,8 +47,35 @@ class JobQueue:
 
     async def _progress_loop(self, job: GenJob):
         last_progress = -1
-        no_progress_count = 0  # Track how long we've had no progress
-        has_started = False  # Track if we've seen any progress yet
+        has_started = False  # Track if we've confirmed this job is being processed
+        consecutive_progress_count = 0  # Count consecutive progress updates
+        
+        # Operation titles
+        operation_titles = {
+            "txt2img": ("🎨", "Generando Imagen"),
+            "upscale_hr": ("🔍", "Generando con Upscale HR"),
+            "repeat": ("🔄", "Repitiendo Generación"),
+            "newseed": ("🎲", "Nueva Variación")
+        }
+        emoji, title = operation_titles.get(job.operation_type, ("🎨", "Generando"))
+        
+        # Show queued message immediately on first check
+        queued_msg = (
+            f"{FormatText.bold(FormatText.emoji(f'{emoji} {title}', '⏳'))}\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            f"{FormatText.bold('📋 Estado:')} {FormatText.code('En cola...')}\n\n"
+            f"{FormatText.italic('⏰ Esperando turno para procesar...')}"
+        )
+        
+        try:
+            await self.bot.edit_message_text(
+                chat_id=job.chat_id,
+                message_id=job.status_message_id,
+                text=queued_msg,
+                parse_mode="HTML"
+            )
+        except Exception as e:
+            logging.warning(f"Failed to show initial queued status: {e}")
         
         while True:
             await asyncio.sleep(1.5)
@@ -57,42 +84,21 @@ class JobQueue:
                 progress = prog_data.get("progress", 0)
                 eta = prog_data.get("eta_relative", 0)
                 
-                # Check if this job has started processing
+                # Only consider job as "started" if we see consistent progress
+                # This prevents showing progress from other jobs in the queue
                 if progress > 0:
-                    has_started = True
-                    no_progress_count = 0
-                elif not has_started:
-                    no_progress_count += 1
+                    consecutive_progress_count += 1
+                    # Require at least 2 consecutive progress updates to confirm it's our job
+                    if consecutive_progress_count >= 2:
+                        has_started = True
+                else:
+                    consecutive_progress_count = 0
+                    # If we had started but now have no progress, keep showing as started
+                    # (this handles brief gaps in progress reporting)
                 
-                # If no progress after 3 checks (~4.5 seconds), show queued message
-                if not has_started and no_progress_count >= 3:
-                    operation_titles = {
-                        "txt2img": ("🎨", "Generando Imagen"),
-                        "upscale_hr": ("🔍", "Generando con Upscale HR"),
-                        "repeat": ("🔄", "Repitiendo Generación"),
-                        "newseed": ("🎲", "Nueva Variación")
-                    }
-                    emoji, title = operation_titles.get(job.operation_type, ("🎨", "Generando"))
-                    
-                    queued_msg = (
-                        f"{FormatText.bold(FormatText.emoji(f'{emoji} {title}', '⏳'))}\n"
-                        "━━━━━━━━━━━━━━━━━━━━\n"
-                        f"{FormatText.bold('📋 Estado:')} {FormatText.code('En cola...')}\n\n"
-                        f"{FormatText.italic('⏰ Esperando a que se procese...')}"
-                    )
-                    
-                    try:
-                        await self.bot.edit_message_text(
-                            chat_id=job.chat_id,
-                            message_id=job.status_message_id,
-                            text=queued_msg,
-                            parse_mode="HTML"
-                        )
-                    except Exception as e:
-                        if "not modified" not in str(e).lower():
-                            logging.warning(f"Failed to update queued status: {e}")
-                    
-                    # Keep checking every 3 seconds when queued
+                # If job hasn't started, keep showing queued message
+                if not has_started:
+                    # Message already shown initially, just continue waiting
                     continue
                 
                 # Only show progress if job has started and progress changed significantly
