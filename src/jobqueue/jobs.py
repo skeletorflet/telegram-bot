@@ -216,15 +216,47 @@ class JobQueue:
                 current_model = await get_current_model()
                 preset = get_preset_for_model(current_model) if current_model else None
                 
-                # Build final prompt with preset pre/post prompts
+                # Helper function to deduplicate prompt tags
+                def deduplicate_prompts(user_prompt: str, additional_prompt: str) -> str:
+                    """
+                    Remove tags from additional_prompt that already exist in user_prompt.
+                    Compares case-insensitive and handles both individual words and parenthesized groups.
+                    """
+                    if not additional_prompt:
+                        return ""
+                    
+                    # Normalize: lowercase for comparison
+                    user_lower = user_prompt.lower()
+                    
+                    # Split additional_prompt by comma and strip whitespace
+                    additional_tags = [tag.strip() for tag in additional_prompt.split(',')]
+                    
+                    # Filter out duplicates
+                    deduplicated = []
+                    for tag in additional_tags:
+                        # Check if the tag (or its content) exists in user prompt
+                        tag_lower = tag.lower()
+                        
+                        # For parenthesized tags like "(4k,8k,Ultra HD)", check the whole thing
+                        # For simple tags like "masterpiece", check if it's a substring
+                        if tag_lower not in user_lower:
+                            deduplicated.append(tag)
+                    
+                    return ", ".join(deduplicated) if deduplicated else ""
+                
+                # Build final prompt with preset pre/post prompts (deduplicated)
                 final_prompt = job.prompt
                 negative_prompt = ""
                 
                 if preset:
                     if preset.pre_prompt:
-                        final_prompt = f"{preset.pre_prompt}, {final_prompt}"
+                        deduplicated_pre = deduplicate_prompts(job.prompt, preset.pre_prompt)
+                        if deduplicated_pre:
+                            final_prompt = f"{deduplicated_pre}, {final_prompt}"
                     if preset.post_prompt:
-                        final_prompt = f"{final_prompt}, {preset.post_prompt}"
+                        deduplicated_post = deduplicate_prompts(job.prompt, preset.post_prompt)
+                        if deduplicated_post:
+                            final_prompt = f"{final_prompt}, {deduplicated_post}"
                     negative_prompt = preset.negative_prompt
                     logging.info(f"Preset '{preset.model_name}' aplicado: pre_prompt={bool(preset.pre_prompt)}, post_prompt={bool(preset.post_prompt)}, negative_prompt={bool(preset.negative_prompt)}")
                 
