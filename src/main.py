@@ -946,9 +946,11 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 "alwayson_scripts": {
                     "ADetailer": {
                         "args": [
-                            {"ad_model": "face_yolov8n.pt"},
-                            {"ad_model": "mediapipe_face_short"},
-                            {"ad_model": "mediapipe_face_mesh_eyes_only"},
+                            True,  # Enable ADetailer
+                            False, # Skip second arg (deprecated API format)
+                            {"ad_model": "face_yolov8n.pt", "ad_confidence": 0.3},
+                            {"ad_model": "mediapipe_face_short", "ad_confidence": 0.3},
+                            {"ad_model": "mediapipe_face_mesh_eyes_only", "ad_confidence": 0.3},
                         ]
                     }
                 }
