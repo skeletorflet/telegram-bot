@@ -58,11 +58,33 @@ class JobQueue:
                     bar = "▓" * filled + "░" * (bar_len - filled)
                     pct = int(progress * 100)
                     
-                    msg = (
-                        f"{FormatText.bold(FormatText.emoji('🎨 Generando...', '⏳'))}\n"
-                        f"{FormatText.code(f'[{bar}] {pct}%')}\n"
-                        f"{FormatText.italic(f'ETA: {int(eta)}s')}"
-                    )
+                    # Extract step info from state
+                    state = prog_data.get("state", {})
+                    current_step = state.get("sampling_step", 0)
+                    total_steps = state.get("sampling_steps", 0)
+                    job_no = state.get("job_no", 0)
+                    job_count = state.get("job_count", 0)
+                    
+                    # Build enhanced message
+                    prompt_preview = job.prompt[:50] + "..." if len(job.prompt) > 50 else job.prompt
+                    
+                    msg_parts = [
+                        f"{FormatText.bold(FormatText.emoji('🎨 Generando imagen', '⏳'))}",
+                        f"{FormatText.code(f'[{bar}] {pct}%')}"
+                    ]
+                    
+                    if total_steps > 0:
+                        msg_parts.append(f"{FormatText.bold('Step:')} {FormatText.code(f'{current_step}/{total_steps}')}")
+                    
+                    if job_count > 1:
+                        msg_parts.append(f"{FormatText.bold('Imagen:')} {FormatText.code(f'{job_no}/{job_count}')}")
+                    
+                    if eta > 0:
+                        msg_parts.append(f"{FormatText.italic(f'ETA: ~{int(eta)}s')}")
+                    
+                    msg_parts.append(f"\n{FormatText.italic(f'Prompt: {prompt_preview}')}")
+                    
+                    msg = "\n".join(msg_parts)
                     
                     try:
                         await self.bot.edit_message_text(
@@ -142,7 +164,7 @@ class JobQueue:
                         size_str = f"{params.get('width', w)}x{params.get('height', h)}"
                         caption = (
                             f"{FormatText.bold(FormatText.emoji('🎨 Generación completada', '✅'))}\n\n"
-                            f"{FormatText.bold('📝 Prompt:')} {FormatText.code(job.prompt[:200] + '...' if len(job.prompt) > 200 else job.prompt)}\n\n"
+                            f"{FormatText.bold('📝 Prompt:')} {FormatText.code(job.prompt)}\n\n"
                             f"{FormatText.bold('⚙️ Configuración:')}\n"
                             f"• {FormatText.bold('Pasos:')} {FormatText.code(str(params.get('steps', steps)))}\n"
                             f"• {FormatText.bold('Sampler:')} {FormatText.code(params.get('sampler_name', sampler))}\n"
