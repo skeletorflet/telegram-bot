@@ -67,8 +67,8 @@ WAI_ILLUSTRIOUS_PRESET = Preset(
     samplers=["Euler a"],
     schedulers=["Normal"],
     resolutions=[1024],
-    post_prompt="masterpiece, best quality, very aesthetic, absurdres",
-    negative_prompt="lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
+    post_prompt="(4k,8k,Ultra HD), masterpiece, best quality, ultra-detailed, very aesthetic, depth of field, best lighting, detailed illustration, detailed background, cinematic",
+    negative_prompt="(worst quality, low quality, extra digits:1.4),(extra fingers), (bad hands), missing fingers, child, loli, (watermark), censored, sagging breasts"
 )
 
 # Preset para el modelo Hassaku
