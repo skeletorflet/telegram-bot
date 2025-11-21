@@ -249,15 +249,26 @@ class JobQueue:
                 negative_prompt = ""
                 
                 if preset:
+                    logging.info(f"ORIGINAL user prompt: '{job.prompt}'")
+                    
                     if preset.pre_prompt:
+                        logging.info(f"Applying PRE_PROMPT: '{preset.pre_prompt}'")
                         deduplicated_pre = deduplicate_prompts(job.prompt, preset.pre_prompt)
+                        logging.info(f"Deduplicated PRE_PROMPT: '{deduplicated_pre}'")
                         if deduplicated_pre:
                             final_prompt = f"{deduplicated_pre}, {final_prompt}"
+                            logging.info(f"After PRE: '{final_prompt}'")
+                    
                     if preset.post_prompt:
+                        logging.info(f"Applying POST_PROMPT: '{preset.post_prompt}'")
                         deduplicated_post = deduplicate_prompts(job.prompt, preset.post_prompt)
+                        logging.info(f"Deduplicated POST_PROMPT: '{deduplicated_post}'")
                         if deduplicated_post:
                             final_prompt = f"{final_prompt}, {deduplicated_post}"
+                            logging.info(f"After POST: '{final_prompt}'")
+                    
                     negative_prompt = preset.negative_prompt
+                    logging.info(f"FINAL prompt: '{final_prompt}'")
                     logging.info(f"Preset '{preset.model_name}' aplicado: pre_prompt={bool(preset.pre_prompt)}, post_prompt={bool(preset.post_prompt)}, negative_prompt={bool(preset.negative_prompt)}")
                 
                 # Store final_prompt in job so progress messages show it
