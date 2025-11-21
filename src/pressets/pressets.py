@@ -3,6 +3,7 @@ from typing import List, Optional, Tuple
 class Preset:
     """
     Define los parámetros recomendados para un modelo específico de Stable Diffusion.
+    Incluye opciones para pre/post prompts y negative prompt preestablecidos.
     """
     def __init__(self,
                  model_name: str,
@@ -10,13 +11,19 @@ class Preset:
                  cfg: List[float],
                  samplers: List[str],
                  schedulers: List[str],
-                 resolutions: List[int]):  # Cambiado a List[int]
+                 resolutions: List[int],
+                 pre_prompt: str = "",  # Texto que se añade ANTES del prompt del usuario
+                 post_prompt: str = "",  # Texto que se añade DESPUÉS del prompt del usuario
+                 negative_prompt: str = ""):  # Negative prompt preestablecido para este preset
         self.model_name = model_name
         self.steps = steps
         self.cfg = cfg
         self.samplers = samplers
         self.schedulers = schedulers
         self.resolutions = resolutions
+        self.pre_prompt = pre_prompt
+        self.post_prompt = post_prompt
+        self.negative_prompt = negative_prompt
 
 # --- Definición de Presets para cada modelo ---
 
@@ -27,7 +34,7 @@ DEFAULT_PRESET = Preset(
     cfg=[7.0, 7.5],
     samplers=["Euler a", "DPM++ 2M Karras"],
     schedulers=["Automatic", "Karras"],
-    resolutions=[512, 768]  # Simplificado
+    resolutions=[512, 768]
 )
 
 # Preset para el modelo Dreamshaper
@@ -37,7 +44,7 @@ DREAMSHAPER_PRESET = Preset(
     cfg=[7.0, 7.5, 8.0],
     samplers=["DPM++ 2M Karras", "DPM++ SDE Karras", "Euler a"],
     schedulers=["Automatic", "Karras"],
-    resolutions=[512, 768, 640]  # Simplificado
+    resolutions=[512, 768, 640]
 )
 
 # Preset para el modelo Janku
@@ -47,19 +54,22 @@ JANKU_PRESET = Preset(
     cfg=[3, 5],
     samplers=["Euler", "Euler a"],
     schedulers=["Normal", "Simple"],
-    resolutions=[768, 1024]  # Simplificado
+    resolutions=[768, 1024],
+    post_prompt="masterpiece, best quality, very aesthetic",
+    negative_prompt="lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry"
 )
 
 # Preset para el modelo WAI Illustrious
 WAI_ILLUSTRIOUS_PRESET = Preset(
     model_name="waiIllustrious",
-    steps=[15, 20, 25, 30],
+    steps=[25, 30],
     cfg=[5, 7],
     samplers=["Euler a"],
     schedulers=["Normal"],
-    resolutions=[1024]  # Simplificado
+    resolutions=[1024],
+    post_prompt="masterpiece, best quality, very aesthetic, absurdres",
+    negative_prompt="lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
 )
-
 
 # Preset para el modelo Hassaku
 HASSAKU_PRESET = Preset(
@@ -68,9 +78,10 @@ HASSAKU_PRESET = Preset(
     cfg=[3, 5],
     samplers=["Euler", "Euler a"],
     schedulers=["Normal", "Simple"],
-    resolutions=[768, 1024]  # Simplificado
+    resolutions=[768, 1024],
+    post_prompt="masterpiece, best quality, very aesthetic, absurdres",
+    negative_prompt="lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
 )
-
 
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
@@ -131,18 +142,5 @@ def are_settings_compliant(settings: dict, preset: Optional[Preset]) -> bool:
         return False
     if settings.get("base_size") not in preset.resolutions:
         return False
-    return True
-    if not (min(preset.steps) <= settings.get("steps", 0) <= max(preset.steps)):
-        return False
-        
-    if not (min(preset.cfg) <= settings.get("cfg_scale", 0.0) <= max(preset.cfg)):
-        return False
-        
-    # Para resolución, verificamos si el 'base_size' está en la lista de resoluciones permitidas.
-    if settings.get("base_size") not in preset.resolutions:
-        return False
-        
-    if settings.get("sampler_name") not in preset.samplers:
-        return False
-
+    
     return True

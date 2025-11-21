@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from typing import Optional
 from io import BytesIO
 from telegram import InputFile, InlineKeyboardMarkup, InlineKeyboardButton
-from services.a1111 import a1111_txt2img, a1111_get_progress
+from services.a1111 import a1111_txt2img, a1111_get_progress, get_current_model
+from pressets.pressets import get_preset_for_model
 from storage.users import load_user_settings
 from utils.formatting import FormatText, format_generation_complete
 import logging
@@ -12,7 +13,7 @@ import json
 from utils.common import ratio_to_dims
 
 class GenJob:
-    def __init__(self, user_id: int, chat_id: int, prompt: str, status_message_id: int, user_name: str, overrides: Optional[dict] = None, hr_options: Optional[dict] = None, alwayson_scripts: Optional[dict] = None):
+    def __init__(self, user_id: int, chat_id: int, prompt: str, status_message_id: int, user_name: str, overrides: Optional[dict] = None, hr_options: Optional[dict] = None, alwayson_scripts: Optional[dict] = None, operation_type: str = "txt2img", operation_metadata: Optional[dict] = None):
         self.user_id = user_id
         self.chat_id = chat_id
         self.prompt = prompt
@@ -21,6 +22,8 @@ class GenJob:
         self.overrides = overrides
         self.hr_options = hr_options
         self.alwayson_scripts = alwayson_scripts
+        self.operation_type = operation_type  # "txt2img", "upscale_hr", "repeat", "newseed"
+        self.operation_metadata = operation_metadata or {}  # Additional context for messages
 
 class JobQueue:
     def __init__(self, concurrency: int = 2):
@@ -44,6 +47,9 @@ class JobQueue:
 
     async def _progress_loop(self, job: GenJob):
         last_progress = -1
+        no_progress_count = 0  # Track how long we've had no progress
+        has_started = False  # Track if we've seen any progress yet
+        
         while True:
             await asyncio.sleep(1.5)
             try:
@@ -51,7 +57,46 @@ class JobQueue:
                 progress = prog_data.get("progress", 0)
                 eta = prog_data.get("eta_relative", 0)
                 
-                if progress > 0 and (progress - last_progress > 0.05 or int(progress * 20) != int(last_progress * 20)):
+                # Check if this job has started processing
+                if progress > 0:
+                    has_started = True
+                    no_progress_count = 0
+                elif not has_started:
+                    no_progress_count += 1
+                
+                # If no progress after 3 checks (~4.5 seconds), show queued message
+                if not has_started and no_progress_count >= 3:
+                    operation_titles = {
+                        "txt2img": ("🎨", "Generando Imagen"),
+                        "upscale_hr": ("🔍", "Generando con Upscale HR"),
+                        "repeat": ("🔄", "Repitiendo Generación"),
+                        "newseed": ("🎲", "Nueva Variación")
+                    }
+                    emoji, title = operation_titles.get(job.operation_type, ("🎨", "Generando"))
+                    
+                    queued_msg = (
+                        f"{FormatText.bold(FormatText.emoji(f'{emoji} {title}', '⏳'))}\n"
+                        "━━━━━━━━━━━━━━━━━━━━\n"
+                        f"{FormatText.bold('📋 Estado:')} {FormatText.code('En cola...')}\n\n"
+                        f"{FormatText.italic('⏰ Esperando a que se procese...')}"
+                    )
+                    
+                    try:
+                        await self.bot.edit_message_text(
+                            chat_id=job.chat_id,
+                            message_id=job.status_message_id,
+                            text=queued_msg,
+                            parse_mode="HTML"
+                        )
+                    except Exception as e:
+                        if "not modified" not in str(e).lower():
+                            logging.warning(f"Failed to update queued status: {e}")
+                    
+                    # Keep checking every 3 seconds when queued
+                    continue
+                
+                # Only show progress if job has started and progress changed significantly
+                if has_started and progress > 0 and (progress - last_progress > 0.05 or int(progress * 20) != int(last_progress * 20)):
                     last_progress = progress
                     bar_len = 10
                     filled = int(progress * bar_len)
@@ -65,24 +110,56 @@ class JobQueue:
                     job_no = state.get("job_no", 0)
                     job_count = state.get("job_count", 0)
                     
-                    # Build enhanced message
-                    prompt_preview = job.prompt[:50] + "..." if len(job.prompt) > 50 else job.prompt
+                    # Operation-specific titles and emojis
+                    operation_titles = {
+                        "txt2img": ("🎨", "Generando Imagen"),
+                        "upscale_hr": ("🔍", "Generando con Upscale HR"),
+                        "repeat": ("🔄", "Repitiendo Generación"),
+                        "newseed": ("🎲", "Nueva Variación")
+                    }
+                    
+                    emoji, title = operation_titles.get(job.operation_type, ("🎨", "Generando"))
+                    
+                    # Build enhanced message with visual separator
+                    prompt_preview = job.prompt[:45] + "..." if len(job.prompt) > 45 else job.prompt
                     
                     msg_parts = [
-                        f"{FormatText.bold(FormatText.emoji('🎨 Generando imagen', '⏳'))}",
+                        f"{FormatText.bold(FormatText.emoji(f'{emoji} {title}', '⏳'))}",
+                        "━━━━━━━━━━━━━━━━━━━━",
                         f"{FormatText.code(f'[{bar}] {pct}%')}"
                     ]
                     
+                    # Progress section
+                    progress_info = []
                     if total_steps > 0:
-                        msg_parts.append(f"{FormatText.bold('Step:')} {FormatText.code(f'{current_step}/{total_steps}')}")
-                    
+                        progress_info.append(f"Step: {FormatText.code(f'{current_step}/{total_steps}')}")
                     if job_count > 1:
-                        msg_parts.append(f"{FormatText.bold('Imagen:')} {FormatText.code(f'{job_no}/{job_count}')}")
-                    
+                        progress_info.append(f"Imagen: {FormatText.code(f'{job_no}/{job_count}')}")
                     if eta > 0:
-                        msg_parts.append(f"{FormatText.italic(f'ETA: ~{int(eta)}s')}")
+                        progress_info.append(f"ETA: {FormatText.code(f'~{int(eta)}s')}")
                     
-                    msg_parts.append(f"\n{FormatText.italic(f'Prompt: {prompt_preview}')}")
+                    if progress_info:
+                        msg_parts.append("")
+                        msg_parts.append(f"{FormatText.bold('📊 Progreso:')}")
+                        for info in progress_info:
+                            msg_parts.append(f"  • {info}")
+                    
+                    # Configuration section (if metadata available)
+                    if job.operation_metadata:
+                        msg_parts.append("")
+                        msg_parts.append(f"{FormatText.bold('🔧 Configuración:')}")
+                        
+                        if "hr_scale" in job.operation_metadata:
+                            hr_scale_val = f"{job.operation_metadata['hr_scale']}x"
+                            msg_parts.append(f"  • Factor: {FormatText.code(hr_scale_val)}")
+                        if "upscaler" in job.operation_metadata:
+                            msg_parts.append(f"  • Upscaler: {FormatText.code(job.operation_metadata['upscaler'])}")
+                        if "denoising" in job.operation_metadata:
+                            msg_parts.append(f"  • Denoising: {FormatText.code(str(job.operation_metadata['denoising']))}")
+                    
+                    # Prompt preview
+                    msg_parts.append("")
+                    msg_parts.append(f"{FormatText.italic(f'💬 {prompt_preview}')}")
                     
                     msg = "\n".join(msg_parts)
                     
@@ -124,12 +201,28 @@ class JobQueue:
                     seed = int(job.overrides.get("seed", seed))
                 logging.info(f"Iniciando generación con parámetros: prompt='{job.prompt[:50]}...', width={w}, height={h}, steps={steps}, cfg={cfg}, sampler={sampler}, scheduler={scheduler}, seed={seed}, n_iter={n_images}, hr_options={job.hr_options}, alwayson_scripts={job.alwayson_scripts}")
                 
+                # Get current model and its preset to apply pre/post/negative prompts
+                current_model = await get_current_model()
+                preset = get_preset_for_model(current_model) if current_model else None
+                
+                # Build final prompt with preset pre/post prompts
+                final_prompt = job.prompt
+                negative_prompt = ""
+                
+                if preset:
+                    if preset.pre_prompt:
+                        final_prompt = f"{preset.pre_prompt}, {final_prompt}"
+                    if preset.post_prompt:
+                        final_prompt = f"{final_prompt}, {preset.post_prompt}"
+                    negative_prompt = preset.negative_prompt
+                    logging.info(f"Preset '{preset.model_name}' aplicado: pre_prompt={bool(preset.pre_prompt)}, post_prompt={bool(preset.post_prompt)}, negative_prompt={bool(preset.negative_prompt)}")
+                
                 # Start progress loop
                 progress_task = asyncio.create_task(self._progress_loop(job))
                 
                 try:
                     res = await a1111_txt2img(
-                        job.prompt,
+                        final_prompt,
                         width=w,
                         height=h,
                         steps=steps,
@@ -138,6 +231,7 @@ class JobQueue:
                         n_iter=n_images,
                         scheduler=scheduler,
                         seed=seed,
+                        negative_prompt=negative_prompt,
                         hr_options=job.hr_options,
                         alwayson_scripts=job.alwayson_scripts,
                     )
