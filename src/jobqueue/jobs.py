@@ -266,10 +266,12 @@ class JobQueue:
                     for i, b in enumerate(imgs):
                         seed = seeds[i] if i < len(seeds) else -1
                         # Enhanced caption with better formatting and emojis
+                        # Use final_prompt (with pre/post) if available
+                        display_prompt = getattr(job, 'final_prompt', job.prompt)
                         size_str = f"{params.get('width', w)}x{params.get('height', h)}"
                         caption = (
                             f"{FormatText.bold(FormatText.emoji('🎨 Generación completada', '✅'))}\n\n"
-                            f"{FormatText.bold('📝 Prompt:')} {FormatText.code(job.prompt)}\n\n"
+                            f"{FormatText.bold('📝 Prompt:')} {FormatText.code(display_prompt)}\n\n"
                             f"{FormatText.bold('⚙️ Configuración:')}\n"
                             f"• {FormatText.bold('Pasos:')} {FormatText.code(str(params.get('steps', steps)))}\n"
                             f"• {FormatText.bold('Sampler:')} {FormatText.code(params.get('sampler_name', sampler))}\n"
@@ -280,7 +282,7 @@ class JobQueue:
                             f"{FormatText.bold(FormatText.emoji('👤 Autor:', ''))} {FormatText.code(job.user_name)}"
                         )
                         payload = {
-                            "prompt": job.prompt,
+                            "prompt": display_prompt,
                             "width": params.get('width', w),
                             "height": params.get('height', h),
                             "steps": params.get('steps', steps),
@@ -294,7 +296,7 @@ class JobQueue:
                         # Enhanced keyboard with better buttons and emojis
                         job_data = {
                             "user_id": job.user_id,
-                            "prompt": job.prompt,
+                            "prompt": display_prompt,
                             "width": params.get('width', w),
                             "height": params.get('height', h),
                             "steps": params.get('steps', steps),
