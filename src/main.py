@@ -965,16 +965,14 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 "denoising_strength": 0.3,
                 "hr_sampler_name": sampler_p,
                 "hr_scheduler": sched_p,
-                "alwayson_scripts": {
-                    "ADetailer": {
-                        "args": [
-                            True,  # Enable ADetailer
-                            False, # Skip second arg (deprecated API format)
-                            {"ad_model": "face_yolov8n.pt", "ad_confidence": 0.3},
-                            {"ad_model": "mediapipe_face_short", "ad_confidence": 0.3},
-                            {"ad_model": "mediapipe_face_mesh_eyes_only", "ad_confidence": 0.3},
-                        ]
-                    }
+            }
+            always_scripts = {
+                "ADetailer": {
+                    "args": [
+                        {"ad_model": "face_yolov8n.pt", "ad_confidence": 0.3},
+                        {"ad_model": "mediapipe_face_short", "ad_confidence": 0.3},
+                        {"ad_model": "mediapipe_face_mesh_eyes_only", "ad_confidence": 0.3},
+                    ]
                 }
             }
             logging.info(f"upscale action overrides: {overrides}, hr: {hr}")
@@ -988,7 +986,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 f"{FormatText.italic('Generando versión de alta resolución...')}"
             )
             status_message = await update.effective_chat.send_message(upscale_message, parse_mode="HTML")
-            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, hr_options=hr, status_message_id=status_message.message_id, user_name=update.effective_user.first_name, operation_type="upscale_hr", operation_metadata={"hr_scale": 1.5, "upscaler": "R-ESRGAN 4x+", "denoising": 0.3}))
+            await JOBQ.enqueue(GenJob(user_id=user_id, chat_id=update.effective_chat.id, prompt=prompt_p, overrides=overrides, hr_options=hr, alwayson_scripts=always_scripts, status_message_id=status_message.message_id, user_name=update.effective_user.first_name, operation_type="upscale_hr", operation_metadata={"hr_scale": 1.5, "upscaler": "R-ESRGAN 4x+", "denoising": 0.3}))
             return
         if action == "newseed":
             logging.info(f"Ejecutando NEWSEED con seed aleatorio")
