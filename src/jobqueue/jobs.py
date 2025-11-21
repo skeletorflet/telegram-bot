@@ -31,6 +31,9 @@ class JobQueue:
         self.concurrency = concurrency
         self.workers = []
         self.bot = None
+        # Semaphore to ensure only 1 job is generating at a time
+        # This prevents multiple jobs from showing the same progress
+        self.generation_semaphore = asyncio.Semaphore(1)
 
     async def start(self, bot):
         self.bot = bot
@@ -228,30 +231,33 @@ class JobQueue:
                 # Store final_prompt in job so progress messages show it
                 job.final_prompt = final_prompt
                 
-                # Start progress loop
-                progress_task = asyncio.create_task(self._progress_loop(job))
-                
-                try:
-                    res = await a1111_txt2img(
-                        final_prompt,
-                        width=w,
-                        height=h,
-                        steps=steps,
-                        cfg_scale=cfg,
-                        sampler_name=sampler,
-                        n_iter=n_images,
-                        scheduler=scheduler,
-                        seed=seed,
-                        negative_prompt=negative_prompt,
-                        hr_options=job.hr_options,
-                        alwayson_scripts=job.alwayson_scripts,
-                    )
-                finally:
-                    progress_task.cancel()
+                # Acquire semaphore to ensure only 1 job generates at a time
+                # This prevents multiple jobs from showing the same API progress
+                async with self.generation_semaphore:
+                    # Start progress loop AFTER acquiring semaphore
+                    progress_task = asyncio.create_task(self._progress_loop(job))
+                    
                     try:
-                        await progress_task
-                    except asyncio.CancelledError:
-                        pass
+                        res = await a1111_txt2img(
+                            final_prompt,
+                            width=w,
+                            height=h,
+                            steps=steps,
+                            cfg_scale=cfg,
+                            sampler_name=sampler,
+                            n_iter=n_images,
+                            scheduler=scheduler,
+                            seed=seed,
+                            negative_prompt=negative_prompt,
+                            hr_options=job.hr_options,
+                            alwayson_scripts=job.alwayson_scripts,
+                        )
+                    finally:
+                        progress_task.cancel()
+                        try:
+                            await progress_task
+                        except asyncio.CancelledError:
+                            pass
                 logging.info(f"Generación completada. Response keys: {list(res.keys()) if res else 'None'}")
                 
                 imgs = res.get("images") or []
