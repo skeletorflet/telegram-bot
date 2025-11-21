@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "r_artist",
+  "width": 1024,
+  "height": 1024,
+  "steps": 30,
+  "cfg_scale": 7.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 2496863298,
+  "file_id": "BQACAgEAAxkDAAIBTmkfhMbZMEs-8xV5faWPeBllmVHcAAIzBwAChmoAAUVHer10FMhcvDYE",
+  "message_id": 334,
+  "timestamp": 1763673288.1207345
+}

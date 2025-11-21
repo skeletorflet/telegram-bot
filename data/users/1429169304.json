@@ -1,1 +1,1 @@
-{"sampler_name": "Euler a", "steps": 25, "cfg_scale": 5, "aspect_ratio": "1:1", "base_size": 1024, "n_iter": 2, "pre_mode": "random", "pre_value": "", "post_mode": "none", "post_value": "", "loras": [], "scheduler": "Normal", "pre_modifiers": [], "post_modifiers": []}
+{"sampler_name": "Euler a", "steps": 30, "cfg_scale": 7, "aspect_ratio": "1:1", "base_size": 1024, "n_iter": 2, "pre_mode": "random", "pre_value": "", "post_mode": "none", "post_value": "", "loras": [], "scheduler": "Normal", "pre_modifiers": [], "post_modifiers": []}

@@ -82,40 +82,63 @@ async def fetch_loras() -> list[str]:
             names.append(n)
     return names
 
-async def get_current_model() -> str | None:
+async def fetch_sd_models() -> list[dict]:
+    """Obtiene la lista de modelos de SD disponibles."""
+    try:
+        data = await a1111_get_json("/sdapi/v1/sd-models")
+        return [
+            {"title": x.get("title"), "model_name": x.get("model_name")}
+            for x in data
+            if isinstance(x, dict) and x.get("title") and x.get("model_name")
+        ]
+    except Exception as e:
+        logging.error(f"Error al obtener los modelos de SD: {e}")
+        return []
+
+async def set_sd_model(model_name: str) -> bool:
+    """Establece el modelo de SD actual en A1111."""
+    try:
+        url = f"{A1111_URL}/sdapi/v1/options"
+        payload = {"sd_model_checkpoint": model_name}
+        headers = {"X-Pinggy-No-Screen": "true"}
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.post(url, json=payload) as resp:
+                resp.raise_for_status()
+                return resp.status == 200
+    except Exception as e:
+        logging.error(f"Error al establecer el modelo de SD: {e}")
+        return False
+
+async def get_current_model() -> str:
     """Obtiene el nombre del checkpoint del modelo SD actual desde A1111."""
     try:
-        # First, try to get the model from the options endpoint
         options = await a1111_get_json("/sdapi/v1/options")
         model_name = options.get("sd_model_checkpoint")
         if model_name:
             logging.info(f"Modelo actual de A1111 (desde options): {model_name}")
             return model_name
-        else:
-            logging.warning("No se pudo determinar el modelo actual desde /sdapi/v1/options. Intentando con /sd-models.")
-            
-            # If it fails, try to get it from the sd-models endpoint
-            models = await a1111_get_json("/sdapi/v1/sd-models")
-            if models and isinstance(models, list) and len(models) > 0:
-                first_model = models[0]
-                model_name = first_model.get("model_name")
-                if model_name:
-                    logging.info(f"Modelo actual de A1111 (desde sd-models): {model_name}")
-                    return model_name
 
-            logging.error("No se pudo determinar el modelo actual desde ninguna de las fuentes.")
-            return None
-            
+        logging.warning("No se pudo determinar el modelo actual desde /sdapi/v1/options. Intentando con /sd-models.")
+        models = await a1111_get_json("/sdapi/v1/sd-models")
+        if models and isinstance(models, list) and len(models) > 0:
+            first_model = models[0]
+            model_name = first_model.get("model_name")
+            if model_name:
+                logging.info(f"Modelo actual de A1111 (desde sd-models): {model_name}")
+                return model_name
+
+        logging.error("No se pudo determinar el modelo actual desde ninguna de las fuentes.")
+        return "Unknown"
     except Exception as e:
         logging.error(f"Error al obtener el modelo de A1111: {e}")
-        return None
+        return "Not available"
 
 def _normalize_scheduler(scheduler: str | None) -> str | None:
     if not scheduler or str(scheduler).lower() in {"", "none", "automatic"}:
         return "Automatic"
     return scheduler
 
-async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps: int = 4, cfg_scale: float = 1.0, sampler_name: str = "LCM", n_iter: int = 1, scheduler: str = "", seed: int = -1, negative_prompt: str = "", hr_options: dict | None = None) -> dict:
+async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps: int = 4, cfg_scale: float = 1.0, sampler_name: str = "LCM", n_iter: int = 1, scheduler: str = "", seed: int = -1, negative_prompt: str = "", hr_options: dict | None = None, alwayson_scripts: dict | None = None) -> dict:
     payload = {
         "prompt": prompt,
         "negative_prompt": negative_prompt,
@@ -143,6 +166,8 @@ async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps:
             "hr_negative_prompt": hr_options.get("hr_negative_prompt", ""),
             "denoising_strength": hr_options.get("denoising_strength", 0.3),
         })
+    if alwayson_scripts:
+        payload["alwayson_scripts"] = alwayson_scripts
     url = f"{A1111_URL}/sdapi/v1/txt2img"
     headers = {"X-Pinggy-No-Screen": "true"}
     async with aiohttp.ClientSession(headers=headers) as session:

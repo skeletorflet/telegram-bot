@@ -1,0 +1,1 @@
+{"sampler_name": "Euler a", "scheduler": "Normal", "steps": 15, "cfg_scale": 5, "aspect_ratio": "3:4", "base_size": 1024, "n_iter": 2, "pre_modifiers": [], "post_modifiers": [], "loras": []}

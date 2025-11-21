@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "A 1girl, rei ayanami neongenesisevangelion, pale porcelain skin, chin-length icy-blue bob, crimson eyes, sleek red plugsuit with orange torso plate",
+  "width": 1024,
+  "height": 1024,
+  "steps": 30,
+  "cfg_scale": 7.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 3875899762,
+  "file_id": "BQACAgEAAxkDAAIBP2kfgGqm8hVcb01I31VVhlFXXVjEAAIrBwAChmoAAUXgAAHEFgEy9QQ2BA",
+  "message_id": 319,
+  "timestamp": 1763672172.2986515
+}

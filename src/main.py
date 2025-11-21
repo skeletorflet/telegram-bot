@@ -283,6 +283,9 @@ def _truncate(text: str, limit: int = 60) -> str:
     return text if len(text) <= limit else text[:limit] + "…"
 
 def are_settings_compliant(settings: dict, preset: Preset) -> bool:
+    # Si no hay preset (sin conexión a A1111), no podemos validar
+    if preset is None:
+        return False
     if settings.get("steps") not in preset.steps:
         return False
     if settings.get("cfg_scale") not in preset.cfg:
@@ -327,8 +330,13 @@ def main_menu_keyboard(s: dict, is_compliant: bool) -> InlineKeyboardMarkup:
 async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
     s = load_user_settings(user_id)
-    model_name = await get_current_model()
-    preset = get_preset_for_model(model_name)
+    try:
+        model_name = await get_current_model()
+        preset = get_preset_for_model(model_name)
+    except Exception as e:
+        logging.warning(f"A1111 offline: {e}")
+        model_name = None
+        preset = None
     is_compliant = are_settings_compliant(s, preset)
     await update.message.reply_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
 

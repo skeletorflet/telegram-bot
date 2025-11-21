@@ -71,22 +71,67 @@ PRESETS = {
     "wai_illustrious": WAI_ILLUSTRIOUS_PRESET,
 }
 
-def get_preset_for_model(model_name: str) -> Preset:
+def get_preset_for_model(model_name: str) -> Optional[Preset]:
     """
     Busca y devuelve el preset más adecuado para un nombre de modelo dado.
+    La búsqueda es flexible, ignorando mayúsculas/minúsculas y caracteres especiales.
 
     Args:
-        model_name: El nombre del archivo del checkpoint del modelo (ej. "dreamshaper_8.safetensors").
+        model_name: El nombre del checkpoint del modelo.
 
     Returns:
-        El objeto Preset correspondiente o el preset por defecto si no se encuentra uno.
+        El objeto Preset correspondiente o None si no se encuentra.
     """
     if not model_name:
-        return DEFAULT_PRESET
+        return None
 
-    model_name_lower = model_name.lower()
-    for key, preset in PRESETS.items():
-        if key in model_name_lower:
-            return preset
+    def normalize(name: str) -> str:
+        return name.lower().replace("_", "").replace("-", "").replace(" ", "")
+
+    normalized_model_name = normalize(model_name)
+
+    for preset_key, preset_obj in PRESETS.items():
+        if normalize(preset_key) in normalized_model_name:
+            return preset_obj
+            
+    return None
+
+def are_settings_compliant(settings: dict, preset: Optional[Preset]) -> bool:
+    """
+    Verifica si la configuración del usuario es compatible con un preset de modelo.
+
+    Args:
+        settings: El diccionario de configuración del usuario.
+        preset: El objeto Preset a comprobar. Si es None, devuelve False.
+
+    Returns:
+        True si la configuración es compatible, False en caso contrario.
+    """
+    if not preset:
+        return False
     
-    return DEFAULT_PRESET
+    if settings.get("steps") not in preset.steps:
+        return False
+    if settings.get("cfg_scale") not in preset.cfg:
+        return False
+    if settings.get("sampler_name") not in preset.samplers:
+        return False
+    if settings.get("scheduler") not in preset.schedulers:
+        return False
+    if settings.get("base_size") not in preset.resolutions:
+        return False
+    return True
+    if not (min(preset.steps) <= settings.get("steps", 0) <= max(preset.steps)):
+        return False
+        
+    if not (min(preset.cfg) <= settings.get("cfg_scale", 0.0) <= max(preset.cfg)):
+        return False
+        
+    # Para resolución, verificamos si el 'base_size' está en la lista de resoluciones permitidas.
+    if settings.get("base_size") not in preset.resolutions:
+        return False
+        
+    if settings.get("sampler_name") not in preset.samplers:
+        return False
+
+    return True

@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "Makima from Chainsaw Man, extreme wide-angle close-up on her face with distorted perspective, yandere stare locked forward, red hair with sidelocks intact, white shirt, black necktie, grey jacket,forest background",
+  "width": 1024,
+  "height": 1024,
+  "steps": 30,
+  "cfg_scale": 7.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 4054888856,
+  "file_id": "BQACAgEAAxkDAAIBMGkffJxsn6aioInMmirYDlv5iSJ4AAInBwAChmoAAUWTcjcnwzavdDYE",
+  "message_id": 304,
+  "timestamp": 1763671198.156088
+}

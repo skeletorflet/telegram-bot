@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "masterpiece, best quality, good quality, very aesthetic, absurdres, newest, 8K, depth of field, hololive, mori calliope, pink hair, long hair, sidelocks, blunt bangs, pink eyes, Mori Calliope inspired vampire girl, steampunk gothic outfit fused with broken gears and pipes protruding from body, glowing neon veins, eyes wide with insanity, surrounded by steam and broken machines, cinematic dark anime horror illustration",
+  "width": 1024,
+  "height": 1024,
+  "steps": 30,
+  "cfg_scale": 7.0,
+  "sampler_name": "Euler a",
+  "scheduler": "Normal",
+  "seed": 3448525443,
+  "file_id": "BQACAgEAAx0Ed_dQ1gABAR2aaR-GXFmQYLFRiD24qPATZQUR3_AAApEHAAIEt_lED-qWUsFvjO82BA",
+  "message_id": 73114,
+  "timestamp": 1763673694.060076
+}

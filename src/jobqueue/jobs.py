@@ -9,22 +9,10 @@ from storage.users import load_user_settings
 from utils.formatting import FormatText, format_generation_complete
 import logging
 import json
-def ratio_to_dims(ratio: str, base: int) -> tuple[int, int]:
-    w_str, h_str = ratio.split(":")
-    w = int(w_str)
-    h = int(h_str)
-    def round64_up(x: float) -> int:
-        return max(64, int((x + 63) // 64 * 64))
-    if w >= h:
-        height = base
-        width = round64_up(base * (w / h))
-    else:
-        width = base
-        height = round64_up(base * (h / w))
-    return width, height
+from utils.common import ratio_to_dims
 
 class GenJob:
-    def __init__(self, user_id: int, chat_id: int, prompt: str, status_message_id: int, user_name: str, overrides: Optional[dict] = None, hr_options: Optional[dict] = None):
+    def __init__(self, user_id: int, chat_id: int, prompt: str, status_message_id: int, user_name: str, overrides: Optional[dict] = None, hr_options: Optional[dict] = None, alwayson_scripts: Optional[dict] = None):
         self.user_id = user_id
         self.chat_id = chat_id
         self.prompt = prompt
@@ -32,6 +20,7 @@ class GenJob:
         self.user_name = user_name
         self.overrides = overrides
         self.hr_options = hr_options
+        self.alwayson_scripts = alwayson_scripts
 
 class JobQueue:
     def __init__(self, concurrency: int = 2):
@@ -74,7 +63,7 @@ class JobQueue:
                     h = int(job.overrides.get("height", h))
                     n_images = int(job.overrides.get("n_iter", n_images))
                     seed = int(job.overrides.get("seed", seed))
-                logging.info(f"Iniciando generación con parámetros: prompt='{job.prompt[:50]}...', width={w}, height={h}, steps={steps}, cfg={cfg}, sampler={sampler}, scheduler={scheduler}, seed={seed}, n_iter={n_images}, hr_options={job.hr_options}")
+                logging.info(f"Iniciando generación con parámetros: prompt='{job.prompt[:50]}...', width={w}, height={h}, steps={steps}, cfg={cfg}, sampler={sampler}, scheduler={scheduler}, seed={seed}, n_iter={n_images}, hr_options={job.hr_options}, alwayson_scripts={job.alwayson_scripts}")
                 
                 res = await a1111_txt2img(
                     job.prompt,
@@ -87,6 +76,7 @@ class JobQueue:
                     scheduler=scheduler,
                     seed=seed,
                     hr_options=job.hr_options,
+                    alwayson_scripts=job.alwayson_scripts,
                 )
                 logging.info(f"Generación completada. Response keys: {list(res.keys()) if res else 'None'}")
                 
