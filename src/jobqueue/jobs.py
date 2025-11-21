@@ -92,6 +92,7 @@ class JobQueue:
                     for i, b in enumerate(imgs):
                         seed = seeds[i] if i < len(seeds) else -1
                         # Enhanced caption with better formatting and emojis
+                        size_str = f"{params.get('width', w)}x{params.get('height', h)}"
                         caption = (
                             f"{FormatText.bold(FormatText.emoji('🎨 Generación completada', '✅'))}\n\n"
                             f"{FormatText.bold('📝 Prompt:')} {FormatText.code(job.prompt[:200] + '...' if len(job.prompt) > 200 else job.prompt)}\n\n"
@@ -101,7 +102,7 @@ class JobQueue:
                             f"• {FormatText.bold('Scheduler:')} {FormatText.code(params.get('scheduler', scheduler))}\n"
                             f"• {FormatText.bold('CFG:')} {FormatText.code(str(params.get('cfg_scale', cfg)))}\n"
                             f"• {FormatText.bold('Seed:')} {FormatText.code(str(seed))}\n"
-                            f"• {FormatText.bold('Tamaño:')} {FormatText.code(f'{params.get("width", w)}x{params.get("height", h)}')}\n\n"
+                            f"• {FormatText.bold('Tamaño:')} {FormatText.code(size_str)}\n\n"
                             f"{FormatText.bold(FormatText.emoji('👤 Autor:', ''))} {FormatText.code(job.user_name)}"
                         )
                         payload = {
@@ -167,7 +168,7 @@ class JobQueue:
                         logging.warning(f"No se pudo borrar el mensaje de estado {job.status_message_id}: {e}")
                 self.q.task_done()
 
-    async def _send_document_long(self, chat_id: int, img_bytes: bytes, filename: str, caption: str, kb: InlineKeyboardMarkup | None) -> dict:
+    async def _send_document_long(self, chat_id: int, img_bytes: bytes, filename: str, caption: str, kb: Optional[InlineKeyboardMarkup]) -> dict:
         url = f"https://api.telegram.org/bot{self.bot.token}/sendDocument"
         attempt = 0
         while True:
@@ -202,5 +203,5 @@ def put_request(payload: dict) -> str:
     _REQ_STORE[rid] = payload
     return rid
 
-def get_request(rid: str) -> dict | None:
+def get_request(rid: str) -> Optional[dict]:
     return _REQ_STORE.get(rid)

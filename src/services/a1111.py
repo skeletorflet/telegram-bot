@@ -1,3 +1,4 @@
+from typing import Optional, Union
 import os
 import base64
 import aiohttp
@@ -10,7 +11,7 @@ from config import A1111_URL
 LOG_DIR = Path(__file__).resolve().parent.parent / "data" / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-def _log_api_call(phase: str, payload: dict | None = None, response: dict | None = None) -> None:
+def _log_api_call(phase: str, payload: Optional[dict] = None, response: Optional[dict] = None) -> None:
     try:
         entry = {
             "time": datetime.now().isoformat(timespec="seconds"),
@@ -133,12 +134,12 @@ async def get_current_model() -> str:
         logging.error(f"Error al obtener el modelo de A1111: {e}")
         return "Not available"
 
-def _normalize_scheduler(scheduler: str | None) -> str | None:
+def _normalize_scheduler(scheduler: Optional[str]) -> Optional[str]:
     if not scheduler or str(scheduler).lower() in {"", "none", "automatic"}:
         return "Automatic"
     return scheduler
 
-async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps: int = 4, cfg_scale: float = 1.0, sampler_name: str = "LCM", n_iter: int = 1, scheduler: str = "", seed: int = -1, negative_prompt: str = "", hr_options: dict | None = None, alwayson_scripts: dict | None = None) -> dict:
+async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps: int = 4, cfg_scale: float = 1.0, sampler_name: str = "LCM", n_iter: int = 1, scheduler: str = "", seed: int = -1, negative_prompt: str = "", hr_options: Optional[dict] = None, alwayson_scripts: Optional[dict] = None) -> dict:
     payload = {
         "prompt": prompt,
         "negative_prompt": negative_prompt,
