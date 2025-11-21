@@ -1,4 +1,153 @@
 
+import os
+import asyncio
+import logging
+import base64
+import json
+import random
+from pathlib import Path
+from io import BytesIO
+import aiohttp
+from typing import Union
+from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
+from jobqueue.jobs import JobQueue, GenJob
+import re
+from services.a1111 import a1111_extra_single_image, get_current_model
+from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
+from utils.prompt_generator import prompt_generator
+from utils.process_manager import process_manager
+from storage.jobs import save_job, get_job, delete_job
+from pressets.pressets import Preset, get_preset_for_model
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+# Crear archivo de log para debugging de callbacks
+LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+CALLBACK_LOG_FILE = LOG_DIR / "callback_debug.jsonl"
+
+def log_callback_payload(payload: dict):
+    """Guarda payload de callback en archivo JSONL para debugging"""
+    try:
+        with open(CALLBACK_LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+    except Exception as e:
+        logging.error(f"Error guardando log de callback: {e}")
+
+from config import A1111_URL
+BOT_TOKEN_DEFAULT = os.environ.get("BOT_TOKEN", "7126310269:AAGiMx_x9jZzOpMWzoKFYfV82-YSx2oG44w")
+
+USER_DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "users"
+USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+DEFAULT_SETTINGS = {
+    "sampler_name": "LCM",
+    "scheduler": "",
+    "steps": 4,
+    "cfg_scale": 1.0,
+    "aspect_ratio": "1:1",
+    "base_size": 512,
+    "n_iter": 1,
+    "pre_modifiers": [],
+    "post_modifiers": [],
+    "loras": [],
+}
+
+JOBQ = JobQueue(concurrency=2)
+
+PRE_MODIFIERS = [
+    "masterpiece, best quality", "ultra-detailed, intricate details", "4k, 8k, uhd",
+    "photorealistic, realistic", "cinematic, movie still", "anime style, vibrant colors",
+    "concept art, digital painting", "illustration, sharp focus", "low poly, isometric",
+    "minimalist, simple background", "epic composition, dramatic", "golden hour, soft light",
+    "vivid, saturated colors", "monochrome, black and white", "surreal, dreamlike",
+    "fantasy, magical", "sci-fi, futuristic", "steampunk, mechanical details",
+    "cyberpunk, neon lights", "vintage, retro style", "watercolor painting",
+    "oil painting, classic", "sketch, charcoal drawing", "cel-shaded, cartoonish",
+    "flat design, vector art", "hdr, high dynamic range", "long exposure, motion blur",
+    "macro photography, close-up", "double exposure", "glitch effect, distorted"
+]
+
+POST_MODIFIERS = [
+    "cinematic lighting", "dramatic shadows", "volumetric lighting, god rays",
+    "studio lighting, softbox", "rim lighting, backlight", "neon glow, vibrant",
+    "underwater lighting, caustic effects", "fire and embers", "lens flare, anamorphic",
+    "bokeh, shallow depth of field", "highly detailed background", "simple background, clean",
+    "fog, mist, atmospheric", "rain, wet surface", "snow, winter scene",
+    "starry night sky", "aurora borealis", "reflections, reflective surface",
+    "dynamic angle, action shot", "fisheye lens", "vignette, dark corners",
+    "color grading, cinematic tones", "film grain, noisy", "light leaks, vintage effect",
+    "chromatic aberration", "bloom, soft glow", "particle effects, dust motes",
+    "sun rays, crepuscular rays", "glowing eyes", "smoke, atmospheric"
+]
+
+ASPECT_CHOICES = ["1:1", "4:3", "3:4", "9:16", "16:9"]
+BASE_CHOICES = [512, 640, 768, 896, 1024]
+STEPS_CHOICES = list(range(4, 51))
+CFG_CHOICES = [i * 0.5 for i in range(2, 25)]
+
+def ratio_to_dims(ratio: str, base: int) -> tuple[int, int]:
+    w_str, h_str = ratio.split(":")
+    w = int(w_str)
+    h = int(h_str)
+    def round64_up(x: float) -> int:
+        return max(64, int((x + 63) // 64 * 64))
+    if w >= h:
+        height = base
+        width = round64_up(base * (w / h))
+    else:
+        width = base
+        height = round64_up(base * (h / w))
+    return width, height
+
+def load_user_settings(user_id: int) -> dict:
+    fp = USER_DATA_DIR / f"{user_id}.json"
+    if fp.exists():
+        try:
+            return json.loads(fp.read_text(encoding="utf-8"))
+        except Exception:
+            return DEFAULT_SETTINGS.copy()
+    return DEFAULT_SETTINGS.copy()
+
+def save_user_settings(user_id: int, settings: dict) -> None:
+    fp = USER_DATA_DIR / f"{user_id}.json"
+    fp.write_text(json.dumps(settings, ensure_ascii=False), encoding="utf-8")
+
+def lora_tokens(settings: dict) -> str:
+    lst = settings.get("loras", [])
+    if not lst:
+        return ""
+    return " ".join([f"<lora:{name}:1>" for name in lst])
+
+def compose_prompt(user_settings: dict, user_prompt: str) -> str:
+    """Enhanced prompt composition with modifiers and loras."""
+    
+    pre_modifiers = ", ".join(user_settings.get("pre_modifiers", []))
+    post_modifiers = ", ".join(user_settings.get("post_modifiers", []))
+    
+    parts = [
+        pre_modifiers,
+        user_prompt,
+        post_modifiers,
+        lora_tokens(user_settings)
+    ]
+    
+    final_prompt = ", ".join(filter(None, parts))
+    logging.info(f"Composed prompt: {final_prompt[:150]}...")
+    return final_prompt
+
+async def a1111_get_json(path: str) -> Union[dict, list]:
+    url = f"{A1111_URL}{path}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as resp:
+            resp.raise_for_status()
+            return await resp.json()
+
+async def fetch_samplers() -> list[str]:
+    data = await a1111_get_json("/sdapi/v1/samplers")
+    return [x.get("name") for x in data if x.get("name")]
+
 async def fetch_schedulers() -> list[dict]:
     try:
         data = await a1111_get_json("/sdapi/v1/schedulers")
