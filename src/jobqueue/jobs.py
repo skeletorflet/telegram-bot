@@ -127,7 +127,9 @@ class JobQueue:
                     emoji, title = operation_titles.get(job.operation_type, ("🎨", "Generando"))
                     
                     # Build enhanced message with visual separator
-                    prompt_preview = job.prompt[:45] + "..." if len(job.prompt) > 45 else job.prompt
+                    # Use final_prompt if available (with pre/post prompts), otherwise use original
+                    display_prompt = getattr(job, 'final_prompt', job.prompt)
+                    prompt_preview = display_prompt[:45] + "..." if len(display_prompt) > 45 else display_prompt
                     
                     msg_parts = [
                         f"{FormatText.bold(FormatText.emoji(f'{emoji} {title}', '⏳'))}",
@@ -222,6 +224,9 @@ class JobQueue:
                         final_prompt = f"{final_prompt}, {preset.post_prompt}"
                     negative_prompt = preset.negative_prompt
                     logging.info(f"Preset '{preset.model_name}' aplicado: pre_prompt={bool(preset.pre_prompt)}, post_prompt={bool(preset.post_prompt)}, negative_prompt={bool(preset.negative_prompt)}")
+                
+                # Store final_prompt in job so progress messages show it
+                job.final_prompt = final_prompt
                 
                 # Start progress loop
                 progress_task = asyncio.create_task(self._progress_loop(job))

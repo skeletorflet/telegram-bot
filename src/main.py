@@ -580,6 +580,11 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         parts = data.split(":")
         kind = parts[1]
         if kind == "autoconfig":
+            # Check if we have a valid preset
+            if preset is None:
+                await q.answer("⚠️ No se pudo detectar el modelo actual o no hay preset disponible", show_alert=True)
+                return
+            
             s["steps"] = random.choice(preset.steps)
             s["cfg_scale"] = random.choice(preset.cfg)
             s["sampler_name"] = random.choice(preset.samplers)

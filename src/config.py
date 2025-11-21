@@ -1,1 +1,1 @@
-A1111_URL = "https://dehxf-34-139-159-144.a.free.pinggy.link"
+A1111_URL = "http://localhost:7860"
