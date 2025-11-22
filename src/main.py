@@ -303,7 +303,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     context.args = [update.message.text]
     await txt2img(update, context)
 
-def settings_summary(s: dict) -> str:
+def settings_summary(s: dict, model_name: str = None) -> str:
     w, h = ratio_to_dims(s.get("aspect_ratio", "1:1"), s.get("base_size", 512))
     pre_count = len(s.get("pre_modifiers", []))
     post_count = len(s.get("post_modifiers", []))
@@ -315,6 +315,7 @@ def settings_summary(s: dict) -> str:
     preset_neg = s.get("preset_negative_prompt", "")
     
     summary = (
+        f"🖼️ Modelo: {model_name or 'Desconocido'}\n"
         f"🎨 Sampler: {s.get('sampler_name')}\n"
         f"⏰ Scheduler: {s.get('scheduler') or '-'}\n"
         f"⚡ Steps: {s.get('steps')}\n"
@@ -392,7 +393,7 @@ async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         model_name = None
         preset = None
     is_compliant = are_settings_compliant(s, preset)
-    await update.message.reply_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
+    await update.message.reply_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
 
 def submenu_keyboard_static(kind: str, preset: Preset) -> InlineKeyboardMarkup:
     rows = []
@@ -540,6 +541,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         if kind == "autoconfig":
             # Check if we have a valid preset
             if preset is None:
+                logging.warning(f"AutoConfig failed: model_name='{model_name}', preset is None")
                 await q.answer("⚠️ No se pudo detectar el modelo actual o no hay preset disponible", show_alert=True)
                 return
             
@@ -568,14 +570,14 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await q.answer("✅ Configuración automática aplicada")
             
             # Update the message with new settings
-            text = settings_summary(s)
+            text = settings_summary(s, model_name)
             # After autoconfig, settings are compliant
             kb = main_menu_keyboard(s, is_compliant=True)
             await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
             return
         if kind == "main":
             is_compliant = are_settings_compliant(s, preset)
-            await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
+            await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
             await q.answer()
             return
 
@@ -599,147 +601,13 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     kb = InlineKeyboardMarkup(rows)
                 except Exception as e:
                     text = f"Error: {e}"
-                    kb = main_menu_keyboard(s)
+                    kb = main_menu_keyboard(s, are_settings_compliant(s, preset))
             elif kind == "scheduler":
                 sched = await fetch_schedulers()
                 items = sched or [{"name": "none", "label": "none"}]
                 recommended = [r.lower() for r in (preset.schedulers if preset else [])]
                 rows = [[InlineKeyboardButton(f"{it['label']} {'👌' if it['name'].lower() in recommended else ''}".strip(), callback_data=f"set:scheduler:{it['name']}")] for it in items]
                 rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
-                kb = InlineKeyboardMarkup(rows)
-            elif kind == "loras":
-                page = int(parts[2]) if len(parts) > 2 else 0
-                names = await fetch_loras()
-                kb = loras_page_keyboard(names, set(s.get("loras", [])), page)
-            elif kind == "model":
-                page = int(parts[2]) if len(parts) > 2 else 0
-                from ui.menus import models_page_keyboard
-                models = await fetch_sd_models()
-                current_user_model = s.get("selected_model")
-                kb = models_page_keyboard(models, current_user_model or "", page)
-                text = submenu_texts["model"]
-                if current_user_model:
-                    text += f"\n\n<b>Actual:</b> {current_user_model}"
-                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
-                await q.answer()
-                return
-            elif kind == "pre" or kind == "post":
-                page = int(parts[2]) if len(parts) > 2 else 0
-                modifier_list = PRE_MODIFIERS if kind == "pre" else POST_MODIFIERS
-                selected_mods = s.get(f"{kind}_modifiers", [])
-                kb = modifiers_page_keyboard(kind, modifier_list, set(selected_mods), page)
-                
-                # Build the text with current modifiers
-                current_mods_text = ", ".join(selected_mods) if selected_mods else "Ninguno"
-                text = submenu_texts[kind] + f"\n\n<b>Actual:</b> {current_mods_text}"
-                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
-                await q.answer()
-                return
-            else:
-                kb = submenu_keyboard_static(kind, preset)
-            
-            await q.edit_message_text(text, reply_markup=kb)
-            await q.answer()
-            return
-    if data.startswith("set:"):
-        _, key, val = data.split(":", 2)
-        if key == "aspect":
-            s["aspect_ratio"] = val
-        elif key == "base":
-            s["base_size"] = int(val)
-        elif key == "steps":
-            s["steps"] = int(val)
-        elif key == "cfg":
-            s["cfg_scale"] = float(val)
-        elif key == "sampler":
-            s["sampler_name"] = val
-        elif key == "scheduler":
-            s["scheduler"] = "" if val == "none" else val
-        elif key == "niter":
-            s["n_iter"] = int(val)
-        elif key == "model":
-            # Guardar el modelo seleccionado
-            s["selected_model"] = val
-            save_user_settings(user_id, s)
-            
-            # Aplicar Auto Config con el preset del modelo seleccionado
-            model_preset = get_preset_for_model(val)
-            
-            if model_preset:
-                # Aplicar configuración automática según el preset
-                s["steps"] = random.choice(model_preset.steps)
-                s["cfg_scale"] = random.choice(model_preset.cfg)
-                s["sampler_name"] = random.choice(model_preset.samplers)
-                s["scheduler"] = random.choice(model_preset.schedulers)
-                base_size = random.choice(model_preset.resolutions)
-                s["base_size"] = base_size
-                
-                if base_size in [512, 768, 1024]:
-                    s["aspect_ratio"] = "1:1"
-                else:
-                    s["aspect_ratio"] = random.choice(["1:1", "4:3", "3:4", "16:9", "9:16"])
-                
-                # Guardar preset prompts
-                s["preset_pre_prompt"] = model_preset.pre_prompt
-                s["preset_post_prompt"] = model_preset.post_prompt
-                s["preset_negative_prompt"] = model_preset.negative_prompt
-                
-                save_user_settings(user_id, s)
-                
-                # Update message and show Auto Config was applied
-                is_compliant = are_settings_compliant(s, model_preset)
-                await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
-                await q.answer(f"✅ Modelo cambiado a {val} y Auto Config aplicado")
-                return
-            else:
-                save_user_settings(user_id, s)
-                is_compliant = are_settings_compliant(s, preset)
-                await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
-                await q.answer(f"✅ Modelo cambiado a {val}")
-                return
-        elif key == "pre":
-            s["pre_mode"] = val
-            if val == "none":
-                s["pre_value"] = ""
-        elif key == "post":
-            s["post_mode"] = val
-            if val == "none":
-                s["post_value"] = ""
-        save_user_settings(user_id, s)
-        is_compliant = are_settings_compliant(s, preset)
-        await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
-        
-        # Enhanced settings update message with emojis
-        setting_emoji = {
-            "aspect": "📐",
-            "base": "📏",
-            "steps": "⚡",
-            "cfg": "🎛️",
-            "sampler": "🎨",
-            "scheduler": "⏰",
-            "niter": "🔢",
-        }.get(key, "⚙️")
-        
-        value_display = val
-        if key in ["aspect", "base", "steps", "niter"]:
-            value_display = val
-        elif key == "cfg":
-            value_display = f"{float(val):.1f}"
-        
-        await q.answer(f"{setting_emoji} {_tip_for_set(key, s)}")
-        return
-    if data.startswith("loras:"):
-        parts = data.split(":")
-        action = parts[1]
-        if action == "toggle":
-            name = parts[2]
-            page = int(parts[3]) if len(parts) > 3 else 0
-            cur_before = set(s.get("loras", []))
-            added = name not in cur_before
-            cur = set(cur_before)
-            if not added:
-                cur.remove(name)
-            else:
                 cur.add(name)
             s["loras"] = sorted(cur)
             save_user_settings(user_id, s)
@@ -768,7 +636,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             candidate = context.chat_data.get("edit_candidate", "").strip()
             if not candidate:
                 await q.answer()
-                await q.edit_message_text("El texto está vacío.", reply_markup=main_menu_keyboard(s))
+                await q.edit_message_text("El texto está vacío.", reply_markup=main_menu_keyboard(s, are_settings_compliant(s, preset)))
                 context.chat_data.clear()
                 return
             if len(candidate) > 1000:
@@ -783,12 +651,12 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             context.chat_data.clear()
             tip = ("Pre" if target == "pre" else "Post") + ": " + _truncate(candidate)
             await q.answer(tip)
-            await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s))
+            await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, are_settings_compliant(s, preset)))
             return
         if action == "cancel":
             context.chat_data.clear()
             await q.answer("Cancelado")
-            await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s))
+            await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, are_settings_compliant(s, preset)))
             return
     if data.startswith("img:") or data.startswith("job:"):
         parts = data.split(":")
@@ -921,12 +789,29 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         logging.info(f"Procesando acción: {action} con prompt='{prompt_p[:50]}...', steps={steps_p}, sampler={sampler_p}, cfg={cfg_p}, seed={seed_p}, size={width_p}x{height_p}")
         
         if action == "repeat":
-            logging.info(f"Ejecutando REPEAT con seed aleatorio")
+            logging.info(f"Ejecutando REPEAT con seed aleatorio y auto-config parcial")
+            
+            # Get current model preset to auto-configure sampler/scheduler
+            try:
+                current_model_name = await get_current_model()
+                current_preset = get_preset_for_model(current_model_name)
+            except Exception as e:
+                logging.warning(f"Could not get model/preset for repeat auto-config: {e}")
+                current_preset = None
+
+            new_sampler = sampler_p
+            new_scheduler = sched_p
+            
+            if current_preset:
+                new_sampler = random.choice(current_preset.samplers)
+                new_scheduler = random.choice(current_preset.schedulers)
+                logging.info(f"Repeat Auto-Config: Sampler={new_sampler}, Scheduler={new_scheduler}")
+
             overrides = {
                 "steps": steps_p,
                 "cfg_scale": cfg_p,
-                "sampler_name": sampler_p,
-                "scheduler": sched_p,
+                "sampler_name": new_sampler,
+                "scheduler": new_scheduler,
                 "width": width_p,
                 "height": height_p,
                 "seed": -1,
@@ -964,15 +849,27 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 "hr_sampler_name": sampler_p,
                 "hr_scheduler": sched_p,
             }
-            always_scripts = {
-                "ADetailer": {
-                    "args": [
-                        {"ad_model": "face_yolov8n.pt", "ad_confidence": 0.3},
-                        {"ad_model": "mediapipe_face_short", "ad_confidence": 0.3},
-                        {"ad_model": "mediapipe_face_mesh_eyes_only", "ad_confidence": 0.3},
-                    ]
-                }
+            hr = {
+                "hr_scale": 1.5,
+                "hr_second_pass_steps": max(1, int(overrides.get("steps", 4)) // 2),
+                "hr_upscaler": "R-ESRGAN 4x+",
+                "denoising_strength": 0.3,
+                "hr_sampler_name": sampler_p,
+                "hr_scheduler": sched_p,
             }
+            
+            # Load user's selected ADetailer models
+            user_settings = load_user_settings(user_id)
+            selected_ad_models = user_settings.get("adetailer_models", [])
+            
+            always_scripts = {}
+            if selected_ad_models:
+                ad_args = [{"ad_model": m, "ad_confidence": 0.3} for m in selected_ad_models]
+                always_scripts["ADetailer"] = {"args": ad_args}
+                logging.info(f"Upscale using ADetailer models: {selected_ad_models}")
+            else:
+                logging.info("Upscale without ADetailer (none selected)")
+
             logging.info(f"upscale action overrides: {overrides}, hr: {hr}")
             # Enhanced upscale message
             upscale_message = (
@@ -980,7 +877,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 f"{FormatText.bold('Prompt:')} {FormatText.code(prompt_p[:100] + '...' if len(prompt_p) > 100 else prompt_p)}\n"
                 f"{FormatText.bold('Factor:')} {FormatText.code('1.5x')}\n"
                 f"{FormatText.bold('Upscaler:')} {FormatText.code('R-ESRGAN 4x+')}\n"
-                f"{FormatText.bold('Denoising:')} {FormatText.code('0.3')}\n\n"
+                f"{FormatText.bold('Denoising:')} {FormatText.code('0.3')}\n"
+                f"{FormatText.bold('ADetailer:')} {FormatText.code(str(len(selected_ad_models)) + ' modelos') if selected_ad_models else 'Desactivado'}\n\n"
                 f"{FormatText.italic('Generando versión de alta resolución...')}"
             )
             status_message = await update.effective_chat.send_message(upscale_message, parse_mode="HTML")

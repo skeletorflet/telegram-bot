@@ -28,6 +28,7 @@ def main_menu_keyboard(s: dict, is_compliant: bool) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("🔢 Imagenes", callback_data="menu:niter"), InlineKeyboardButton("🎲 Pre", callback_data="menu:pre")],
         [InlineKeyboardButton("✨ Post", callback_data="menu:post"), InlineKeyboardButton("🎭 Loras", callback_data="menu:loras:0")],
         [InlineKeyboardButton("🖼️ Modelo", callback_data="menu:model:0"), InlineKeyboardButton(f"{icon} Auto Configurar", callback_data="menu:autoconfig")],
+        [InlineKeyboardButton("🎭 ADetailer", callback_data="menu:adetailer:0")],
         [InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")],
     ]
     return InlineKeyboardMarkup(kb)
@@ -103,6 +104,27 @@ def modifiers_page_keyboard(kind: str, modifiers: list[str], selected: set[str],
         nav.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"mod:{kind}:page:{page-1}"))
     if start + per < len(modifiers):
         nav.append(InlineKeyboardButton("Next ➡️", callback_data=f"mod:{kind}:page:{page+1}"))
+    
+    if nav:
+        rows.append(nav)
+    
+    rows.append([InlineKeyboardButton("⬅️ Volver", callback_data="menu:main"), InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")])
+    return InlineKeyboardMarkup(rows)
+
+def adetailer_page_keyboard(models: list[str], selected: set[str], page: int) -> InlineKeyboardMarkup:
+    per = 10
+    start = page * per
+    items = models[start:start+per]
+    rows = []
+    for name in items:
+        mark = "✅" if name in selected else "⛔️"
+        rows.append([InlineKeyboardButton(f"{mark} {name}", callback_data=f"adetailer:toggle:{name}:{page}")])
+    
+    nav = []
+    if start > 0:
+        nav.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"menu:adetailer:{page-1}"))
+    if start + per < len(models):
+        nav.append(InlineKeyboardButton("Next ➡️", callback_data=f"menu:adetailer:{page+1}"))
     
     if nav:
         rows.append(nav)

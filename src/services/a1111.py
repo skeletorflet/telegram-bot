@@ -106,6 +106,21 @@ async def fetch_sd_models() -> list[dict]:
         logging.error(f"Error al obtener los modelos de SD: {e}")
         return []
 
+async def fetch_adetailer_models() -> list[str]:
+    """Obtiene la lista de modelos de ADetailer disponibles."""
+    try:
+        # Endpoint común para ADetailer: /adetailer/v1/ad_model
+        data = await a1111_get_json("/adetailer/v1/ad_model")
+        # La respuesta suele ser {"ad_model": ["face_yolov8n.pt", ...]}
+        if isinstance(data, dict):
+            return [str(x) for x in data.get("ad_model", [])]
+        elif isinstance(data, list):
+            return [str(x) for x in data]
+        return []
+    except Exception as e:
+        logging.error(f"Error al obtener modelos ADetailer: {e}")
+        return []
+
 async def set_sd_model(model_name: str) -> bool:
     """Establece el modelo de SD actual en A1111."""
     try:
