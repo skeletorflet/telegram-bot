@@ -319,53 +319,59 @@ class JobQueue:
                 imgs = res.get("images") or []
                 params = res.get("parameters") or {}
                 info = res.get("info") or {}
-                seeds = (info or {}).get("all_seeds") or []
+                
+                # Extract arrays from info for individual image data
+                all_prompts = info.get("all_prompts", [])
+                all_seeds = info.get("all_seeds", [])
                 
                 logging.info(f"Imágenes generadas: {len(imgs)}, parámetros: {params}, info: {info}")
+                logging.info(f"all_prompts: {all_prompts}, all_seeds: {all_seeds}")
+                
                 if not imgs:
                     await self.bot.send_message(job.chat_id, f"{FormatText.bold(FormatText.emoji('❌ Sin imágenes generadas', '⚠️'))}", parse_mode="HTML")
                 else:
                     for i, b in enumerate(imgs):
-                        seed = seeds[i] if i < len(seeds) else -1
+                        # Use the actual resolved prompt and seed for THIS specific image
+                        actual_prompt = all_prompts[i] if i < len(all_prompts) else final_prompt
+                        actual_seed = all_seeds[i] if i < len(all_seeds) else -1
+                        
                         # Enhanced caption with better formatting and emojis
-                        # Use final_prompt (with pre/post) if available
-                        display_prompt = getattr(job, 'final_prompt', job.prompt)
                         size_str = f"{params.get('width', w)}x{params.get('height', h)}"
                         caption = (
                             f"{FormatText.bold(FormatText.emoji('🎨 Generación completada', '✅'))}\n\n"
-                            f"{FormatText.bold('📝 Prompt:')} {FormatText.code(display_prompt)}\n\n"
+                            f"{FormatText.bold('📝 Prompt:')} {FormatText.code(actual_prompt)}\n\n"
                             f"{FormatText.bold('⚙️ Configuración:')}\n"
                             f"• {FormatText.bold('Pasos:')} {FormatText.code(str(params.get('steps', steps)))}\n"
                             f"• {FormatText.bold('Sampler:')} {FormatText.code(params.get('sampler_name', sampler))}\n"
                             f"• {FormatText.bold('Scheduler:')} {FormatText.code(params.get('scheduler', scheduler))}\n"
                             f"• {FormatText.bold('CFG:')} {FormatText.code(str(params.get('cfg_scale', cfg)))}\n"
-                            f"• {FormatText.bold('Seed:')} {FormatText.code(str(seed))}\n"
+                            f"• {FormatText.bold('Seed:')} {FormatText.code(str(actual_seed))}\n"
                             f"• {FormatText.bold('Tamaño:')} {FormatText.code(size_str)}\n\n"
                             f"{FormatText.bold(FormatText.emoji('👤 Autor:', ''))} {FormatText.code(job.user_name)}"
                         )
                         payload = {
-                            "prompt": display_prompt,
+                            "prompt": actual_prompt,
                             "width": params.get('width', w),
                             "height": params.get('height', h),
                             "steps": params.get('steps', steps),
                             "cfg_scale": params.get('cfg_scale', cfg),
                             "sampler_name": params.get('sampler_name', sampler),
                             "scheduler": params.get('scheduler', scheduler),
-                            "seed": seed,
+                            "seed": actual_seed,
                         }
                         rid = put_request(payload)
                         
                         # Enhanced keyboard with better buttons and emojis
                         job_data = {
                             "user_id": job.user_id,
-                            "prompt": display_prompt,
+                            "prompt": actual_prompt,
                             "width": params.get('width', w),
                             "height": params.get('height', h),
                             "steps": params.get('steps', steps),
                             "cfg_scale": params.get('cfg_scale', cfg),
                             "sampler_name": params.get('sampler_name', sampler),
                             "scheduler": params.get('scheduler', scheduler),
-                            "seed": seed,
+                            "seed": actual_seed,
                         }
                         
                         if job.hr_options:
