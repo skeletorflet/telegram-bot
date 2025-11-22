@@ -330,6 +330,8 @@ def _tip_for_set(key: str, s: dict) -> str:
 
 async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
+    chat_type = update.effective_chat.type
+    
     s = load_user_settings(user_id)
     try:
         model_name = await get_current_model()
@@ -339,7 +341,37 @@ async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         model_name = None
         preset = None
     is_compliant = are_settings_compliant(s, preset)
-    await update.message.reply_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
+
+    if chat_type != "private":
+        # Try to send to DM
+        try:
+            await context.bot.send_message(
+                chat_id=user_id,
+                text=settings_summary(s, model_name),
+                reply_markup=main_menu_keyboard(s, is_compliant),
+                parse_mode="HTML"
+            )
+            
+            # Notify in group and auto-delete
+            msg = await update.message.reply_text(f"⚙️ {update.effective_user.first_name}, te envié la configuración por privado. 📩")
+            
+            async def _del():
+                await asyncio.sleep(5)
+                try:
+                    await msg.delete()
+                    await update.message.delete()
+                except Exception:
+                    pass
+            asyncio.create_task(_del())
+            
+        except Exception as e:
+            logging.warning(f"Could not send settings to DM for {user_id}: {e}")
+            await update.message.reply_text(
+                f"❌ {update.effective_user.first_name}, no pude enviarte el mensaje privado. Por favor inicia el bot en privado primero."
+            )
+        return
+
+    await update.message.reply_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant), parse_mode="HTML")
 
 
 
@@ -686,9 +718,9 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             models = await fetch_adetailer_models()
             kb = adetailer_page_keyboard(models, cur, page)
             try:
-                await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
+                await q.edit_message_reply_markup(reply_markup=kb)
             except Exception as e:
-                logging.warning(f"Could not edit message in adetailer toggle: {e}")
+                logging.warning(f"Could not edit markup in adetailer toggle: {e}")
             return
         if action == "page":
             page = int(parts[2])
