@@ -1,80 +1,127 @@
-Hogwarts
-Middle-earth
-Narnia
-Wonderland
-Neverland
-Oz
-Westeros
-Panem
-The Shire
-Rivendell
-Mordor
-Atlantis
-Camelot
-El Dorado
-Shangri-La
-Utopia
-Dystopia
-Gotham City
-Metropolis
-Wakanda
-Asgard
-Valhalla
-Olympus
-Pandora
-Arrakis
-Gilead
-Terabithia
-The Emerald City
-The Hundred Acre Wood
-The Land of Oz
-The Island of Misfit Toys
-The Forbidden Forest
-Diagon Alley
-Platform 9¾
-The Ministry of Magic
-The Burrow
-King's Landing
-Winterfell
-The Wall
-The Iron Islands
-The Capitol
-District 12
-The Hunger Games Arena
-Jurassic Park
-The Matrix
-The Upside Down
-The Overlook Hotel
-The Bates Motel
-Twin Peaks
-Silent Hill
-Rapture
-Columbia
-The Mushroom Kingdom
-Hyrule
-The Fire Swamp
-The Chocolate Factory
-The Island of Doctor Moreau
-The Lost City of Z
-The Phantom Zone
-The Death Star
-Tatooine
-Endor
-Hoth
-Naboo
-The Grid
-The Enchanted Forest
-The Dark Tower
-The Library of Babel
-The House of Leaves
-The City of Ember
-The Land of Stories
-The Secret Garden
-The Island of the Blue Dolphins
-The Valley of the Dolls
-The City of Gold
-The Black Forest
-The Red Keep
-The Green Mile
-The Yellow Submarine
-The White Palace
+Tokyo at night, neon-lit streets, bustling crowds, cyberpunk atmosphere
+ancient Japanese temple, cherry blossoms falling, stone lanterns, misty morning
+cyberpunk megacity, towering skyscrapers, holographic billboards, rain-slicked streets
+magical forest, glowing mushrooms, ethereal mist, fairy lights
+underwater palace, coral architecture, bioluminescent creatures, crystal clear water
+gothic cathedral, stained glass windows, candlelight, shadows and stone
+futuristic space station, zero gravity, panoramic windows, stars beyond
+medieval castle courtyard, stone walls, training grounds, banner flags
+modern high school rooftop, metal fence, cityscape view, sunset
+cozy coffee shop interior, wooden tables, steam from cups, warm lighting
+bustling marketplace, colorful stalls, exotic goods, crowd of people
+snowy mountain peak, ice crystals, thin air, sunrise view
+desert oasis, palm trees, cool water, sand dunes around
+tropical beach, white sand, turquoise waves, palm tree shade
+enchanted garden, oversized flowers, winding paths, magical creatures
+steampunk workshop, brass gears, steam vents, mechanical inventions
+dark alleyway, brick walls, puddles, street lamp glow
+grand ballroom, crystal chandelier, marble floor, elegant dancers
+abandoned factory, broken windows, rust and decay, eerie silence
+sakura park in spring, pink petals everywhere, picnic blankets, joyful atmosphere
+Victorian London street, gas lamps, cobblestones, fog rolling in
+modern apartment balcony, city lights below, evening breeze, potted plants
+underwater cave, glowing crystals, schools of fish, mysterious depths
+volcano crater, lava flows, smoke rising, intense heat
+ice cave, frozen stalactites, blue ice glow, echoing chamber
+bamboo forest, tall green stalks, filtered sunlight, peaceful rustling
+moonlit lake, reflection of moon, calm waters, fireflies dancing
+battlefield ruins, broken weapons, smoke, dramatic sky
+zen rock garden, raked sand patterns, meditation stones, tranquil atmosphere
+dystopian wasteland, broken buildings, ash falling, desolate landscape
+floating islands in sky, waterfalls falling into clouds, magical bridges, birds flying
+pirate ship deck, wooden planks, sails billowing, ocean horizon
+wizard's tower library, endless bookshelves, floating candles, ancient tomes
+underground dungeon, torch-lit corridors, stone walls, mysterious passages
+crystalline cavern, giant crystals, rainbow reflections, mineral formations
+rural Japanese countryside, rice paddies, traditional farmhouse, mountains in distance
+neon-lit arcade, game cabinets, flashing lights, electronic sounds
+elegant French cafe, outdoor seating, Eiffel tower view, croissants and coffee
+haunted mansion hallway, dusty furniture, spider webs, moonlight through windows
+futuristic laboratory, glass tubes, holographic displays, experimental equipment
+ancient ruins, crumbling pillars, overgrown vines, archaeological mystery
+throne room, red carpet, golden throne, royal guards standing
+dojo training hall, wooden floor, practice weapons on walls, serious atmosphere
+flower field, endless blooms, gentle breeze, butterflies everywhere
+city rooftop garden, urban oasis, vegetables growing, peaceful escape
+grand library, towering shelves, ladders, quiet reading nooks
+subway platform, waiting crowd, bright lights, arriving train
+clock tower interior, giant gears, mechanical sounds, view of cityscape
+cherry blossom tunnel, pink canopy overhead, petals falling, romantic path
+enchanted ice palace, frozen architecture, ice sculptures, aurora borealis above
+medieval tavern interior, wooden beams, fireplace, travelers drinking
+art museum gallery, paintings on walls, white space, cultured atmosphere
+astronomy observatory, telescope dome, star charts, nighttime viewing
+bamboo tea house, sliding doors, tatami mats, tea ceremony setup
+burning battlefield, flames everywhere, warriors clashing, chaotic scene
+calm monastery courtyard, stone fountain, monks meditating, incense smoke
+cascading waterfall, mist spray, rocks, rainbow in sunlight
+cathedral basement, ancient crypts, candlelight, mysterious atmosphere
+city park autumn, orange-red leaves, benches, children playing
+cloud castle, white fluffy architecture, rainbow stairs, angelic aesthetic
+coastal lighthouse, rocky cliffs, crashing waves, beacon light
+dark throne room, shadows, ominous atmosphere, villain presence
+desert caravan camp, tents, campfire, night stars
+dragon's lair, treasure piles, bones scattered, cave darkness
+elven village, treehouses, rope bridges, forest canopy
+festival grounds, lanterns hanging, food stalls, celebration atmosphere
+frozen tundra, blizzard winds, ice formations, survival challenge
+futuristic highway, flying cars, light trails, speed motion
+garden maze, hedge walls, hidden fountain, getting lost
+geisha district, traditional architecture, paper lanterns, evening atmosphere
+gladiator arena, sand floor, crowd cheering, combat readiness
+harbor docks, ships moored, seagulls, salty air
+hidden valley, surrounded by mountains, secret waterfall, untouched nature
+industrial complex, smokestacks, metal structures, working machinery
+jungle ruins, ancient temple, overgrown vegetation, wildlife sounds
+lava chamber, molten rock, extreme heat, danger zone
+magical academy courtyard, student wizards, spell practice, fountain centerpiece
+mountain shrine, torii gate, stone steps, spiritual atmosphere
+nightclub interior, dance floor, laser lights, pulsing music
+onsen hot spring, steam rising, natural rocks, relaxing bath
+parallel dimension, surreal physics, floating objects, distorted reality
+pocket dimension, endless void, glowing platforms, mysterious space
+prison cell, iron bars, stone walls, confined space
+rainbow bridge, colorful arch, clouds below, mythical crossing
+royal garden, trimmed hedges, rose bushes, peacocks walking
+samurai battlefield, falling cherry blossoms, crossed swords, honor duel
+school classroom, desks in rows, chalkboard, window view
+shopping district, bright storefronts, crowds shopping, modern retail
+shrine gate path, red torii gates lining path, spiritual journey
+skyscraper rooftop helipad, city sprawl below, landing pad markings
+space nebula, colorful cosmic clouds, stars forming, vast beauty
+spirit realm, ethereal landscape, floating spirits, otherworldly glow
+spring meadow, wildflowers, grazing deer, gentle hills
+stadium arena, massive crowd, spotlight, performance stage
+starship bridge, control panels, viewscreen showing space, captain's chair
+street food alley, vendor carts, delicious aromas, casual dining
+subterranean city, artificial sun, underground buildings, cave architecture
+summoning circle, magical runes, glowing symbols, ritual space
+sunflower field, tall yellow flowers, blue sky, summer warmth
+sunset harbor, orange sky reflecting on water, boats silhouetted, peaceful evening
+swamp, murky water, twisted trees, fog, eerie sounds
+swimming pool, crystal blue water, poolside chairs, summer fun
+tavern cellar, wine barrels, dim lighting, storage space
+temple inner sanctum, sacred altar, incense burning, reverent atmosphere
+thunderstorm plains, lightning strikes, rain pouring, dramatic sky
+time vortex, swirling energy, clock imagery, temporal distortion
+Tokyo street crossing, crowds waiting, neon signs, night energy
+train interior, passengers sitting, windows showing passing scenery
+treasure vault, gold coins piled, jewels sparkling, secure chamber
+treehouse hideout, wooden platforms, rope ladder, forest view
+tribal village, huts in circle, bonfire center, community gathering
+tropical rainforest, dense canopy, exotic birds, humidity
+underwater trench, deep ocean darkness, strange creatures, pressure
+urban alley cafe, graffiti walls, small tables, hipster vibe
+Victorian bedroom, four-poster bed, lace curtains, antique furniture
+village square, central well, market day, townspeople chatting
+virtual reality world, digital landscape, glitching effects, matrix aesthetic
+volcanic island, black sand beach, smoking volcano, tropical heat
+war room, strategy maps on table, generals planning, serious discussion
+waterfall grotto, hidden cave behind waterfall, pool at bottom, sanctuary
+western saloon, swinging doors, bar counter, poker tables
+wheat field, golden stalks waving, barn in distance, harvest time
+winter cabin, snow on roof, smoke from chimney, cozy interior
+witch's hut, crooked structure, potion shelves, bubbling cauldron
+wooden pier, extending into ocean, fishing spot, sunset reflection
+zen meditation garden, raked gravel, balanced rocks, minimalist beauty
+zombie apocalypse street, abandoned cars, broken windows, survival horror

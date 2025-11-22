@@ -1,25 +1,123 @@
-Golden sunset glow
-Dramatic backlighting
-Rembrandt lighting (side window)
-Cyberpunk neon accents
-Cold blue moonlight
-Soft studio key light
-Vintage warm tungsten
-Bioluminescent glow
-Harsh directional spotlights
-Overcast natural diffusion
-Celestial god rays
-Dynamic RGB gaming lights
-Lava lamp red-orange hues
-Flashlight beam in darkness
-Holographic screen glare
-Flickering candlelight
-Himalayan salt lamp glow
-Pool water reflections
-Multicolor firework bursts
-UV blacklight fluorescence
-Northern lights aurora
-Forge fire ember glow
-Clinical surgical lighting
-Antique sepia filter
-Theatrical stage spotlight
+golden hour warm glow, sun low on horizon, orange-yellow cast
+blue hour cool twilight, deep blue atmosphere, peaceful evening
+harsh midday sun, bright overhead light, strong shadows
+soft diffused overcast, even lighting, no harsh shadows
+dramatic backlighting, silhouette effect, rim light glow
+Rembrandt lighting, triangle under eye, classic portrait
+butterfly lighting, centered nose shadow, beauty standard
+split lighting, half face lit half shadow, dramatic contrast
+rim lighting, outline glow, separation from background
+three-point lighting, key fill rim, professional studio
+spotlight from above, theatrical beam, focused attention
+candlelight flicker, warm intimate glow, dancing shadows
+fireplace glow, orange warm light, cozy atmosphere
+neon signs reflection, colorful electric glow, urban night
+moonlight through window, cool pale blue, romantic mood
+sunrise breaking, golden pink light, new day beginning
+sunset gradient, orange pink purple, day ending
+volumetric god rays, light beams through atmosphere, divine feel
+underwater caustic light, rippling patterns, aquatic glow
+bioluminescent glow, natural creature light, fantasy blue-green
+northern lights aurora, dancing green purple, magical sky
+lightning flash, bright white burst, storm illumination
+car headlights, twin beams, night driving, urban scene
+street lamp sodium glow, orange urban lighting, noir atmosphere
+fluorescent office lighting, cool white harsh, corporate environment
+LED strip lights, rgb color changing, modern tech aesthetic
+fairy lights strung, warm yellow twinkle, festive decoration
+campfire orange glow, crackling light, wilderness night
+laser light show, colored beams cutting, concert atmosphere
+stadium floodlights, bright white intense, sports event
+disco ball reflections, rotating spots of light, dance party
+stained glass colored light, pattern projection, cathedral beauty
+crystal refraction, rainbow light split, gem sparkle
+magic spell glow, mystical energy light, supernatural effect
+explosive flash, bright orange-yellow burst, action scene
+muzzle flash, gun firing light, combat moment
+sword clash sparks, metal collision light, battle scene
+welding torch, intense blue-white, industrial work
+blacklight UV glow, neon colors pop, party atmosphere
+phosphorescence glow, green luminescence, deep ocean or cave
+lantern swing, moving warm light, exploration
+
+ scene
+torch flame, orange flickering, medieval dungeon
+oil lamp glow, soft yellow, vintage ambiance
+match strike, small flame birth, ignition moment
+lighter flick, blue-orange flame, cigarette lighting
+sparkler trails, bright white sparks, celebration
+star field, distant point lights, space vastness
+nebula glow, colorful cosmic clouds, deep space
+planet atmosphere glow, edge lighting, space view
+hologram projection, blue translucent light, sci-fi tech
+computer screen glow, face illumination, late night work
+phone screen light, blue glow on face, modern life
+television static glow, flickering light, retro horror
+projector beam, movie showing, dusty air visible
+flashlight beam, cone of light, searching darkness
+headlamp, hands-free light, explorer's tool
+searchlight sweep, powerful beam rotating, prison or military
+lighthouse beam rotating, coastal safety light, maritime
+traffic light colors, red yellow green, urban intersection
+ambulance strobe, red-blue flashing, emergency
+police lights, red-blue alternating, law enforcement
+turn signal blink, orange rhythmic, vehicle indicator
+hazard lights, yellow warning flash, caution alert
+runway lights, white line marking, airport guidance
+stage lighting color wash, concert atmosphere, performance
+follow spot, performer tracking light, theater
+footlights, upward stage glow, theatrical classic
+spotlight on speaker, focused attention, presentation
+desk lamp, directed task light, study workspace
+bedside lamp, soft nighttime glow, bedroom comfort
+floor lamp uplight, ceiling wash, ambient room
+chandelier sparkle, multiple points, elegant dining
+pendant light, hanging fixture, modern kitchen
+wall sconce, decorative fixture, hallway lighting
+under-cabinet lighting, task illumination, kitchen work
+cove lighting, indirect ceiling glow, architectural
+track lighting, adjustable spots, gallery display
+recessed can lights, ceiling grid, modern home
+string globe lights, outdoor party, festive evening
+tiki torch, flame on pole, tropical party
+chinese lantern, red paper glow, festival celebration
+paper lantern ceiling, soft diffused, asian aesthetic
+lava lamp glow, blob movement light, retro psychedelic
+salt lamp, pink-orange glow, wellness trend
+plasma ball, electric tendrils, interactive science
+fiber optic stars, ceiling installation, soothing bedroom
+grow light, purple-pink spectrum, indoor garden
+heat lamp, red-orange glow, warming effect
+infrared light, invisible warmth, thermal imaging
+X-ray light, medical imaging glow, hospital scene
+radioactive glow, green toxic light, danger symbol
+radiation warning light, yellow caution, nuclear facility
+alarm strobe, bright white pulse, emergency alert
+beacon rotating, warning light, tower top
+signal fire, communication flame, ancient messaging
+flare bright, emergency signal light, survival
+glow stick chemical, neon color, rave or emergency
+lightsaber glow, colored blade, sci-fi weapon
+energy shield
+
+
+, translucent barrier light, defense visual
+force field shimmer, protective light distortion, sci-fi
+teleportation effect, swirling light, sci-fi travel
+wormhole light, spiraling tunnel, space travel
+time portal glow, temporal energy light, time travel
+dimensional rift, reality tear lighting, multiverse
+mirror reflection, light bounce, perfect reflection
+water reflection, rippling light, surface mirrored
+metal reflection, sharp glare, polished surface
+glass reflection, transparent light, window glare
+ice reflection, glacier sparkle, frozen mirror
+crystal reflection, multi-faceted light, gem quality
+diamond sparkle, brilliant cut light, precious stone
+gold gleam, metallic shine, wealth display
+silver shine, cool metal, elegant gleam
+bronze patina, aged metal glow, antique
+copper warm, metallic orange-brown, decorative
+chrome reflection, mirror polish, automotive
+pearl luster, iridescent soft, organic gem
+opal fire, rainbow flash, play of color

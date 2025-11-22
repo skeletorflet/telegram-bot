@@ -1,80 +1,139 @@
-Walking
-Running
-Jumping
-Sitting
-Standing
-Lying
-Crawling
-Climbing
-Swimming
-Flying
-Dancing
-Singing
-Talking
-Whispering
-Shouting
-Laughing
-Crying
-Smiling
-Frowning
-Thinking
-Writing
-Reading
-Drawing
-Painting
-Cooking
-Eating
-Drinking
-Sleeping
-Waking
-Listening
-Watching
-Observing
-Staring
-Glancing
-Gazing
-Peering
-Looking
-Seeing
-Viewing
-Noticing
-Ignoring
-Touching
-Holding
-Grabbing
-Pushing
-Pulling
-Lifting
-Lowering
-Raising
-Dropping
-Throwing
-Catching
-Kicking
-Hitting
-Beating
-Clapping
-Waving
-Pointing
-Nodding
-Shaking
-Turning
-Twisting
-Bending
-Stretching
-Leaning
-Sliding
-Rolling
-Spinning
-Floating
-Sinking
-Rising
-Falling
-Collapsing
-Exploding
-Breaking
-Fixing
-Building
-Destroying
-Creating
-Imagining
+walking gracefully, elegant posture, flowing movement
+running at full speed, determined expression, hair flowing behind
+jumping high in mid-air, athletic leap, dynamic motion
+sitting on elegant throne, legs crossed, confident posture
+sitting casually on ground, relaxed pose, peaceful expression
+standing heroically, arms crossed, powerful stance
+lying down peacefully, resting pose, calm expression
+lying dramatically, wounded pose, emotional scene
+crawling stealthily, ninja pose, sneaking motion
+climbing steep cliff, adventurous pose, reaching upward
+swimming underwater, graceful strokes, bubbles around
+flying through clouds, soaring pose, wind effects
+dancing energetically, rhythmic movement, joyful expression
+dancing ballet, graceful pirouette, elegant form
+singing passionately, microphone in hand, spotlight effect
+talking animatedly, gesturing hands, expressive face
+whispering secretly, hand near mouth, conspiratorial look
+shouting loudly, mouth wide open, intense emotion
+laughing heartily, head thrown back, tears of joy
+crying emotionally, tears streaming, sad expression
+smiling warmly, gentle expression, kind eyes
+smiling mischievously, playful grin, teasing look
+frowning deeply, concerned expression, worried look
+thinking deeply, hand on chin, contemplative pose
+meditating peacefully, lotus position, spiritual aura
+writing in journal, pen in hand, focused expression
+reading book intently, absorbed in story, quiet moment
+drawing on canvas, artistic tools, creative process
+painting masterpiece, brush in hand, inspired expression
+cooking delicious meal, chef outfit, steam rising
+eating happily, fork and food, enjoying taste
+drinking elegantly, cup raised, refined gesture
+sleeping soundly, curled up, peaceful dreams
+waking up stretching, yawning, morning light
+listening carefully, hand to ear, attentive pose
+watching intently, focused gaze, observant expression
+staring intensely, unblinking eyes, serious look
+glancing sideways, subtle eye movement, cautious look
+gazing at stars, looking up, dreamy expression
+peering around corner, sneaky pose, curious look
+touching gently, soft contact, tender moment
+holding precious object, protective grip, careful hands
+grabbing weapon quickly, action pose, ready for battle
+pushing with force, straining muscles, determined effort
+pulling with strength, rope or chain, teamwork pose
+lifting heavy object, muscles flexing, power display
+throwing projectile, dynamic wind-up, release motion
+catching in mid-air, reaching out, perfect timing
+kicking powerfully, martial arts pose, leg extended
+punching forward, fist clenched, battle cry
+fighting fiercely, combat stance, multiple opponents
+clapping enthusiastically, hands together, celebration
+waving goodbye, hand raised, emotional farewell
+waving hello, friendly gesture, welcoming smile
+pointing dramatically, finger extended, accusing or directing
+pointing at sky, inspirational pose, hopeful gesture
+nodding in agreement, understanding expression, affirmative
+shaking head no, disagreement, refusing gesture
+turning around dramatically, flowing cape or hair, reveal moment
+turning back to look, over-shoulder glance, mysterious
+twisting body in combat, agile dodge, flexibility
+bending down to pick up, reaching low, gentle motion
+stretching arms high, morning routine, energetic pose
+stretching body lazily, cat-like pose, comfortable
+leaning against wall, casual pose, cool demeanor
+leaning forward interested, engaged expression, curiosity
+sliding on ground, action slide, dynamic movement
+rolling to dodge, evasive maneuver, quick reflex
+spinning rapidly, tornado effect, dizzying motion
+spinning gracefully, figure skater pose, elegant rotation
+floating in air, levitation, magical aura
+floating in water, peaceful drift, weightless
+sinking underwater, reaching up, desperate motion
+rising from ground, getting up, determination
+rising into air, ascension, angelic light
+falling from height, mid-fall pose, wind rushing
+falling backwards, shocked expression, losing balance
+collapsing exhausted, dropping to knees, fatigue
+exploding with power, energy burst aura, transformation
+breaking through wall, dramatic entry, debris flying
+fixing broken item, focused repair, mechanical work
+building structure, construction pose, teamwork
+destroying obstacle, powerful strike, rubble flying
+creating artwork, artistic expression, inspired moment
+imagining possibilities, thought bubbles, creative mind
+praying devoutly, hands clasped, spiritual moment
+hugging tightly, emotional embrace, loving gesture
+hugging from behind, surprise embrace, romantic moment
+kissing passionately, romantic scene, intimate moment
+kissing forehead gently, tender affection, caring gesture
+bowing respectfully, formal greeting, honorable pose
+bowing deeply, apologetic gesture, sincere regret
+kneeling on one knee, proposal pose, romantic declaration
+kneeling both knees, begging pose, desperate plea
+saluting military style, disciplined pose, respect shown
+saluting casual, friendly wave-salute, informal
+summoning magic spell, hands glowing, incantation pose
+casting spell, magic circles appearing, mystical energy
+wielding sword overhead, epic battle pose, warrior stance
+dual-wielding weapons, crossed swords, badass pose
+shooting arrow from bow, archer stance, aimed precision
+firing gun, action pose, recoil effect
+blocking with shield, defensive stance, protection
+dodging attack, agile sidestep, narrow escape
+countering attack, reversal move, tactical strike
+transforming dramatically, power-up transformation, light effects
+powering up, energy charging, aura intensifying
+meditating before battle, calm preparation, focus gathering
+resting after battle, exhausted victory, sitting on rubble
+celebrating victory, triumphant pose, fist raised
+mourning defeat, dejected posture, head down
+protecting someone, sheltering embrace, heroic sacrifice
+reaching out desperately, extended hand, trying to save
+grasping hand, connection made, emotional link
+letting go reluctantly, releasing grip, sad farewell
+carrying princess style, romantic carry,
+
+ protective hold
+carrying on back, piggyback pose, playful or helpful
+dragging along ground, pulling unconscious ally, rescue mission
+supporting injured ally, arm over shoulder, teamwork
+sneaking through shadows, stealth mode, ninja crouch
+hiding behind object, peek-around, avoiding detection
+revealing dramatically, unveiling, surprise moment
+presenting gift, offering hands, generous gesture
+receiving gift happily, accepting with joy, grateful smile
+opening door cautiously, peeking in, careful entry
+closing door firmly, shutting out, decisive action
+looking out window, gazing outside, contemplative mood
+sitting at desk studying, homework pose, focused learning
+typing on keyboard, computer work, modern life
+playing video game, controller in hand, engaged
+playing musical instrument, performer pose, artistic talent
+photographing scene, camera held up, capturing moment
+filming with camera, director pose, creative vision
+skateboarding tricks, mid-trick pose, urban sport
+surfing waves, balance on board, beach vibes
+skiing down slope, athletic pose, winter sport
+ice skating gracefully, figure skating, elegant glide

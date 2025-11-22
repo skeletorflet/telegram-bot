@@ -1,20 +1,108 @@
-Low-angle shot (from below)
-Overhead shot (from above)
-Dutch tilt (canted angle)
-Extreme close-up (face details)
-Medium shot (waist-up)
-Cowboy shot (mid-thigh)
-Full-body wide shot
-15mm ultra-wide angle
-Fisheye lens distortion
-Polaroid-style frame (vintage B&W)
-Cinematic 35mm film grain
-Kodak Gold 200 lomography effect
-Macro focus (texture detail)
-Drone aerial perspective
-Shoulder-level tracking shot
-Tilt-shift miniature effect
-Deep focus landscape
-Over-the-shoulder framing
-Symmetrical center composition
-Dutch angle dynamic action
+eye-level straight on, neutral perspective, direct engagement
+low-angle from below, looking up, heroic powerful feel
+high-angle from above, looking down, vulnerable diminished feel
+bird's-eye view, directly overhead, top-down flat perspective
+worm's-eye view, extreme low angle, towering presence
+Dutch angle tilted, canted horizon, unease tension
+extreme close-up, face details, pores and texture visible
+close-up, head and shoulders, intimate emotion
+medium close-up, chest up, conversation framing
+medium shot, waist up, standard dialogue
+cowboy shot, mid-thigh up, western film classic
+full shot, entire body, action clear
+long shot, body with environment, establishing context
+extreme long shot, tiny figure in vast space, scale emphasis
+ultra wide-angle, fisheye distortion, immersive environment
+wide-angle 24mm, expanded perspective, architectural feel
+standard 50mm, natural eye view, realistic perspective
+telephoto 85mm, portrait compression, flattering face
+telephoto 200mm, distant compressed, voyeuristic feel
+macro focus extreme, tiny details huge, texture exploration
+rack focus shift, blur to sharp, attention direction
+selective focus, subject sharp background blur, depth isolation
+deep focus, everything sharp, maximum clarity
+shallow depth of field, bokeh background, subject isolated
+tilt-shift miniature, selective blur plane, toy-like effect
+over-the-shoulder, conversation partner visible, dialogue setup
+point of view POV, first person perspective, immersive experience
+reverse angle, opposite perspective, scene continuity
+two-shot, two subjects framed, relationship shown
+three-shot, three subjects together, group dynamic
+crowd shot, many people visible, busy atmosphere
+tracking shot, camera following subject, motion continuity
+dolly in, moving toward subject, increasing intimacy
+dolly out, moving away, revealing context
+crane shot, vertical movement, grand scale
+steadicam smooth, fluid movement, following action
+handheld shaky, documentary feel, urgent realism
+locked-off static, no camera movement, formal composition
+whip pan, fast horizontal blur, energetic transition
+tilt up, camera looks upward, revealing height
+tilt down, camera looks downward, following fall
+pan left, horizontal scan left, surveying scene
+pan right, horizontal scan right, landscape reveal
+diagonal composition, tilted lines, dynamic energy
+symmetrical composition, perfect balance, formal harmony
+rule of thirds, subject off-center, pleasing balance
+centered composition, subject dead center, formal portrait
+frame within frame, architectural framing, depth layers
+leading lines, perspective guides eye, directed attention
+negative space, empty area emphasis, minimalist focus
+golden ratio spiral, natural balance, artistic composition
+breaking the fourth wall, direct camera address, audience engagement
+reflection shot, mirror or water, doubled imagery
+silhouette shot, black shape against light, dramatic profile
+shadow emphasis, dark shapes prominent, noir atmosphere
+profile view, side angle, classical portrait
+three-quarter view, angled face, natural posture
+back view, facing away, mysterious departure
+walking away shot, receding figure, ending or journey
+approaching camera, coming closer, confrontation or arrival
+circling shot, 360 rotation, full subject reveal
+spiral shot, rotating while moving, disorienting dramatic
+aerial establishing, city from above, grand scale introduction
+ground level, camera at floor, child or small creature view
+through window peeking, voyeuristic angle, privacy invasion
+through doorway, framing portal, transition space
+through foliage, nature obscuring, hidden observer
+underwater perspective, submerged view, aquatic world
+upside down inverted, disorienting angle, altered reality
+mirror reflection angle, reversed image, duality shown
+glass reflection, layered composition, urban complexity
+car interior, passenger or driver view, journey intimacy
+dashboard cam, road ahead view, travel perspective
+security camera angle, high corner mount, surveillance feel
+surveillance footage, grainy fixed angle, watched feeling
+sniper scope view, crosshairs framing, precision targeting
+binocular view, dual circles, distant observation
+microscope view, extreme magnification, scientific discovery
+telescope view, space observation, cosmic perspective
+x-ray vision, see-through effect, medical or super power
+thermal imaging, heat signature colors, tactical view
+night vision green, low-light amplification, military operation
+slow motion, time stretched, dramatic action detail
+bullet time, frozen rotation, Matrix effect
+time-lapse, compressed time, change over duration
+shutter speed blur, motion streaks, speed conveyed
+freeze frame, action stopped, emphasizing moment
+zoom in, magnifying subject, detail focus
+zoom out, widening view, context reveal
+crash zoom, fast zoom motion, dramatic emphasis
+vertigo zoom, dolly zoom effect, psychological unease
+forced perspective, size tricks, false depth
+anamorphic wide, cinematic bars, epic scope
+16:9 widescreen, standard HD, modern television
+4:3 fullscreen, vintage TV, nostalgic framing
+1:1 square, Instagram format, social media
+9:16 vertical, phone orientation, short form content
+2.35:1 ultra wide, cinema scope, epic film
+split screen, multiple views, parallel action
+picture in picture, small inset view, dual focus
+kaleidoscope effect, radial multiplication, psychedelic
+prism effect, rainbow splits, artistic distortion
+vignette edges, darkened corners, vintage photo feel
+spotlight circle, focused center, stage performance
+keyhole view, circular frame, peeping perspective
+binocular black edges, twin circles, observational
+scope reticle, targeting overlay, sniper focus intense gaze
+cross-processing colors, shifted hues, artistic stylization

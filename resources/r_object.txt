@@ -1,80 +1,159 @@
-Diamond Necklace
-Golden Ring
-Pearl Earrings
-Ruby Bracelet
-Sapphire Pendant
-Emerald Brooch
-Antique Watch
-Crystal Vase
-Silver Chalice
-Platinum Tiara
-Magic Wand
-Enchanted Amulet
-Mystic Orb
-Cursed Dagger
-Ancient Sword
-Lucky Charm
-Healing Potion
-Invisibility Cloak
-Time Turner
-Philosopher’s Stone
-Apple
-Banana
-Orange
-Grape
-Strawberry
-Pineapple
-Watermelon
-Lemon
-Cherry
-Blueberry
-Coconut
-Peach
-Plum
-Pomegranate
-Kiwi
-Mango
-Dragon Fruit
-Starfruit
-Passionfruit
-Fig
-Olive Branch
-Oak Leaf
-Maple Seed
-Pine Cone
-Seashell
-Coral Reef
-Moonstone
-Sun Crystal
-Ice Shard
-Fire Gem
-Wind Chime
-Thunder Bolt
-Earth Crystal
-Water Droplet
-Feather Quill
-Silk Scarf
-Velvet Robe
-Leather Belt
-Wooden Flute
-Glass Prism
-Brass Compass
-Iron Key
-Bronze Bell
-Steel Shield
-Copper Coin
-Obsidian Mirror
-Ivory Comb
-Jade Statue
-Amber Beads
-Turquoise Necklace
-Quartz Sphere
-Lapis Lazuli Ring
-Topaz Earrings
-Garnet Pendant
-Onyx Bracelet
-Peridot Brooch
-Aquamarine Crown
-Opal Tiara
-Amethyst Pendant
-Citrine Ring
+ornate katana with dragon-engraved blade, leather-wrapped handle, battle-worn
+ancient leather-bound grimoire, glowing runes on cover, mystical pages
+bouquet of red roses, water droplets on petals, green stems wrapped
+crystal ball on ornate stand, swirling mist inside, fortune telling
+diamond tiara with intricate metalwork, sparkling jewels, royal crown
+elegant violin with golden strings, polished wood, bow included
+enchanted staff topped with glowing crystal, carved wood, magical aura
+futuristic laser pistol, sleek chrome design, energy cell glowing
+golden pocket watch, engraved cover, ticking mechanism, chain attached
+magical wand, star-tipped, sparkles emanating, wizard's tool
+ornamental fan, painted silk, wooden ribs, elegant accessory
+silver chalice, gemstone inlays, ceremonial cup, sacred object
+steampunk goggles, brass frames, tinted lenses, leather strap
+vintage camera, leather case, flash bulb, mechanical shutter
+wooden treasure chest, iron bands, overflowing with gold coins
+crystal wine glass, delicate stem, clear shine, elegant drinkware
+leather-bound journal, yellowed pages, ink stains, personal diary
+ornate mirror, golden frame, mystical reflection, baroque style
+silk scarf, flowing fabric, colorful patterns, draped elegantly
+steel sword, broad blade, cross-guard, battle-ready weapon
+bronze shield, dented surface, family crest, defensive armor
+compass with brass casing, cardinal points, treasure hunting tool
+emerald necklace, gold chain, large center gem, luxury jewelry
+feathered quill pen, ink bottle, parchment, writing set
+glass prism, rainbow refraction, scientific tool, light experiment
+iron key, ornate design, rusted with age, unlocks mysteries
+jade statuette, carved dragon, smooth stone, ancient artifact
+lantern with candle inside, metal frame, glowing warm light
+locket with photo inside, silver heart-shaped, sentimental keepsake
+marble bust, classical sculpture, pedestal display, artistic piece
+obsidian dagger, black blade, ritual weapon, dark magic
+pearl earrings, white luster, gold hooks, elegant jewelry
+quartz crystal cluster, natural formation, energy healing, spiritual
+ruby ring, gold band, large red gem, precious jewelry
+sapphire pendant, silver chain, blue gemstone, noble accessory
+telescope, brass construction, star-gazing, astronomical tool
+umbrella, lace parasol, Victorian style, sun protection
+vial of glowing potion, bubbling liquid, cork stopper, alchemical
+war hammer, massive head, leather-wrapped handle, crushing weapon
+xylophone, colorful bars, mallets, musical instrument
+yarn ball, soft wool, crafting material, cozy aesthetic
+zodiac medallion, astrological symbols, hanging chain, mystical charm
+acoustic guitar, wooden body, six strings, musical performance
+playing cards deck, ornate design, magic tricks, gambler's tool
+hourglass, sand flowing, wooden frame, time measurement
+spellbook, floating pages, arcane symbols, wizard's knowledge
+scrolls tied with ribbon, aged parchment, ancient texts
+inkwell and fountain pen, elegant writing set, calligraphy
+globe on wooden stand, old world map, explorer's reference
+magnifying glass, brass handle, detective tool, investigation
+sacred cross, silver material, religious symbol, faith token
+dreamcatcher, feathers hanging, woven web, native charm
+music box, clockwork mechanism, delicate tune, antique treasure
+origami crane, folded paper, japanese art, wish symbol
+tarot cards spread, mystical reading, fortune deck
+top hat, silk fabric, magician's prop, formal wear
+medicine bottle, glass container, cork seal, healing elixir
+spell scroll, rolled parchment, wax seal, magical knowledge
+broken chains, freedom symbol, dramatic scene, escape theme
+butterfly net, mesh fabric, wooden handle, nature collection
+candelabra, multiple candles, ornate brass, gothic lighting
+cherry blossom branch, pink petals, delicate wood, spring symbol
+coin purse, leather pouch, gold coins spilling, merchant's bag
+crystal pendant, hanging chain, light refraction, magical jewelry
+feather duster, colorful plumes, cleaning tool, maid accessory
+fishing rod, bamboo pole, line and hook, peaceful hobby
+flower crown, woven blossoms, festival wear, nature adornment
+fortune cookie, broken open, paper fortune, luck charm
+gavel, wooden hammer, judge's tool, law symbol
+handcuffs, metal restraints, police equipment, crime scene
+harmonica, metal reeds, blues music, pocket instrument
+incense burner, smoke rising, aromatic sticks, meditation tool
+jack-o-lantern, carved pumpkin, glowing inside, Halloween decoration
+jewelry box, velvet interior, mirror lid, treasure storage
+letter with wax seal, aged paper, mysterious message
+map with X marking spot, treasure chart, adventure quest
+mask, ornate design, masquerade ball, identity hidden
+megaphone, red and white, announcement tool, protest rally
+microphone on stand, performance equipment, singer's tool
+monocle, single lens, chain attached, sophisticated accessory
+music sheet, musical notes, composer's work, performance guide
+opera mask, half-face coverage, theatrical prop, mysterious elegance
+paintbrush and palette, artist tools, colors mixed, creative work
+parasol, lace edges, sun shade, elegant accessory
+perfume bottle, crystal glass, atomizer top, fragrance luxury
+photograph in frame, sepia tone, memories captured, sentimental display
+pipe, smoking tobacco, detective aesthetic, contemplative prop
+poison apple, shiny red, dark fairy tale, danger symbol
+prayer beads, wooden spheres, string loop, spiritual tool
+puzzle box, mechanical locks, secret compartment, mystery object
+quiver full of arrows, leather case, archer's equipment
+radio, vintage design, antenna extended, music playing
+ring box, velvet cushion, proposal scene, engagement moment
+rope coiled neatly, thick hemp, utility tool, adventure equipment
+scepter, jeweled top, golden shaft, royal symbol of power
+skull, bone white, dark symbolism, memento mori
+snowglobe, glass sphere, miniature scene inside, winter decoration
+spyglass, extendable telescope, pirate tool, naval equipment
+stamp and ink pad, postal mark, official seal, bureaucratic tool
+stethoscope, medical instrument, doctor's tool, health check
+suitcase, leather vintage, travel stickers, journey beginning
+sundial, bronze construction, shadow casting, ancient timekeeper
+sword in stone, legendary weapon, Excalibur reference, mythical
+teddy bear, soft plush, button eyes, childhood comfort
+thermometer, glass tube, mercury line, temperature reading
+torch, burning flame, wooden handle, dungeon exploration
+trophy cup, golden shine, winner's prize, victory symbol
+tuning fork, metal prongs, musical tool, pitch reference
+vinyl record, black disc, turntable ready, retro music
+walking stick, carved wood, elderly aid, gentleman's accessory
+watering can, metal construction, garden tool, plant care
+wedding ring, gold band, diamond set, marriage symbol
+whistle, silver metal, referee tool, sharp sound
+wine bottle, aged vintage, cork sealed, celebration drink
+wishing well, stone structure, coins at bottom, hope symbol
+wrench, metal tool, mechanical repair, engineer's equipment
+yin-yang symbol, black and white, balance representation, philosophy
+zeppelin model, airship miniature, steampunk aesthetic, sky travel
+abacus, wooden beads, counting tool, mathematical instrument
+bell, brass construction, ringing sound, announcement tool
+boombox, retro cassette player, speakers loud, street music
+briefcase, professional leather, business documents inside, corporate symbol
+brooch, decorative pin, gemstone center, clothing accessory
+cage, iron bars, bird or prisoner, confinement symbol
+calendar, marked dates, time organization, scheduling tool
+canteen, water container, military style, survival equipment
+cauldron, iron pot, bubbling brew, witch's cooking
+chessboard, black and white squares, strategic game, intellectual pursuit
+clipboard, paper attached, pen clipped, official notes
+crown, royal headpiece, jewels encrusted, monarchy symbol
+crutch, wooden support, medical aid, injury recovery
+dice, six-sided, game of chance, gambling element
+diploma, rolled certificate, ribbon tied, achievement recognition
+easel, wooden stand, canvas mounted, artist's workspace
+envelope, sealed paper, stamp affixed, letter delivery
+flask, scientific glass, chemical liquid, laboratory equipment
+flute, silver instrument, melodic tool, peaceful music
+fork and knife, dining utensils, meal setting, civilized eating
+gong, metal disc, mallet strike, ceremonial sound
+hammer and nails, construction tools, building work, carpentry
+harp, golden strings, angelic music, heavenly instrument
+helmet, protective gear, military or sport, safety equipment
+hockey stick, sports equipment, ice game, athletic tool
+horn, brass instrument, loud sound, medieval signaling
+hourglass timer, sand running out, deadline approaching, time pressure
+iron maiden, torture device, dark history, horror element
+journal with lock, private diary, key needed, secret thoughts
+kazoo, simple instrument, buzzing sound, playful music
+kettle, steaming spout, tea brewing, kitchen essential
+ladder, wooden rungs, climbing tool, height access
+lasso, rope loop, cowboy tool, cattle wrangling
+lighthouse lamp, rotating beam, maritime guide, coastal safety
+lollipop, candy spiral, stick holder, sweet treat
+lyre, ancient instrument, greek mythology, poetic music
+mace weapon, spiked ball, chain attached, medieval combat
+mandolin, stringed instrument, folk music, cultural sound
+money bag, dollar sign, coins inside, wealth symbol
+mortar and pestle, grinding tool, pharmacy work, herb crushing
+mummy wrappings, ancient bandages, Egyptian theme, preserved remains

@@ -1,80 +1,113 @@
-Abstract Art
-Realism
-Impressionism
-Expressionism
-Cubism
-Surrealism
-Pop Art
-Minimalism
-Futurism
-Dadaism
-Baroque
-Rococo
-Gothic Art
-Renaissance Art
-Romanticism
-Neoclassicism
-Post-Impressionism
-Fauvism
-Constructivism
-De Stijl
-Bauhaus
-Op Art
-Conceptual Art
-Land Art
-Performance Art
-Installation Art
-Digital Art
-Pixel Art
-Graffiti Art
-Street Art
-Neo-Expressionism
-Hyperrealism
-Photorealism
-Kinetic Art
-Video Art
-Collage
-Assemblage
-Outsider Art
-Naïve Art
-Symbolism
-Art Nouveau
-Art Deco
-Modernism
-Postmodernism
-Abstract Expressionism
-Color Field Painting
-Lyrical Abstraction
-Hard-Edge Painting
-Suprematism
-Orphism
-Vorticism
-Social Realism
-Magic Realism
-Metaphysical Art
-Neue Sachlichkeit
-Precisionism
-Rayonism
-Purism
-Synchromism
-Tachisme
-Action Painting
-Environmental Art
-Light Art
-Mail Art
-Body Art
-Sound Art
-Fluxus
-Happenings
-New Media Art
-Virtual Art
-Bio Art
-Cyber Art
-Interactive Art
-Generative Art
-Net Art
-Post-Internet Art
-Relational Art
-Transgressive Art
-Kitsch
-Mythological Art
+anime style, vibrant colors, expressive eyes, cel-shaded
+manga style, black and white, screentone patterns, dramatic panels
+Studio Ghibli style, soft watercolor aesthetic, pastoral beauty, whimsical
+Makoto Shinkai style, photorealistic backgrounds, lens flare, emotional lighting
+Kyoto Animation style, detailed character animation, soft lighting, slice of life
+trigger style, dynamic action, bold colors, energetic composition
+shaft head tilt, extreme angles, avant-garde composition, stylistic quirk
+chibi style, super deformed, cute proportions, simplified features
+realistic anime, detailed proportions, subtle colors, mature aesthetic
+shoujo style, sparkly eyes, flower backgrounds, romantic atmosphere
+shounen style, action poses, speed lines, power auras
+seinen style, gritty realism, mature themes, detailed linework
+josei style, elegant linework, realistic relationships, sophisticated
+moe style, cute appeal, big eyes, soft features
+bishonen style, beautiful boys, delicate features, sparkles
+isekai style, fantasy elements, RPG aesthetics, adventure atmosphere
+magical girl style, transformation sequences, ribbons and frills, sparkly
+mecha style, giant robots, mechanical details, sci-fi battles
+slice of life style, everyday moments, warm colors, relatable scenes
+psychological thriller style, dark atmosphere, surreal elements, tension
+cyberpunk anime, neon lights, technology, dystopian future
+fantasy anime, medieval settings, magic effects, epic adventure
+horror anime, dark shadows, creepy atmosphere, unsettling visuals
+sports anime, dynamic action, sweat and determination, competitive spirit
+music anime, performance scenes, rhythm visualization, passionate expression
+idol anime, sparkly stages, colorful costumes, energetic performance
+watercolor painting, soft edges, flowing colors, artistic blur
+oil painting, thick brushstrokes, rich textures, classical art
+digital painting, clean edges, vibrant colors, modern technique
+acrylic painting, bold colors, thick application, contemporary feel
+impressionism, loose brushstrokes, light and color focus, dreamy atmosphere
+expressionism, emotional distortion, bold colors, subjective reality
+cubism, fragmented forms, multiple perspectives, geometric shapes
+surrealism, dreamlike imagery, impossible combinations, subconscious exploration
+pop art, bold graphics, commercial imagery, bright colors
+minimalism, simple forms, limited palette, essential elements only
+abstract art, non-representational, shapes and colors, emotional response
+photorealism, photographic detail, technical precision, hyperrealistic
+concept art, developmental sketches, world-building, imaginative design
+character design, turnaround sheets, expression studies, detailed reference
+environment design, atmospheric backgrounds, architectural detail, scene setting
+matte painting, photorealistic backgrounds, cinematic scope, film production
+cel animation, traditional hand-drawn, frame-by-frame, classic Disney
+3D CGI, computer generated, realistic rendering, modern animation
+2.5D style, flat characters in 3D space, hybrid technique
+pixel art, retro gaming, blocky aesthetic, limited palette
+voxel art, 3D pixels, Minecraft aesthetic, cubic forms
+low poly, geometric simplification, angular forms, stylized 3D
+vector art, clean shapes, scalable graphics, flat design
+line art, outlines only, no color, sketch aesthetic
+sketch style, rough lines, unfinished feel, artistic process
+ink drawing, bold blacks, brush strokes, traditional technique
+pencil drawing, graphite shading, soft tones, classical sketch
+charcoal drawing, smudgy blacks, dramatic contrast, moody atmosphere
+pastel drawing, soft colors, blended tones, gentle aesthetic
+marker art, vibrant colors, bold lines, comic book style
+crayon art, waxy texture, childlike charm, nostalgic feel
+chalk art, dusty texture, sidewalk aesthetic, temporary beauty
+graffiti art, spray paint, urban style, street culture
+street art, public installation, social commentary, contemporary expression
+stencil art, repeated patterns, Banksy style, political edge
+comic book style, bold outlines, halftone dots, panel layout
+manga panels, reading right-to-left, speed lines, dramatic angles
+webtoon style, vertical scroll, digital native, full color
+graphic novel, sophisticated narrative, varied panel layouts, literary
+noir style, high contrast, dramatic shadows, crime aesthetic
+retro futurism, 1950s sci-fi, atomic age, optimistic technology
+steampunk aesthetic, Victorian era, brass gears, steam power
+diesel punk, 1940s technology, industrial aesthetic, wartime
+cyberpunk, high tech low life, neon dystopia, corporate control
+solarpunk, utopian future, sustainable technology, green aesthetic
+post-apocalyptic, wasteland ruins, survival aesthetic, desolate beauty
+gothic style, dark romantic, ornate details, mysterious atmosphere
+baroque style, ornate decoration, dramatic lighting, grandeur
+rococo style, delicate pastels, playful themes, aristocratic elegance
+art nouveau, flowing lines, natural forms, decorative beauty
+art deco, geometric patterns, luxury materials, 1920s glamour  
+modernism, clean lines, functional design, rejection of ornament
+postmodernism, ironic detachment, mixed styles, conceptual play
+dadaism, anti-art, random combinations, rebellious spirit
+constructivism, geometric forms, industrial materials, Soviet aesthetic
+bauhaus style, form follows function, primary colors, design school
+de stijl, primary colors, strict geometry, neoplasticism
+futurism, dynamic motion, speed, technological optimism
+kinetic art, actual movement, mechanical motion, interactive
+op art, optical illusions, pattern play, visual effects
+glitch art, digital errors, corrupted data, tech aesthetic
+vaporwave, 80s nostalgia, pastel colors, internet aesthetic
+synthwave, neon 80s, gridlines, retro-futuristic
+outrun aesthetic, sunset gradients, palm trees, driving vibe
+lo-fi aesthetic, grainy texture, nostalgic imperfection, chill vibe
+cottagecore, pastoral fantasy, rustic charm, nature romance
+dark academia, scholarly aesthetic, classical architecture, intellectual
+light academia, sunny libraries, classical learning, optimistic knowledge
+goblincore, forest aesthetic, earthy tones, natural treasures
+fairycore, magical nature, floral crowns, ethereal beauty
+witchy aesthetic, mystical symbols, dark nature, magical tools
+ethereal, dreamlike quality, soft focus, otherworldly beauty
+cosmic, space themes, galaxy colors, infinite vastness
+underwater, aquatic colors, flowing motion, submerged world
+tropical, lush vegetation, bright colors, paradise vibes
+winter, cool blues, snow and ice, crisp atmosphere
+autumn, warm oranges, falling leaves, cozy feeling
+spring, pastel blooms, fresh growth, renewal energy
+summer, golden light, warm colors, carefree joy
+noir, black and white, shadows, crime drama
+wabi-sabi, imperfect beauty, natural aging, Japanese aesthetic
+hygge, cozy comfort, warm lighting, Danish contentment
+kawaii, extreme cute, pastel colors, innocent charm
+kowai, creepy cute, unsettling juxtaposition, horror kawaii
+guro, grotesque imagery, horror elements, shock value
+risque, subtle sensuality, suggestive not explicit, elegant seduction
+baroque pearl, irregular beauty, unique imperfection, natural oddity

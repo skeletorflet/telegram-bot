@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "A gorgeous long dark haired goddess of luck, wearing a green top and green miniskirt, wearing a golden belt, wearing golden collar, holding a basketball ball, surrounded by burfa Kalifa building in turkey grassland, mountain full moon mountain surrounded, masterpiece, best quality, very aesthetic, absurdres",
+  "width": 1024,
+  "height": 1024,
+  "steps": 30,
+  "cfg_scale": 6.0,
+  "sampler_name": "DPM++ 2M SDE",
+  "scheduler": "Karras",
+  "seed": 478697648,
+  "file_id": "BQACAgEAAx0Ed_dQ1gABAR7BaSIHULIYc7_owQMMq4OgiI7hGasAAoIHAAIjlhFFTRArWGLZ71E2BA",
+  "message_id": 73409,
+  "timestamp": 1763837776.7108612
+}

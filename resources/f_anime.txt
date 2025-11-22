@@ -54,13 +54,13 @@ Satsuki Kiryuuin, long dark blue hair, regal white uniform, dominant gaze, massi
 Rikka Takanashi, eye patch, chuunibyou expression, black magical school outfit, blue twintails, Love, Chunibyo & Other Delusions anime style
 Yumeko Jabami, long black hair with red eyes, gambling cards, intense smirk, red blazer uniform, Kakegurui anime style
 Mary Saotome, blonde curled hair, manic expression, gambling chips, red school uniform, Kakegurui anime style
-Nana Hiiragi, pink hair bob cut, deceptive smile, school uniform, deadly telepathy, Talentless Nana anime style
+Nana Hiirag, pink hair bob cut, deceptive smile, school uniform, deadly telepathy, Talentless Nana anime style
 Tomoe Mami, blonde curly twin drills, musket guns, elegant magical girl outfit, yellow and white palette, Madoka Magica anime style
 Ai Ohto, blue short hair, yellow hoodie, paintball gun, surreal dreamscape setting, Wonder Egg Priority anime style
 Neiru Aonuma, green twin braids, stoic expression, school uniform, virtual reality powers, Wonder Egg Priority anime style
-Jolyne Cujoh, green braided hair, butterfly tattoo, prison outfit, Stand power chains, JoJo’s Bizarre Adventure anime style
-Foo Fighters, alien energy girl, wet hair, tank top, water manipulation, JoJo’s Bizarre Adventure anime style
-Trish Una, pink curled bob, heart motifs, glamorous outfit, Stand aura, JoJo’s Bizarre Adventure anime style
+Jolyne Cujoh, green braided hair, butterfly tattoo, prison outfit, Stand power chains, JoJo's Bizarre Adventure anime style
+Foo Fighters, alien energy girl, wet hair, tank top, water manipulation, JoJo's Bizarre Adventure anime style
+Trish Una, pink curled bob, heart motifs, glamorous outfit, Stand aura, JoJo's Bizarre Adventure anime style
 Milly Thompson, messy blonde hair, huge grin, giant stun gun, trench coat, Trigun anime style
 Yoko Littner, red flaming hair, sniper rifle, revealing battle outfit, shades on head, Gurren Lagann anime style
 Nia Teppelin, pastel blue hair, flower-themed dress, pure aura, sparkly eyes, Gurren Lagann anime style
@@ -96,3 +96,84 @@ Baiken, pink hair in ponytail, eyepatch, katana, samurai kimono outfit, Guilty G
 Jack-O Valentine, white hair, mask down pose, red-black latex suit, playful stance, Guilty Gear anime style
 Millia Rage, long flowing blonde hair, deadly hair attacks, gothic leather outfit, Guilty Gear anime style
 2B (female android), white bob haircut, blindfold, black gothic battle dress, sword pose, Nier Automata anime style
+Momo Yaoyorozu, long black ponytail, red hero costume, creation quirk sparkles, My Hero Academia anime style
+Ochaco Uraraka, short brown hair, pink and black hero suit, gravity quirk, My Hero Academia anime style
+Tsuyu Asui, long green hair, frog-themed hero suit, tongue extended, My Hero Academia anime style
+Kyoka Jiro, purple hair with earphone jacks, black leather jacket, sound wave effects, My Hero Academia anime style
+Mina Ashido, pink curly horns, acid quirk sparkles, energetic dance pose, My Hero Academia anime style
+Nejire Hado, periwinkle wavy hair, spiral quirk aura, curious expression, My Hero Academia anime style
+Mirko/Rumi Usagiyama, white rabbit ears, muscular athletic build, hero costume, powerful kick pose, My Hero Academia anime style
+Mt. Lady, blonde hair, purple and white bodysuit, gigantification quirk, My Hero Academia anime style
+Midnight/Nemuri Kayama, long black hair, dominatrix hero costume, whip weapon, seductive pose, My Hero Academia anime style
+Makima, red-orange hair in braid, white shirt with tie, golden ringed eyes, controlling aura, Chainsaw Man anime style
+Kobeni Higashiyama, black short hair, nervous expression, suit and tie, Chainsaw Man anime style
+Reze, black hair in ponytail, cafe apron, bomb transformation, Chainsaw Man anime style
+Quanxi, white hair in ponytail, eyepatch, multiple girlfriends around, Chainsaw Man anime style
+Maki Zenin, green hair in ponytail, glasses, cursed tools weapons, Jujutsu Kaisen anime style
+Mai Zenin, green short hair, arrow bow weapon, twin sister, Jujutsu Kaisen anime style
+Miwa Kasumi, blue hair, katana sword, simple domain aura, Jujutsu Kaisen anime style
+Momo Nishimiya, orange hair with witch hat, broomstick flying, Jujutsu Kaisen anime style
+Yuki Tsukumo, blonde long hair, biker jacket, special grade sorcerer aura, Jujutsu Kaisen anime style
+Kanao Tsuyuri, purple-black hair with butterfly clip, flower breathing petals, calm expression, Demon Slayer anime style
+Shinobu Kocho, purple-black hair with butterfly haori, poison katana, gentle smile, Demon Slayer anime style
+Mitsuri Kanroji, pink-green hair in braids, Love Hashira outfit, flexible whip sword, Demon Slayer anime style
+Daki, white hair with floral obi sash, upper moon demon markings, Demon Slayer anime style
+Tamayo, dark purple hair, purple kimono, demon doctor with medicine, Demon Slayer anime style
+Shizue Izawa, silver-blue hair, black mask, fire spirit sword, Reincarnated as a Slime anime style
+Milim Nava, pink long hair, revealing outfit, demon lord wings, Reincarnated as a Slime anime style
+Shuna, pink hair, elegant kimono, analytical skills, Reincarnated as a Slime anime style
+Shion, purple hair, oni horns, maid outfit with huge sword, Reincarnated as a Slime anime style
+Noelle Silva, silver hair in braids, Water Magic tome, royal dress, Black Clover anime style
+Mimosa Vermillion, orange wavy hair, healing plant magic, gentle smile, Black Clover anime style
+Mereoleona Vermillion, orange wild mane hair, fiery lion aura, combat stance, Black Clover anime style
+Vanessa Enoteca, pink wavy hair, witch hat, thread magic strings, Black Clover anime style
+Charmy Pappitson, black-green hair, sheep chef hat, cotton magic food, Black Clover anime style
+Asuna Yuuki, chestnut brown hair, Knights of the Blood uniform, rapier sword, Sword Art Online anime style
+Leafa/Suguha Kirigaya, blonde hair in SAO, green fairy outfit, sylph wings, Sword Art Online anime style
+Yuuki Konno, purple hair, Absolute Sword skill aura, determined smile, Sword Art Online anime style
+Ais Wallenstein, blonde hair with golden eyes, armor dress, Wind swordsmanship, DanMachi anime style
+Hestia, black twin tails with blue ribbon, white dress with blue cord, goddess aura, DanMachi anime style
+Ryuu Lion, blonde elf with long ears, green adventurer outfit, magic sword, DanMachi anime style
+Freya, silver hair, elegant goddess dress, beauty charm aura, DanMachi anime style
+Haruhime Sanjouno, blonde fox girl with tail, shrine maiden outfit, level boost magic, DanMachi anime style
+Aqua, blue hair in ponytail, goddess outfit, water magic staff, crying face, KonoSuba anime style
+Megumin, brown hair with eye patch, black witch dress, explosion magic staff, KonoSuba anime style
+Darkness/Lalatina, blonde hair in ponytail, heavy armor, masochistic crusader, KonoSuba anime style
+Wiz, blue hair, shop apron over robe, lich undead aura, gentle smile, KonoSuba anime style
+Eris/Chris, purple hair, thief outfit, goddess secretly helping, KonoSuba anime style
+Albedo, black hair with horns, black and white dress, succubus wings, Overlord anime style
+Shalltear Bloodfallen, silver hair, gothic lolita vampire dress, lance weapon, Overlord anime style
+Narberal Gamma, black hair, maid outfit, battle magic aura, Overlord anime style
+Crusch Lulu, lizardman female, white scales, druid nature magic, Overlord anime style
+Enri Emmot, blonde ponytail, simple village dress, goblin horn summons, Overlord anime style
+Tanya von Degurechaff, blonde hair, military uniform, computation orb, psychotic smile, Saga of Tanya the Evil anime style
+Viktoriya Ivanovna Serebryakov, silver hair, military uniform, sniper rifle, Saga of Tanya the Evil anime style
+Chise Hatori, red hair, mage apprentice robe, dragon curse arm, The Ancient Magus Bride anime style
+Elias Ainsworth (female version), skull-headed mage with female form, elegant dress, The Ancient Magus Bride anime style
+Silky, silver-haired banshee maid, Victorian maid dress, household fairy, The Ancient Magus Bride anime style
+Myne/Rozemyne, blue hair, noble dress with books, Book-obsessed scholar, Ascendance of a Bookworm anime style
+Benno's assistant Freida, blonde curly hair, merchant dress, business savvy, Ascendance of a Bookworm anime style
+Tohru (dragon maid), blonde hair with horns, green maid dress, dragon tail, Miss Kobayashi's Dragon Maid anime style
+Kanna Kamui, white-lavender hair, gothic lolita dress, electric dragon powers, Miss Kobayashi's Dragon Maid anime style
+Lucoa/Quetzalcoatl, blonde hair with heterochromia, revealing outfit, ancient dragon goddess, Miss Kobayashi's Dragon Maid anime style
+Elma, blue hair with horns, office suit, water dragon bureaucrat, Miss Kobayashi's Dragon Maid anime style
+Ilulu, pink hair with massive horns, revealing flame dragon outfit, Miss Kobayashi's Dragon Maid anime style
+Kumoko/Shiraori, white hair spider girl, gothic dress, spider silk threads, So I'm a Spider So What anime style
+Katarina Claes, blonde drill hair, noble dress, farming hoe, bakarina oblivious smile, My Next Life as a Villainess anime style
+Maria Campbell, platinum blonde hair, saintly white outfit, light magic glow, My Next Life as a Villainess anime style
+Elizabeth Liones, silver hair, Boar Hat waitress outfit, goddess powers, Seven Deadly Sins anime style
+Diane, brown twin tails, giant girl, earth manipulation hammer, Seven Deadly Sins anime style
+Merlin, black hair, revealing mage outfit, Infinity magic aura, Seven Deadly Sins anime style
+Jibril, pink-purple hair, angel wings with halo, magic tome, superior smirk, No Game No Life anime style
+Schwi Dola, silver-blue hair, ex-machina android, analytical eyes, No Game No Life Zero anime style
+Maple/Kaede Honjou, short brown hair, white shield, defense build tank, Bofuri anime style
+Sally/Risa Shiramine, blue-white hair, twin daggers, agility build speedster, Bofuri anime style
+Kumoko, white spider monster girl form, multiple eyes, thread manipulation, So I'm a Spider So What anime style
+Roxy Migurdia, blue hair, witch hat and robe, water magic staff, Mushoku Tensei anime style
+Sylphiette, green-white hair, elf ears, healing magic, Mushoku Tensei anime style
+Eris Boreas Greyrat, red hair, swordswoman outfit, aggressive battle stance, Mushoku Tensei anime style
+Kurumi Tokisaki, black-red twin tails, gothic lolita dress, time manipulation clock, Date A Live anime style
+Tohka Yatogami, purple hair, spirit armor dress, throne sword weapon, Date A Live anime style
+Origami Tobiichi, white hair, mecha battle suit, serious expression, Date A Live anime style
+Yoshino, blue hair with bunny hoodie, shy aura, ice puppet Yoshinon, Date A Live anime style
+Kotori Itsuka, red twin tails, commander ribbon, fire spirit powers, Date A Live anime style

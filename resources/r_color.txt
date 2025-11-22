@@ -1,80 +1,126 @@
-Red
-Orange
-Yellow
-Green
-Blue
-Purple
-Pink
-Brown
-Black
-White
-Gray
-Beige
-Turquoise
-Cyan
-Magenta
-Lime
-Maroon
-Navy
-Teal
-Lavender
-Coral
-Olive
-Gold
-Silver
-Bronze
-Indigo
-Violet
-Peach
-Cream
-Mauve
-Salmon
-Ruby
-Emerald
-Sapphire
-Amber
-Jade
-Lilac
-Rose
-Scarlet
-Vermilion
-Cerulean
-Chartreuse
-Cobalt
-Crimson
-Fuchsia
-Khaki
-Lemon
-Mahogany
-Mint
-Mustard
-Onyx
-Periwinkle
-Plum
-Raspberry
-Rust
-Sepia
-Sienna
-Tangerine
-Taupe
-Ultramarine
-Vanilla
-Vermilion
-Viridian
-Walnut
-Watermelon
-Wheat
-Wine
-Amethyst
-Babyblue
-Paleyellow
-Emeraldgreen
-Chocolate
-Castañoclaro(Beige)
-Azulbebé(Babyblue)
-Verdeesmeralda(Emeraldgreen)
-Rosa(Pink)
-Amatista(Amethyst)
-Amarilloclaro(Paleyellow)
-Café(Brown)
-Negro(Black)
+vibrant crimson red
+deep ocean blue
+royal purple with violet highlights
+emerald forest green
+golden sunshine yellow
+hot magenta pink
+jet black with glossy sheen
+pure snow white
+warm sunset orange
+soft pastel pink
+electric neon blue
+rich burgundy wine red
+metallic silver chrome
+antique bronze
+rose gold shimmer
+lavender purple
+mint green
+coral pink with peach undertones
+turquoise aqua blue
+indigo midnight blue
+ruby gemstone red
+sapphire crystal blue
+amber honey gold
+jade green
+charcoal gray
+ivory cream
+copper metallic
+steel blue-gray
+ash gray
+pearl white with iridescent shine
+obsidian black
+candy apple red
+sky blue
+grass green
+lemon yellow
+lime green
+navy blue
+maroon red
+teal cyan
+beige sand
+chocolate brown
+platinum blonde
+cherry blossom pink
+midnight black
+arctic white
+flame orange-red
+electric purple
+neon green
+hot pink
+cobalt blue
+vermilion red
+ultramarine blue
+forest hunter green
+desert sand beige
+storm cloud gray
+blood red
+ice blue
+sunset pink-orange gradient
+ocean teal
+galaxy purple-blue gradient
+autumn copper-orange
+spring pastel green
+winter frost white
+summer golden yellow
+rose red
+violet amethyst
+seafoam green
+dusty rose pink
+slate gray
+burgundy wine
+champagne gold
+smoke gray
+ivory pearl
+ebony black
+crimson scarlet
+cerulean sky blue
+chartreuse yellow-green
+fuchsia hot pink
+khaki tan
+mahogany reddish-brown
+mustard yellow
+olive green
+periwinkle blue-purple
+plum purple
+raspberry red-pink
+rust orange-brown
+sepia brown
+sienna earthy brown
+tangerine bright orange
+taupe gray-brown
+vanilla cream
+walnut brown
+wheat golden-brown
+wine burgundy
+baby blue
+pale yellow
+emerald green
+vibrant hot pink
+dark chocolate brown
+glowing neon cyan
+shimmering metallic gold
+matte midnight black
+glossy candy red
+frosted ice blue
+warm terracotta orange
+cool mint aqua
+deep wine purple
+bright lime yellow
+soft blush pink
+dark forest green
+light cream beige
+burnt orange
+pale lavender
+steel metallic gray
+electric lime green
+cosmic purple
+sunset gradient pink-orange-yellow
+ocean gradient blue-green-teal
+fire gradient red-orange-yellow
+twilight gradient purple-pink-blue
+aurora gradient green-blue-purple
+rainbow gradient multicolor
+pastel rainbow mix
+dark rainbow vivid mix
+golden hour warm orange-yellow
+blue hour cool blue-purple

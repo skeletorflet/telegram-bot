@@ -1,11 +1,11 @@
 Son Goku, spiky black hair, orange gi with blue sash, Kamehameha pose, Dragon Ball anime style  
 Naruto Uzumaki, spiky blonde hair, orange jumpsuit, ninja headband, Rasengan attack, Naruto anime style  
 Monkey D. Luffy, straw hat, scar under left eye, red vest, rubbery stretched arms, One Piece anime style  
-Levi Ackerman, undercut hairstyle, Survey Corps uniform, vertical maneuering gear, stoic glare, Attack on Titan anime style  
+Levi Ackerman, undercut hairstyle, Survey Corps uniform, vertical maneuvering gear, stoic glare, Attack on Titan anime style  
 Eren Yeager, messy brown hair, Titan marks on face, green jacket, determined expression, Attack on Titan anime style  
 Light Yagami, neat brown hair, white dress shirt, Death Note book, sinister smirk, Death Note anime style  
 L Lawliet, messy black hair, white long-sleeve shirt, crouched sitting pose, dark eye circles, Death Note anime style  
-Saitama, bald head, red gloves, white cape, bored expression, One Punch Man anime style  
+Saitama, bald head, red gloves, white cape, yellow jumpsuit, bored expression, One Punch Man anime style  
 Genos, cyborg body with glowing core, blonde hair, mechanical arms, intense gaze, One Punch Man anime style  
 Edward Elric, blonde ponytail, red coat, automail right arm, alchemy transmutation circle, Fullmetal Alchemist anime style  
 Roy Mustang, slick black hair, military uniform, flame alchemy gloves, confident smirk, Fullmetal Alchemist anime style  
@@ -32,10 +32,9 @@ Guts, massive Dragonslayer sword, black armor, eyepatch, Berserker rage aura, Be
 Griffith, flowing white hair, Falcon armor, crimson Behelit pendant, angelic yet sinister gaze, Berserk anime style  
 Alucard, long black coat, red fedora, crimson eyes, Hellsing ARMS pistol, Hellsing anime style  
 Kirito, black trench coat, dual swords, NerveGear headset, Aincrad landscape background, Sword Art Online anime style  
-Eren Kruger, brown hair, Survey Corps cloak, Titan transformation smoke, Attack on Titan anime style  
 Armin Arlert, blonde bowl-cut hair, military uniform, strategic thinking pose, Attack on Titan anime style  
 Himura Kenshin, red hair with X-shaped scar, reverse-blade katana, wandering samurai attire, Rurouni Kenshin anime style  
-Jotaro Kujo, black trench coat, Star Platinum stand, "ORA ORA" pose, JoJo's Bizarre Adventure anime style  
+Jotaro Kujo, black trench coat, Star Platinum stand, ORA ORA pose, JoJo's Bizarre Adventure anime style  
 Dio Brando, blonde hair with heart motif, vampire fangs, The World stand, JoJo's Bizarre Adventure anime style  
 Gintoki Sakata, silver perm hair, blue yukata, wooden sword, lazy smirk, Gintama anime style  
 Hachiman Hikigaya, dead fish eyes, school uniform, cynical slouch, My Teen Romantic Comedy SNAFU anime style  
@@ -44,8 +43,91 @@ Tatsuya Shiba, black military uniform, CAD device on wrist, emotionless expressi
 Meliodas, blonde hair, dragon handle sword, tavern apron, Seven Deadly Sins tattoo, The Seven Deadly Sins anime style  
 Ban, white hair with red streaks, immortality scars, Fox's Sin of Greed mark, The Seven Deadly Sins anime style  
 Rimuru Tempest, blue slime form with humanoid appearance, black coat, Demon Lord aura, Reincarnated as a Slime anime style  
-Asta, spiky black hair, Grimoire with five-leaf clover, muscular build, Black Clover anime style  
-Yami Sukehiro, black captain coat, katana, cigarette, dark magic aura, Black Clover anime style  
+Asta, spiky black hair, Grimoire with five-leaf clover sword, muscular build, Black Clover anime style  
+Yami Sukehiro, black captain coat, katana, cigarette smoke, dark magic aura, Black Clover anime style  
 Shinji Ikari, brown hair, plug suit with purple accents, timid posture, Neon Genesis Evangelion anime style  
 Kamina, red sunglasses, fur coat, drill-shaped sword, Gurren Lagann mecha backdrop, Gurren Lagann anime style  
 Simon, black hair with red goggles, spiral energy aura, Core Drill necklace, Gurren Lagann anime style  
+Roronoa Zoro, green hair, three swords style, black bandana, muscular swordsman, One Piece anime style
+Sanji, blonde hair covering one eye, black suit, cigarette, flaming leg kick, One Piece anime style
+Portgas D. Ace, black hair with freckles, orange cowboy hat, shirtless with fire fists, One Piece anime style
+Trafalgar Law, dark hair with white spotted hat, tattoos, Room technique aura, One Piece anime style
+All Might, blonde spiky hair in hero form, red and blue costume, Symbol of Peace smile, My Hero Academia anime style
+Shoto Aizawa/Eraser Head, long black hair, white scarf weapon, tired eyes, My Hero Academia anime style
+Endeavor, orange flame beard, blue bodysuit, intense fire aura, My Hero Academia anime style
+Hawks, blonde hair with red wings, brown jacket, feather sword, My Hero Academia anime style
+Dabi, black spiky hair, scarred face with staples, purple flames, My Hero Academia anime style
+Tomura Shigaraki, light blue hair, hands covering body, decay quirk aura, My Hero Academia anime style
+Megumi Fushiguro, black spiky hair, dark blue uniform, shikigami shadows, Jujutsu Kaisen anime style
+Ryomen Sukuna, pink spiky hair with black tattoos, four arms, Malevolent Shrine aura, Jujutsu Kaisen anime style
+Inosuke Hashibira, black-to-blue fade hair, boar mask, dual serrated swords, Demon Slayer anime style
+Giyu Tomioka, black hair in ponytail, blue haori with geometric patterns, stoic water breathing, Demon Slayer anime style
+Kyojuro Rengoku, yellow-red flame hair, Flame Hashira uniform, enthusiastic smile, Demon Slayer anime style
+Tengen Uzui, white hair with headband, jewelry and makeup, dual cleavers, flashy pose, Demon Slayer anime style
+Muzan Kibutsuji, black curly hair, white fedora, red eyes, demon lord aura, Demon Slayer anime style
+Kaneki Ken (final form), white hair with kakuja mask, black coat, centipede kagune, Tokyo Ghoul anime style
+Subaru Natsuki, black messy hair, track jacket, Return by Death determination, Re:Zero anime style
+Kazuma Satou, brown hair, green cape, lazy but cunning expression, KonoSuba anime style
+Ainz Ooal Gown, skeletal overlord form, red glowing eyes, ornate robes, staff of power, Overlord anime style
+Issei Hyoudou, brown spiky hair, red gauntlet Boosted Gear, perverted grin, High School DxD anime style
+Accelerator, white hair, black collar device, vector manipulation aura, A Certain Magical Index anime style
+Touma Kamijou, black spiky hair, white t-shirt, Imagine Breaker right hand, A Certain Magical Index anime style
+Shirou Emiya, red hair, blue shirt, swords projecting around, Fate/stay night anime style
+Archer/EMIYA, white hair, red coat, dual black and white swords, Fate/stay night anime style
+Gilgamesh, blonde hair in ponytail, golden armor, Gate of Babylon portals, Fate anime style
+Kiritsugu Emiya, black hair, black suit, dual guns, cold assassin aura, Fate/Zero anime style
+Rider/Iskandar, red hair and beard, armored cloak, chariot wheels, Fate/Zero anime style
+Saber/Artoria Pendragon (male alter), blonde hair, black armor, Excalibur Morgan, Fate anime style
+Shinya Kogami, black messy hair, detective coat, Dominator gun, Psycho-Pass anime style
+Shogo Makishima, white hair, long coat, philosophical villain aura, Psycho-Pass anime style
+Decim, white hair, bartender vest, emotionless arbiter, Death Parade anime style
+Mob/Shigeo Kageyama, black bowl cut, school uniform, psychic energy explosion, Mob Psycho 100 anime style
+Reigen Arataka, blonde hair, gray suit, con artist smile, Mob Psycho 100 anime style
+Senku Ishigami, white spiky hair with green tips, lab coat, science kingdom pose, Dr. Stone anime style
+Tsukasa Shishio, long brown hair, primitive clothing, incredible strength, Dr. Stone anime style
+Thorfinn, blonde hair, furs and leather, dual daggers, berserker Viking, Vinland Saga anime style
+Askeladd, brown hair with beard, Viking armor, cunning smile, Vinland Saga anime style
+Tanjirou Kamado (post-training), burgundy-black hair, Hinokami Kagura flames, intense determination, Demon Slayer anime style
+Miyamura Izumi, black hair with piercings, casual clothing, gentle smile, Horimiya anime style
+Kyo Sohma, orange hair, martial arts stance, cat transformation aura, Fruits Basket anime style
+Hatsuharu Sohma, black-white two-tone hair, school uniform, calm demeanor, Fruits Basket anime style
+Karma Akabane, red spiky hair, school uniform with knives, sadistic grin, Assassination Classroom anime style
+Nagisa Shiota, blue hair in pigtails, assassin training pose, Assassination Classroom anime style
+Koro-sensei, yellow octopus head, academic robe, tentacles, Mach 20 speed blur, Assassination Classroom anime style
+Shoyo Hinata, orange hair, volleyball uniform number 10, mid-jump spike, Haikyuu anime style
+Tobio Kageyama, black hair, setter toss pose, intense concentration, Haikyuu anime style
+Tetsuro Kuroo, messy black hair with rooster style, red jersey, blocking pose, Haikyuu anime style
+Kotaro Bokuto, black-silver spiked hair, energetic ace spiker, Haikyuu anime style
+Kenma Kozume, blonde hair with black roots, pudding head, gaming device, Haikyuu anime style
+Taiga Kagami, red spiky hair, basketball jersey number 10, dunk pose, Kuroko's Basketball anime style
+Tetsuya Kuroko, light blue hair, white jersey number 11, phantom sixth man aura, Kuroko's Basketball anime style
+Aomine Daiki, navy blue hair, streetball attire, unstoppable ace, Kuroko's Basketball anime style
+Yuri Katsuki, black hair, ice skating costume, quad jump pose, Yuri on Ice anime style
+Victor Nikiforov, silver-platinum hair, coaching outfit, graceful skating, Yuri on Ice anime style
+Soma Yukihira, red spiky hair, chef uniform, cooking utensils, Food Wars anime style
+Takumi Aldini, blonde Italian hair, white chef coat, mezzaluna knife, Food Wars anime style
+Natsu Dragneel, pink spiky hair, white scarf, fire dragon fist, Fairy Tail anime style
+Gray Fullbuster, black hair, shirtless with ice magic, Fairy Tail anime style
+Jellal Fernandes, blue hair, tattoo on face, Meteor spell aura, Fairy Tail anime style
+Rin Okumura, dark blue hair, Blue Exorcist sword, demon flames, Blue Exorcist anime style
+Yukio Okumura, dark hair with glasses, dual pistols, exorcist uniform, Blue Exorcist anime style
+Yusuke Urameshi, black slicked hair, green school uniform, Spirit Gun pose, Yu Yu Hakusho anime style
+Hiei, black spiky hair with white starburst, Jagan third eye, black cloak, Yu Yu Hakusho anime style
+Kurama, long red hair, white outfit, rose whip weapon, Yu Yu Hakusho anime style
+Kazuma Kuwabara, orange pompadour hair, school uniform, Spirit Sword, Yu Yu Hakusho anime style
+Vash the Stampede, spiky blonde hair, red coat, prosthetic arm, revolver, Trigun anime style
+Nicholas D. Wolfwood, black hair, priest outfit, cross-shaped gun, Trigun anime style
+Lupin III, sideburns, red or green suit jacket, Walther P38 pistol, gentleman thief smile, Lupin III anime style
+Goemon Ishikawa, black samurai topknot, blue hakama, Zantetsuken sword, Lupin III anime style
+Jigen Daisuke, black suit with fedora, long sideburns, revolver quickdraw, Lupin III anime style
+Gon Freecss (adult form), muscular build, long black hair, Jajanken Rock, Hunter x Hunter anime style
+Kurapika, blonde hair with scarlet eyes, chain weapon, Kurta clan outfit, Hunter x Hunter anime style
+Hisoka Morow, red spiky hair, jester outfit with card suits, Bungee Gum aura, Hunter x Hunter anime style
+Chrollo Lucilfer, black hair combed back, fur-collared coat, Bandit's Secret book, Hunter x Hunter anime style
+Meruem, ant king with green exoskeleton, muscular humanoid, royal aura, Hunter x Hunter anime style
+Johan Liebert, blonde hair, elegant suit, unsettling smile, Monster anime style
+Kenzo Tenma, black hair, doctor coat, conflicted expression, Monster anime style
+Char Aznable, blonde hair with red mask, red Zeon uniform, Gundam cockpit, Mobile Suit Gundam anime style
+Amuro Ray, brown hair, white pilot suit, RX-78-2 Gundam, Mobile Suit Gundam anime style
+Heero Yuy, dark brown messy hair, green tank top, Wing Gundam pilot, Gundam Wing anime style
+Setsuna F. Seiei, brown hair, Celestial Being pilot suit, GN Drive aura, Gundam 00 anime style
