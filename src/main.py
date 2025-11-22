@@ -13,12 +13,30 @@ from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMark
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 from jobqueue.jobs import JobQueue, GenJob
 import re
-from services.a1111 import a1111_extra_single_image, get_current_model, a1111_test_connection, fetch_sd_models, set_sd_model
+from services.a1111 import (
+    a1111_extra_single_image, 
+    get_current_model, 
+    a1111_test_connection, 
+    fetch_sd_models, 
+    set_sd_model,
+    fetch_samplers,
+    fetch_schedulers,
+    fetch_loras,
+    fetch_adetailer_models,
+    a1111_txt2img
+)
 from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
 from utils.prompt_generator import prompt_generator
 from utils.process_manager import process_manager
 from storage.jobs import save_job, get_job, delete_job
 from pressets.pressets import Preset, get_preset_for_model
+from ui.menus import (
+    main_menu_keyboard, 
+    submenu_keyboard_static, 
+    loras_page_keyboard, 
+    modifiers_page_keyboard,
+    adetailer_page_keyboard
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
@@ -83,18 +101,7 @@ POST_MODIFIERS = [
 ]
 
 
-PRE_MODIFIERS = [
-    "masterpiece, best quality", "ultra-detailed, intricate details", "4k, 8k, uhd",
-    "photorealistic, realistic", "cinematic, movie still", "anime style, vibrant colors",
-    "concept art, digital painting", "illustration, sharp focus", "low poly, isometric",
-    "minimalist, simple background", "epic composition, dramatic", "golden hour, soft light",
-    "vivid, saturated colors", "monochrome, black and white", "surreal, dreamlike",
-    "fantasy, magical", "sci-fi, futuristic", "steampunk, mechanical details",
-    "cyberpunk, neon lights", "vintage, retro style", "watercolor painting",
-    "oil painting, classic", "sketch, charcoal drawing", "cel-shaded, cartoonish",
-    "flat design, vector art", "hdr, high dynamic range", "long exposure, motion blur",
-    "macro photography, close-up", "double exposure", "glitch effect, distorted"
-]
+
 
 POST_MODIFIERS = [
     "cinematic lighting", "dramatic shadows", "volumetric lighting, god rays",
@@ -175,57 +182,7 @@ def compose_prompt(user_settings: dict, user_prompt: str) -> str:
     logging.info(f"Composed prompt: {final_prompt[:150]}...")
     return final_prompt
 
-async def a1111_get_json(path: str) -> Union[dict, list]:
-    url = f"{A1111_URL}{path}"
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as resp:
-            resp.raise_for_status()
-            return await resp.json()
 
-async def fetch_samplers() -> list[str]:
-    data = await a1111_get_json("/sdapi/v1/samplers")
-    return [x.get("name") for x in data if x.get("name")]
-
-async def fetch_schedulers() -> list[dict]:
-    try:
-        data = await a1111_get_json("/sdapi/v1/schedulers")
-        return [
-            {"name": x.get("name"), "label": x.get("label") or x.get("name")}
-            for x in data
-            if isinstance(x, dict) and x.get("name")
-        ]
-    except Exception:
-        return []
-
-async def fetch_loras() -> list[str]:
-    data = await a1111_get_json("/sdapi/v1/loras")
-    names = []
-    for x in data:
-        n = x.get("name") or x.get("model_name") or x.get("path")
-        if n:
-            names.append(n)
-    return names
-
-async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps: int = 4, cfg_scale: float = 1.0, sampler_name: str = "LCM", n_iter: int = 1, scheduler: str = "") -> bytes:
-    payload = {
-        "prompt": prompt,
-        "steps": steps,
-        "cfg_scale": cfg_scale,
-        "width": width,
-        "height": height,
-        "sampler_name": sampler_name,
-        "n_iter": max(1, min(8, n_iter)),
-        "batch_size": 1,
-    }
-    if scheduler:
-        payload["scheduler"] = scheduler
-    url = f"{A1111_URL}/sdapi/v1/txt2img"
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url, json=payload, timeout=aiohttp.ClientTimeout(total=600)) as resp:
-            resp.raise_for_status()
-            data = await resp.json()
-            img_b64 = data["images"][0]
-            return base64.b64decode(img_b64)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(format_welcome_message(), parse_mode="HTML")
@@ -369,18 +326,7 @@ def _tip_for_set(key: str, s: dict) -> str:
         return f"Images {s.get('n_iter')}"
     return "Guardado"
 
-def main_menu_keyboard(s: dict, is_compliant: bool) -> InlineKeyboardMarkup:
-    icon = "✅" if is_compliant else "🔴"
-    kb = [
-        [InlineKeyboardButton("📐 Aspect", callback_data="menu:aspect"), InlineKeyboardButton("📏 Base", callback_data="menu:base")],
-        [InlineKeyboardButton("⚡ Steps", callback_data="menu:steps"), InlineKeyboardButton("🎛️ CFG", callback_data="menu:cfg")],
-        [InlineKeyboardButton("🎨 Sampler", callback_data="menu:sampler"), InlineKeyboardButton("⏰ Scheduler", callback_data="menu:scheduler")],
-        [InlineKeyboardButton("🔢 Imagenes", callback_data="menu:niter"), InlineKeyboardButton("🎲 Pre", callback_data="menu:pre")],
-        [InlineKeyboardButton("✨ Post", callback_data="menu:post"), InlineKeyboardButton("🎭 Loras", callback_data="menu:loras:0")],
-        [InlineKeyboardButton("🖼️ Modelo", callback_data="menu:model:0"), InlineKeyboardButton(f"{icon} Auto Configurar", callback_data="menu:autoconfig")],
-        [InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")],
-    ]
-    return InlineKeyboardMarkup(kb)
+
 
 async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
@@ -395,62 +341,11 @@ async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     is_compliant = are_settings_compliant(s, preset)
     await update.message.reply_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
 
-def submenu_keyboard_static(kind: str, preset: Preset) -> InlineKeyboardMarkup:
-    rows = []
-    if kind == "aspect":
-        rows = [[InlineKeyboardButton(r, callback_data=f"set:aspect:{r}")] for r in ASPECT_CHOICES]
-    elif kind == "base":
-        recommended = preset.resolutions if preset else []
-        rows = [[InlineKeyboardButton(f"{str(b)} {'👌' if b in recommended else ''}".strip(), callback_data=f"set:base:{b}")] for b in BASE_CHOICES]
-    elif kind == "steps":
-        recommended = preset.steps if preset else []
-        rows = [[InlineKeyboardButton(f"{str(v)} {'👌' if v in recommended else ''}".strip(), callback_data=f"set:steps:{v}")] for v in STEPS_CHOICES]
-    elif kind == "cfg":
-        recommended = preset.cfg if preset else []
-        rows = [[InlineKeyboardButton(f"{str(v)} {'👌' if v in recommended else ''}".strip(), callback_data=f"set:cfg:{v}")] for v in CFG_CHOICES]
-    elif kind == "niter":
-        rows = [[InlineKeyboardButton(str(v), callback_data=f"set:niter:{v}")] for v in range(1, 9)]
-    rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
-    return InlineKeyboardMarkup(rows)
 
-def loras_page_keyboard(loras: list[str], selected: set[str], page: int) -> InlineKeyboardMarkup:
-    per = 20
-    start = page * per
-    items = loras[start:start+per]
-    rows = []
-    for name in items:
-        mark = "✅" if name in selected else "⛔️"
-        rows.append([InlineKeyboardButton(f"{mark} {name}", callback_data=f"loras:toggle:{name}:{page}")])
-    nav = []
-    if start > 0:
-        nav.append(InlineKeyboardButton("Prev", callback_data=f"loras:page:{page-1}"))
-    if start + per < len(loras):
-        nav.append(InlineKeyboardButton("Next", callback_data=f"loras:page:{page+1}"))
-    if nav:
-        rows.append(nav)
-    rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
-    return InlineKeyboardMarkup(rows)
 
-def modifiers_page_keyboard(kind: str, modifiers: list[str], selected: set[str], page: int) -> InlineKeyboardMarkup:
-    per = 10  # Show 10 modifiers per page
-    start = page * per
-    items = modifiers[start:start+per]
-    rows = []
-    for name in items:
-        mark = "✅" if name in selected else "⛔️"
-        rows.append([InlineKeyboardButton(f"{mark} {name}".strip(), callback_data=f"mod:{kind}:toggle:{name}:{page}")])
-    
-    nav = []
-    if start > 0:
-        nav.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"mod:{kind}:page:{page-1}"))
-    if start + per < len(modifiers):
-        nav.append(InlineKeyboardButton("Next ➡️", callback_data=f"mod:{kind}:page:{page+1}"))
-    
-    if nav:
-        rows.append(nav)
-    
-    rows.append([InlineKeyboardButton("⬅️ Volver", callback_data="menu:main"), InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")])
-    return InlineKeyboardMarkup(rows)
+
+
+
 
 
 async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
