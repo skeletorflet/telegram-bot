@@ -433,7 +433,7 @@ def main_menu_keyboard(s: dict, is_compliant: bool) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("🎨 Sampler", callback_data="menu:sampler"), InlineKeyboardButton("⏰ Scheduler", callback_data="menu:scheduler")],
         [InlineKeyboardButton("🔢 Imagenes", callback_data="menu:niter"), InlineKeyboardButton("🎲 Pre", callback_data="menu:pre")],
         [InlineKeyboardButton("✨ Post", callback_data="menu:post"), InlineKeyboardButton("🎭 Loras", callback_data="menu:loras:0")],
-        [InlineKeyboardButton(f"{icon} Auto Configurar", callback_data="menu:autoconfig")],
+        [InlineKeyboardButton("🖼️ Modelo", callback_data="menu:model:0"), InlineKeyboardButton(f"{icon} Auto Configurar", callback_data="menu:autoconfig")],
         [InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")],
     ]
     return InlineKeyboardMarkup(kb)
@@ -720,7 +720,6 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             save_user_settings(user_id, s)
             
             # Aplicar Auto Config con el preset del modelo seleccionado
-            from pressets.pressets import get_preset_for_model
             model_preset = get_preset_for_model(val)
             
             if model_preset:
