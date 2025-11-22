@@ -67,8 +67,16 @@ class PromptGenerator:
         def replace_match(match):
             key = match.group(1)
             values = self.replacements.get(key, [f"!{key.upper()}!"])
+            
+            # Randomly select up to 5 values to avoid extremely long prompts
+            max_choices = 5
+            if len(values) > max_choices:
+                selected_values = random.sample(values, max_choices)
+            else:
+                selected_values = values
+            
             # Create A1111 choice format: {option1|option2|option3}
-            formatted_values = "|".join(values)
+            formatted_values = "|".join(selected_values)
             return f"{{{formatted_values}}}"
         
         # Replace all occurrences
