@@ -13,7 +13,7 @@ from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMark
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 from jobqueue.jobs import JobQueue, GenJob
 import re
-from services.a1111 import a1111_extra_single_image, get_current_model
+from services.a1111 import a1111_extra_single_image, get_current_model, a1111_test_connection, fetch_sd_models, set_sd_model
 from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
 from utils.prompt_generator import prompt_generator
 from utils.process_manager import process_manager
@@ -82,63 +82,6 @@ POST_MODIFIERS = [
     "sun rays, crepuscular rays", "glowing eyes", "smoke, atmospheric"
 ]
 
-
-import os
-import asyncio
-import logging
-import base64
-import json
-import random
-from pathlib import Path
-from io import BytesIO
-import aiohttp
-from typing import Union
-from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
-from jobqueue.jobs import JobQueue, GenJob
-import re
-from services.a1111 import a1111_extra_single_image, get_current_model, a1111_test_connection, fetch_sd_models, set_sd_model
-from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
-from utils.prompt_generator import prompt_generator
-from utils.process_manager import process_manager
-from storage.jobs import save_job, get_job, delete_job
-from pressets.pressets import Preset, get_preset_for_model
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
-# Crear archivo de log para debugging de callbacks
-LOG_DIR = Path(__file__).resolve().parent.parent / "logs"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
-CALLBACK_LOG_FILE = LOG_DIR / "callback_debug.jsonl"
-
-def log_callback_payload(payload: dict):
-    """Guarda payload de callback en archivo JSONL para debugging"""
-    try:
-        with open(CALLBACK_LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(payload, ensure_ascii=False) + "\n")
-    except Exception as e:
-        logging.error(f"Error guardando log de callback: {e}")
-
-from config import A1111_URL
-BOT_TOKEN_DEFAULT = os.environ.get("BOT_TOKEN", "7126310269:AAGiMx_x9jZzOpMWzoKFYfV82-YSx2oG44w")
-
-USER_DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "users"
-USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
-
-DEFAULT_SETTINGS = {
-    "sampler_name": "LCM",
-    "scheduler": "",
-    "steps": 4,
-    "cfg_scale": 1.0,
-    "aspect_ratio": "1:1",
-    "base_size": 512,
-    "n_iter": 1,
-    "pre_modifiers": [],
-    "post_modifiers": [],
-    "loras": [],
-}
-
-JOBQ = JobQueue(concurrency=2)
 
 PRE_MODIFIERS = [
     "masterpiece, best quality", "ultra-detailed, intricate details", "4k, 8k, uhd",
