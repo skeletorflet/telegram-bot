@@ -403,7 +403,23 @@ class JobQueue:
             except Exception as e:
                 logging.error(f"Error en generación para job {job}: {str(e)}", exc_info=True)
                 error_msg = f"{FormatText.bold(FormatText.emoji('❌ Error en generación', '⚠️'))}\n{FormatText.code(str(e))}"
-                await self.bot.send_message(job.chat_id, error_msg, parse_mode="HTML")
+                err_message = await self.bot.send_message(job.chat_id, error_msg, parse_mode="HTML")
+                
+                # Track error message for cleanup on restart
+                from storage.error_messages import add_error_message, remove_error_message
+                add_error_message(job.chat_id, err_message.message_id)
+                
+                # Auto-delete error message after 5 seconds
+                async def _auto_delete_error():
+                    try:
+                        await asyncio.sleep(5)
+                        await self.bot.delete_message(chat_id=job.chat_id, message_id=err_message.message_id)
+                        # Remove from tracking after successful deletion
+                        remove_error_message(job.chat_id, err_message.message_id)
+                    except Exception as del_err:
+                        logging.warning(f"Could not delete error message: {del_err}")
+                
+                asyncio.create_task(_auto_delete_error())
             finally:
                 if job.status_message_id:
                     try:

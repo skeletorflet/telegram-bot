@@ -1144,6 +1144,41 @@ def build_app() -> "Application":
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     return app
 
+async def cleanup_error_messages(app):
+    """Clean up existing error messages from bot chat history on startup"""
+    try:
+        logging.info("🧹 Iniciando limpieza de mensajes de error...")
+        
+        from storage.error_messages import load_error_messages, clear_all_error_messages
+        
+        bot = app.bot
+        error_msgs = load_error_messages()
+        
+        deleted_count = 0
+        failed_count = 0
+        
+        # Iterate through all tracked error messages
+        for chat_id, message_ids in error_msgs.items():
+            for message_id in message_ids:
+                try:
+                    await bot.delete_message(chat_id=chat_id, message_id=message_id)
+                    deleted_count += 1
+                    logging.debug(f"Deleted error message {message_id} from chat {chat_id}")
+                except Exception as e:
+                    failed_count += 1
+                    logging.debug(f"Failed to delete message {message_id} from chat {chat_id}: {e}")
+        
+        # Clear the tracking file after cleanup attempt
+        clear_all_error_messages()
+        
+        if deleted_count > 0:
+            logging.info(f"✅ Limpieza completada: {deleted_count} mensajes eliminados, {failed_count} fallidos")
+        else:
+            logging.info("✅ No hay mensajes de error para limpiar")
+        
+    except Exception as e:
+        logging.error(f"Error durante la limpieza de mensajes: {e}")
+
 def main() -> None:
     # Process management
     if process_manager.check_existing_process():
@@ -1166,6 +1201,13 @@ def main() -> None:
     
     try:
         app = build_app()
+        
+        # Run cleanup on startup
+        async def post_init(application):
+            await cleanup_error_messages(application)
+        
+        app.post_init = post_init
+        
         app.run_polling(allowed_updates=Update.ALL_TYPES)
     finally:
         # Cleanup on exit
