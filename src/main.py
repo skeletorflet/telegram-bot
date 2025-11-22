@@ -608,6 +608,150 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 recommended = [r.lower() for r in (preset.schedulers if preset else [])]
                 rows = [[InlineKeyboardButton(f"{it['label']} {'👌' if it['name'].lower() in recommended else ''}".strip(), callback_data=f"set:scheduler:{it['name']}")] for it in items]
                 rows.append([InlineKeyboardButton("Volver", callback_data="menu:main"), InlineKeyboardButton("Cerrar", callback_data="menu:close")])
+                kb = InlineKeyboardMarkup(rows)
+            elif kind == "loras":
+                page = int(parts[2]) if len(parts) > 2 else 0
+                names = await fetch_loras()
+                kb = loras_page_keyboard(names, set(s.get("loras", [])), page)
+            elif kind == "model":
+                page = int(parts[2]) if len(parts) > 2 else 0
+                from ui.menus import models_page_keyboard
+                models = await fetch_sd_models()
+                current_user_model = s.get("selected_model")
+                kb = models_page_keyboard(models, current_user_model or "", page)
+                text = submenu_texts["model"]
+                if current_user_model:
+                    text += f"\n\n<b>Actual:</b> {current_user_model}"
+                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
+                await q.answer()
+                return
+            elif kind == "pre" or kind == "post":
+                page = int(parts[2]) if len(parts) > 2 else 0
+                modifier_list = PRE_MODIFIERS if kind == "pre" else POST_MODIFIERS
+                selected_mods = s.get(f"{kind}_modifiers", [])
+                kb = modifiers_page_keyboard(kind, modifier_list, set(selected_mods), page)
+                
+                # Build the text with current modifiers
+                current_mods_text = ", ".join(selected_mods) if selected_mods else "Ninguno"
+                text = submenu_texts[kind] + f"\n\n<b>Actual:</b> {current_mods_text}"
+                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
+                await q.answer()
+                return
+            elif kind == "adetailer":
+                page = int(parts[2]) if len(parts) > 2 else 0
+                from ui.menus import adetailer_page_keyboard
+                models = await fetch_adetailer_models()
+                selected = set(s.get("adetailer_models", []))
+                kb = adetailer_page_keyboard(models, selected, page)
+                text = "🎭 Modelos ADetailer disponibles (selecciona para upscale):"
+                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
+                await q.answer()
+                return
+            else:
+                kb = submenu_keyboard_static(kind, preset)
+            
+            await q.edit_message_text(text, reply_markup=kb)
+            await q.answer()
+            return
+    if data.startswith("set:"):
+        _, key, val = data.split(":", 2)
+        if key == "aspect":
+            s["aspect_ratio"] = val
+        elif key == "base":
+            s["base_size"] = int(val)
+        elif key == "steps":
+            s["steps"] = int(val)
+        elif key == "cfg":
+            s["cfg_scale"] = float(val)
+        elif key == "sampler":
+            s["sampler_name"] = val
+        elif key == "scheduler":
+            s["scheduler"] = "" if val == "none" else val
+        elif key == "niter":
+            s["n_iter"] = int(val)
+        elif key == "model":
+            # Guardar el modelo seleccionado
+            s["selected_model"] = val
+            save_user_settings(user_id, s)
+            
+            # Aplicar Auto Config con el preset del modelo seleccionado
+            model_preset = get_preset_for_model(val)
+            
+            if model_preset:
+                # Aplicar configuración automática según el preset
+                s["steps"] = random.choice(model_preset.steps)
+                s["cfg_scale"] = random.choice(model_preset.cfg)
+                s["sampler_name"] = random.choice(model_preset.samplers)
+                s["scheduler"] = random.choice(model_preset.schedulers)
+                base_size = random.choice(model_preset.resolutions)
+                s["base_size"] = base_size
+                
+                if base_size in [512, 768, 1024]:
+                    s["aspect_ratio"] = "1:1"
+                else:
+                    s["aspect_ratio"] = random.choice(["1:1", "4:3", "3:4", "16:9", "9:16"])
+                
+                # Guardar preset prompts
+                s["preset_pre_prompt"] = model_preset.pre_prompt
+                s["preset_post_prompt"] = model_preset.post_prompt
+                s["preset_negative_prompt"] = model_preset.negative_prompt
+                
+                save_user_settings(user_id, s)
+                
+                # Update message and show Auto Config was applied
+                is_compliant = are_settings_compliant(s, model_preset)
+                await q.edit_message_text(settings_summary(s, val), reply_markup=main_menu_keyboard(s, is_compliant))
+                await q.answer(f"✅ Modelo cambiado a {val} y Auto Config aplicado")
+                return
+            else:
+                save_user_settings(user_id, s)
+                is_compliant = are_settings_compliant(s, preset)
+                await q.edit_message_text(settings_summary(s, val), reply_markup=main_menu_keyboard(s, is_compliant))
+                await q.answer(f"✅ Modelo cambiado a {val}")
+                return
+        elif key == "pre":
+            s["pre_mode"] = val
+            if val == "none":
+                s["pre_value"] = ""
+        elif key == "post":
+            s["post_mode"] = val
+            if val == "none":
+                s["post_value"] = ""
+        save_user_settings(user_id, s)
+        is_compliant = are_settings_compliant(s, preset)
+        await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
+        
+        # Enhanced settings update message with emojis
+        setting_emoji = {
+            "aspect": "📐",
+            "base": "📏",
+            "steps": "⚡",
+            "cfg": "🎛️",
+            "sampler": "🎨",
+            "scheduler": "⏰",
+            "niter": "🔢",
+        }.get(key, "⚙️")
+        
+        value_display = val
+        if key in ["aspect", "base", "steps", "niter"]:
+            value_display = val
+        elif key == "cfg":
+            value_display = f"{float(val):.1f}"
+        
+        await q.answer(f"{setting_emoji} {_tip_for_set(key, s)}")
+        return
+    if data.startswith("loras:"):
+        parts = data.split(":")
+        action = parts[1]
+        if action == "toggle":
+            name = parts[2]
+            page = int(parts[3]) if len(parts) > 3 else 0
+            cur_before = set(s.get("loras", []))
+            added = name not in cur_before
+            cur = set(cur_before)
+            if not added:
+                cur.remove(name)
+            else:
                 cur.add(name)
             s["loras"] = sorted(cur)
             save_user_settings(user_id, s)
@@ -623,41 +767,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await q.edit_message_text(submenu_texts["loras"], reply_markup=kb)
             await q.answer()
             return
-    if data.startswith("edit:"):
-        parts = data.split(":")
-        action = parts[1]
-        if action in {"pre", "post"}:
-            context.chat_data["edit_target"] = action
-            await q.answer()
-            await q.edit_message_text(f"Escribe el texto para {action}_value. Usa /cancel para cancelar.")
-            return
-        if action == "confirm":
-            target = parts[2]
-            candidate = context.chat_data.get("edit_candidate", "").strip()
-            if not candidate:
-                await q.answer()
-                await q.edit_message_text("El texto está vacío.", reply_markup=main_menu_keyboard(s, are_settings_compliant(s, preset)))
-                context.chat_data.clear()
-                return
-            if len(candidate) > 1000:
-                candidate = candidate[:1000]
-            if target == "pre":
-                s["pre_value"] = candidate
-                s["pre_mode"] = "custom"
-            else:
-                s["post_value"] = candidate
-                s["post_mode"] = "custom"
-            save_user_settings(user_id, s)
-            context.chat_data.clear()
-            tip = ("Pre" if target == "pre" else "Post") + ": " + _truncate(candidate)
-            await q.answer(tip)
-            await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, are_settings_compliant(s, preset)))
-            return
-        if action == "cancel":
-            context.chat_data.clear()
-            await q.answer("Cancelado")
-            await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, are_settings_compliant(s, preset)))
-            return
+
     if data.startswith("img:") or data.startswith("job:"):
         parts = data.split(":")
         action = parts[1]
