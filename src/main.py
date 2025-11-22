@@ -664,6 +664,34 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await q.answer()
             return
 
+    if data.startswith("adetailer:"):
+        parts = data.split(":")
+        action = parts[1]
+        if action == "toggle":
+            name = parts[2]
+            page = int(parts[3]) if len(parts) > 3 else 0
+            cur_before = set(s.get("adetailer_models", []))
+            added = name not in cur_before
+            cur = set(cur_before)
+            if not added:
+                cur.remove(name)
+            else:
+                cur.add(name)
+            s["adetailer_models"] = sorted(cur)
+            save_user_settings(user_id, s)
+            models = await fetch_adetailer_models()
+            kb = adetailer_page_keyboard(models, cur, page)
+            await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
+            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(cur)})")
+            return
+        if action == "page":
+            page = int(parts[2])
+            models = await fetch_adetailer_models()
+            kb = adetailer_page_keyboard(models, set(s.get("adetailer_models", [])), page)
+            await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
+            await q.answer()
+            return
+
     if data.startswith("img:") or data.startswith("job:"):
         parts = data.split(":")
         action = parts[1]
