@@ -57,7 +57,7 @@ class PromptGenerator:
         return defaults.get(key, [f"!{key.upper()}!"])
     
     def generate(self, template: str) -> str:
-        """Generate enhanced prompt from template"""
+        """Generate enhanced prompt from template using A1111 choice syntax"""
         if not template:
             return template
             
@@ -67,9 +67,9 @@ class PromptGenerator:
         def replace_match(match):
             key = match.group(1)
             values = self.replacements.get(key, [f"!{key.upper()}!"])
-            # Randomly select a value from the list
-            selected_value = random.choice(values) if values else f"!{key.upper()}!"
-            return selected_value
+            # Create A1111 choice format: {option1|option2|option3}
+            formatted_values = "|".join(values)
+            return f"{{{formatted_values}}}"
         
         # Replace all occurrences
         enhanced_template = pattern.sub(replace_match, template)

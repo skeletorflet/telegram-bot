@@ -306,7 +306,9 @@ async def txt2img(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         logging.error(f"Failed to fetch or validate LoRAs: {e}")
 
     prompt_raw = " ".join(context.args).strip() if getattr(context, "args", None) else (update.message.text if update.message else "")
-    prompt = compose_prompt(settings, prompt_raw)
+    # Parse resource keywords (f_anime, r_color, etc.) before composing final prompt
+    prompt_parsed = prompt_generator.generate(prompt_raw)
+    prompt = compose_prompt(settings, prompt_parsed)
     if not prompt:
         await update.message.reply_text(
             f"{FormatText.bold(FormatText.emoji('❌ Uso incorrecto', '⚠️'))}\n"

@@ -1,1 +1,1 @@
-A1111_URL = "http://localhost:7860"
+A1111_URL = "https://3109110c878d4f89e9.gradio.live"

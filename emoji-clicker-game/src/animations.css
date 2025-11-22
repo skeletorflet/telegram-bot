@@ -1,0 +1,214 @@
+/* Particle animations */
+@keyframes float-particle {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+.click-particle {
+    position: absolute;
+    pointer-events: none;
+    font-size: 2rem;
+    animation: float-particle 1s ease-out forwards;
+    z-index: 1000;
+}
+
+/* Click effect */
+@keyframes click-effect {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.click-effect {
+    animation: click-effect 0.2s ease-out;
+}
+
+/* Emoji float animation */
+.emoji-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+.pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Shimmer effect */
+.shimmer {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%);
+    background-size: 2000px 100%;
+    animation: shimmer 3s infinite linear;
+}
+
+/* Number count up animation */
+@keyframes count-up {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.count-up {
+    animation: count-up 0.3s ease-out;
+}
+
+/* Bounce in animation */
+.bounce-in {
+    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Slide up animation */
+.slide-up {
+    animation: slide-up 0.4s ease-out;
+}
+
+/* Fade in animation */
+.fade-in {
+    animation: fade-in 0.4s ease-out;
+}
+
+/* Rotating emoji */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.rotate-slow {
+    animation: rotate 20s linear infinite;
+}
+
+/* Shake animation for errors */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Progress bar fill */
+@keyframes fill {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+/* Glow pulse for achievements */
+@keyframes achievement-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+    }
+}
+
+.achievement-glow {
+    animation: achievement-glow 1.5s ease-in-out infinite;
+}
+
+/* Sparkle effect */
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+    }
+}
+
+.sparkle {
+    animation: sparkle 1s ease-in-out infinite;
+}
+
+/* Coin flip animation */
+@keyframes coin-flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.coin-flip {
+    animation: coin-flip 1s ease-in-out;
+}
+
+/* Hover scale */
+.hover-scale {
+    transition: transform var(--transition-normal);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Hover glow */
+.hover-glow {
+    transition: filter var(--transition-normal);
+}
+
+.hover-glow:hover {
+    filter: drop-shadow(0 0 10px var(--color-purple)) drop-shadow(0 0 20px var(--color-pink));
+}

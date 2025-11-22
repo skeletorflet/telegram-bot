@@ -83,6 +83,18 @@ HASSAKU_PRESET = Preset(
     negative_prompt="lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
 )
 
+# Preset para el modelo Juggernaut
+JUGGERNAUT_PRESET = Preset(
+    model_name="juggernaut",
+    steps=[30, 40],
+    cfg=[3, 6],
+    samplers=["DPM++ 2M SDE"],
+    schedulers=["Karras"],
+    resolutions=[1024],
+    post_prompt="masterpiece, best quality, very aesthetic, absurdres",
+    negative_prompt="lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
+)
+
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
 # Ejemplo: "dreamshaper" coincidirá con "dreamshaper_8_93211.safetensors"
@@ -91,6 +103,7 @@ PRESETS = {
     "janku": JANKU_PRESET,
     "wai_illustrious": WAI_ILLUSTRIOUS_PRESET,
     "hassaku": HASSAKU_PRESET,
+    "juggernaut": JUGGERNAUT_PRESET,
 }
 
 def get_preset_for_model(model_name: str) -> Optional[Preset]:
