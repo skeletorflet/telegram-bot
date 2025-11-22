@@ -369,6 +369,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         "post": "✨ Elige un estilo predefinido para aplicar después de tu prompt.",
         "loras": "🎭 Administra tus Loras (modelos mágicos que modifican el estilo). ✨",
         "model": "🖼️ Selecciona el checkpoint para tus generaciones. El modelo se aplicará automáticamente antes de generar imágenes.",
+        "adetailer": "🎭 Modelos ADetailer disponibles (selecciona para upscale):",
     }
     
     # Log detallado del callback
