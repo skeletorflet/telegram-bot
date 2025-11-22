@@ -679,10 +679,16 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 cur.add(name)
             s["adetailer_models"] = sorted(cur)
             save_user_settings(user_id, s)
+            
+            # Answer callback first to stop spinner
+            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(cur)})")
+            
             models = await fetch_adetailer_models()
             kb = adetailer_page_keyboard(models, cur, page)
-            await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
-            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(cur)})")
+            try:
+                await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
+            except Exception as e:
+                logging.warning(f"Could not edit message in adetailer toggle: {e}")
             return
         if action == "page":
             page = int(parts[2])
