@@ -1,0 +1,14 @@
+{
+  "user_id": 1429169304,
+  "prompt": "masterpiece, best quality, amazing quality, absurdres, A gorgeous Power, blonde horns, devil grin, casual outfit, blood weapon chains, Chainsaw Man anime style woman wearing a periwinkle translucent bodysuit, wearing a Templar periwinkle blue hoodie, holding a golden chest box walking  full of plants, orchid surrounded, walking between golden rocks next to a crystal clear turquoise riverside, Kaws",
+  "width": 1024,
+  "height": 1024,
+  "steps": 25,
+  "cfg_scale": 6.0,
+  "sampler_name": "DPM++ 2M",
+  "scheduler": "Normal",
+  "seed": 2595266841,
+  "file_id": "BQACAgEAAxkDAAIBQmkiQY_IDis__5LuCG-Gpl39mfLwAAIiDgACMhkRRQknvgZoyTXeNgQ",
+  "message_id": 322,
+  "timestamp": 1763852687.4297862
+}
