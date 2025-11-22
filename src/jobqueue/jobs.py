@@ -194,6 +194,19 @@ class JobQueue:
             job: GenJob = await self.q.get()
             try:
                 s = load_user_settings(job.user_id)
+                
+                # Cambiar al modelo seleccionado por el usuario antes de generar
+                user_model = s.get("selected_model")
+                if user_model:
+                    from services.a1111 import set_sd_model
+                    logging.info(f"Cambiando modelo a '{user_model}' para usuario {job.user_id}")
+                    try:
+                        await set_sd_model(user_model)
+                        logging.info(f"Modelo cambiado exitosamente a '{user_model}'")
+                    except Exception as e:
+                        logging.error(f"Error al cambiar modelo: {e}")
+                        # Continuar con la generación incluso si falla el cambio de modelo
+                
                 w, h = ratio_to_dims(s.get("aspect_ratio", "1:1"), s.get("base_size", 512))
                 steps = int(s.get("steps", 4))
                 cfg = float(s.get("cfg_scale", 1.0))

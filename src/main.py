@@ -97,7 +97,7 @@ from telegram import Update, InputFile, InlineKeyboardButton, InlineKeyboardMark
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 from jobqueue.jobs import JobQueue, GenJob
 import re
-from services.a1111 import a1111_extra_single_image, get_current_model, a1111_test_connection
+from services.a1111 import a1111_extra_single_image, get_current_model, a1111_test_connection, fetch_sd_models, set_sd_model
 from utils.formatting import FormatText, format_welcome_message, format_queue_status, format_generation_complete, format_error_message, format_settings_updated
 from utils.prompt_generator import prompt_generator
 from utils.process_manager import process_manager
@@ -528,7 +528,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         "niter": "🔢 Define cuántas imágenes generar a la vez.",
         "pre": "🎲 Elige un estilo predefinido para aplicar antes de tu prompt.",
         "post": "✨ Elige un estilo predefinido para aplicar después de tu prompt.",
-        "loras": "🎭 Administra tus Loras (modelos mágicos que modifican el estilo). ✨"
+        "loras": "🎭 Administra tus Loras (modelos mágicos que modifican el estilo). ✨",
+        "model": "🖼️ Selecciona el checkpoint para tus generaciones. El modelo se aplicará automáticamente antes de generar imágenes.",
     }
     
     # Log detallado del callback
@@ -667,6 +668,18 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 page = int(parts[2]) if len(parts) > 2 else 0
                 names = await fetch_loras()
                 kb = loras_page_keyboard(names, set(s.get("loras", [])), page)
+            elif kind == "model":
+                page = int(parts[2]) if len(parts) > 2 else 0
+                from ui.menus import models_page_keyboard
+                models = await fetch_sd_models()
+                current_user_model = s.get("selected_model")
+                kb = models_page_keyboard(models, current_user_model or "", page)
+                text = submenu_texts["model"]
+                if current_user_model:
+                    text += f"\n\n<b>Actual:</b> {current_user_model}"
+                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
+                await q.answer()
+                return
             elif kind == "pre" or kind == "post":
                 page = int(parts[2]) if len(parts) > 2 else 0
                 modifier_list = PRE_MODIFIERS if kind == "pre" else POST_MODIFIERS
@@ -701,6 +714,47 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             s["scheduler"] = "" if val == "none" else val
         elif key == "niter":
             s["n_iter"] = int(val)
+        elif key == "model":
+            # Guardar el modelo seleccionado
+            s["selected_model"] = val
+            save_user_settings(user_id, s)
+            
+            # Aplicar Auto Config con el preset del modelo seleccionado
+            from pressets.pressets import get_preset_for_model
+            model_preset = get_preset_for_model(val)
+            
+            if model_preset:
+                # Aplicar configuración automática según el preset
+                s["steps"] = random.choice(model_preset.steps)
+                s["cfg_scale"] = random.choice(model_preset.cfg)
+                s["sampler_name"] = random.choice(model_preset.samplers)
+                s["scheduler"] = random.choice(model_preset.schedulers)
+                base_size = random.choice(model_preset.resolutions)
+                s["base_size"] = base_size
+                
+                if base_size in [512, 768, 1024]:
+                    s["aspect_ratio"] = "1:1"
+                else:
+                    s["aspect_ratio"] = random.choice(["1:1", "4:3", "3:4", "16:9", "9:16"])
+                
+                # Guardar preset prompts
+                s["preset_pre_prompt"] = model_preset.pre_prompt
+                s["preset_post_prompt"] = model_preset.post_prompt
+                s["preset_negative_prompt"] = model_preset.negative_prompt
+                
+                save_user_settings(user_id, s)
+                
+                # Update message and show Auto Config was applied
+                is_compliant = are_settings_compliant(s, model_preset)
+                await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
+                await q.answer(f"✅ Modelo cambiado a {val} y Auto Config aplicado")
+                return
+            else:
+                save_user_settings(user_id, s)
+                is_compliant = are_settings_compliant(s, preset)
+                await q.edit_message_text(settings_summary(s), reply_markup=main_menu_keyboard(s, is_compliant))
+                await q.answer(f"✅ Modelo cambiado a {val}")
+                return
         elif key == "pre":
             s["pre_mode"] = val
             if val == "none":

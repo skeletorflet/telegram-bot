@@ -17,6 +17,7 @@ DEFAULT_SETTINGS = {
     "post_mode": "none",
     "post_value": "",
     "loras": [],
+    "selected_model": None,  # Modelo seleccionado por el usuario
 }
 
 PRESETS_PRE = [
