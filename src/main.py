@@ -36,7 +36,7 @@ def log_callback_payload(payload: dict):
         logging.error(f"Error guardando log de callback: {e}")
 
 from config import A1111_URL
-BOT_TOKEN_DEFAULT = os.environ.get("BOT_TOKEN", "7126310269:AAGiMx_x9jZzOpMWzoKFYfV82-YSx2oG44w")
+BOT_TOKEN_DEFAULT = os.environ.get("BOT_TOKEN", "7942698199:AAEg1z9jqhUp5GnClWepqTH9zyCzRB4ARfw")
 
 USER_DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "users"
 USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
