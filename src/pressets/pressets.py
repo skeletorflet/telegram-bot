@@ -89,14 +89,13 @@ JUGGERNAUT_PRESET = Preset(
     steps=[30, 40],
     cfg=[3, 6],
     samplers=["DPM++ 2M SDE"],
-    schedulers=["Karras"],
+    schedulers=[" Karras"],
     resolutions=[1024],
     post_prompt="masterpiece, best quality, very aesthetic, absurdres",
     negative_prompt="lowres, (bad), text, error, fewer, extra, missing, worst quality, jpeg artifacts, low quality, watermark, unfinished, displeasing, oldest, early, chromatic aberration, signature, extra digits, artistic error, username, scan, [abstract]"
 )
 
-
-# Perfect Illustrious
+# Perfect Illustrious (nota: el nombre real del modelo tiene typo 'prefect' no 'perfect')
 PERFECT_ILLUSTRIOUS_PRESET = Preset(
     model_name="prefectIllustrious",
     steps=[25, 30],
@@ -115,14 +114,16 @@ PRESETS = {
     "dreamshaper": DREAMSHAPER_PRESET,
     "janku": JANKU_PRESET,
     "wai_illustrious": WAI_ILLUSTRIOUS_PRESET,
+    "waiillustrious": WAI_ILLUSTRIOUS_PRESET,  # Alias sin underscore
     "hassaku": HASSAKU_PRESET,
     "juggernaut": JUGGERNAUT_PRESET,
-    "perfect_illustrious": PERFECT_ILLUSTRIOUS_PRESET,
+    "prefectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # Coincide con el modelo real (tiene typo)
+    "perfectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # También coincide con la escritura correcta
 }
 
 def get_preset_for_model(model_name: str) -> Optional[Preset]:
     """
-    Busca y devuelve el preset más adecuado para un nombre de modelo dado.
+    Busca y devuelve el preset más congruo para un nombre de modelo dado.
     La búsqueda es flexible, ignorando mayúsculas/minúsculas y caracteres especiales.
 
     Args:

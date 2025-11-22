@@ -35,7 +35,8 @@ async def a1111_get_json(path: str):
     url = f"{A1111_URL}{path}"
     logging.info(f"Getting JSON from: {url}")
     headers = {"X-Pinggy-No-Screen": "true"}
-    async with aiohttp.ClientSession(headers=headers) as session:
+    timeout = aiohttp.ClientTimeout(total=10)  # 10 second timeout
+    async with aiohttp.ClientSession(headers=headers, timeout=timeout) as session:
         async with session.get(url) as resp:
             return await resp.json()
 
@@ -180,7 +181,8 @@ async def a1111_txt2img(prompt: str, width: int = 512, height: int = 512, steps:
         payload["alwayson_scripts"] = alwayson_scripts
     url = f"{A1111_URL}/sdapi/v1/txt2img"
     headers = {"X-Pinggy-No-Screen": "true"}
-    async with aiohttp.ClientSession(headers=headers) as session:
+    timeout = aiohttp.ClientTimeout(total=300)  # 5 minute timeout for generation
+    async with aiohttp.ClientSession(headers=headers, timeout=timeout) as session:
         logging.info(f"txt2img payload: {payload}")
         _log_api_call("request", payload=payload)
         async with session.post(url, json=payload) as resp:
