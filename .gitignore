@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Logs
+logs/
+*.log
+data/logs/
+
+# Runtime
+bot.pid
+
+# User Data (Local DB)
+data/users/
+data/error_messages.json
+
+# Temporary/Test files
+patch_main.py
+test_parsing.py
+verify_parsing.py
+
+# IDE
+.vscode/
+.idea/
