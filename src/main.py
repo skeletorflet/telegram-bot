@@ -1205,12 +1205,25 @@ def main() -> None:
         # Run cleanup on startup
         async def post_init(application):
             await cleanup_error_messages(application)
+            await JOBQ.start(application.bot)
         
         app.post_init = post_init
         
         app.run_polling(allowed_updates=Update.ALL_TYPES)
     finally:
         # Cleanup on exit
+        async def shutdown():
+            await JOBQ.stop()
+            
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                loop.create_task(shutdown())
+            else:
+                loop.run_until_complete(shutdown())
+        except Exception as e:
+            logging.error(f"Error stopping JobQueue: {e}")
+
         process_manager.remove_pid_file()
         logging.info("👋 Bot detenido correctamente")
 

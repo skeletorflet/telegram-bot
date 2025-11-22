@@ -1,14 +1,14 @@
 {
   "user_id": 1429169304,
-  "prompt": "A 1girl, rei ayanami neongenesisevangelion, pale porcelain skin, chin-length icy-blue bob, crimson eyes, sleek red plugsuit with orange torso plate",
+  "prompt": "masterpiece, best quality, amazing quality, absurdres, mujer hermosa",
   "width": 1024,
   "height": 1024,
-  "steps": 30,
-  "cfg_scale": 7.0,
-  "sampler_name": "Euler a",
+  "steps": 25,
+  "cfg_scale": 6.0,
+  "sampler_name": "DPM++ 2M",
   "scheduler": "Normal",
-  "seed": 3875899762,
-  "file_id": "BQACAgEAAxkDAAIBP2kfgGqm8hVcb01I31VVhlFXXVjEAAIrBwAChmoAAUXgAAHEFgEy9QQ2BA",
+  "seed": 698822712,
+  "file_id": "BQACAgEAAxkDAAIBP2kiQL1rXeqNxUok5J28VPP3g2-jAAIhDgACMhkRRZZ65Rx1CqNCNgQ",
   "message_id": 319,
-  "timestamp": 1763672172.2986515
+  "timestamp": 1763852477.9683216
 }
