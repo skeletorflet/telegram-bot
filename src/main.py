@@ -702,21 +702,29 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         if action == "toggle":
             name = parts[2]
             page = int(parts[3]) if len(parts) > 3 else 0
-            cur_before = set(s.get("adetailer_models", []))
-            added = name not in cur_before
-            cur = set(cur_before)
-            if not added:
-                cur.remove(name)
+            
+            # Use list to preserve selection order
+            current_list = s.get("adetailer_models", [])
+            # Ensure it's a list (backward compatibility if it was a set/sorted list)
+            if not isinstance(current_list, list):
+                current_list = list(current_list)
+            
+            if name in current_list:
+                current_list.remove(name)
+                added = False
             else:
-                cur.add(name)
-            s["adetailer_models"] = sorted(cur)
+                current_list.append(name)
+                added = True
+            
+            s["adetailer_models"] = current_list
             save_user_settings(user_id, s)
             
             # Answer callback first to stop spinner
-            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(cur)})")
+            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(current_list)})")
             
             models = await fetch_adetailer_models()
-            kb = adetailer_page_keyboard(models, cur, page)
+            # Pass set for fast lookup in UI rendering
+            kb = adetailer_page_keyboard(models, set(current_list), page)
             try:
                 await q.edit_message_reply_markup(reply_markup=kb)
             except Exception as e:
