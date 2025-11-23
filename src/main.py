@@ -121,30 +121,7 @@ BASE_CHOICES = [512, 640, 768, 896, 1024]
 STEPS_CHOICES = list(range(4, 51))
 CFG_CHOICES = [i * 0.5 for i in range(2, 25)]
 
-def ratio_to_dims(ratio: str, base: int) -> tuple[int, int]:
-    w_str, h_str = ratio.split(":")
-    w = int(w_str)
-    h = int(h_str)
-    
-    # Calculate target area based on base size (e.g. 1024x1024)
-    target_area = base * base
-    
-    # Calculate dimensions preserving aspect ratio and approximate area
-    # w_new * h_new = target_area
-    # w_new / h_new = w / h
-    # => w_new^2 = target_area * (w / h)
-    
-    import math
-    width = int(math.sqrt(target_area * w / h))
-    height = int(math.sqrt(target_area * h / w))
-    
-    def round64(x: int) -> int:
-        return max(64, int((x + 32) // 64 * 64))
-        
-    width = round64(width)
-    height = round64(height)
-    
-    return width, height
+from utils.common import ratio_to_dims
 
 def load_user_settings(user_id: int) -> dict:
     fp = USER_DATA_DIR / f"{user_id}.json"
@@ -938,7 +915,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 logging.info(f"Upscale using ADetailer models: {selected_ad_models}")
             else:
                 try:
-                    from services.a1111 import fetch_adetailer_models
+
                     available = await fetch_adetailer_models()
                     defaults = ["face_yolov8n.pt", "mediapipe_face_mesh_eyes_only"]
                     auto_models = [m for m in defaults if m in available]

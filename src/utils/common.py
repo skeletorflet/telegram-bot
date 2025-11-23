@@ -8,15 +8,19 @@ def ratio_to_dims(ratio: str, base: int) -> tuple[int, int]:
         # Fallback por si el ratio no es válido
         return base, base
 
-    def round64_up(x: float) -> int:
-        return max(64, int((x + 63) // 64 * 64))
-
-    if w >= h:
-        height = base
-        width = round64_up(base * (w / h))
-    else:
-        width = base
-        height = round64_up(base * (h / w))
+    # Calculate target area based on base size (e.g. 1024x1024)
+    target_area = base * base
+    
+    import math
+    width = int(math.sqrt(target_area * w / h))
+    height = int(math.sqrt(target_area * h / w))
+    
+    def round64(x: int) -> int:
+        return max(64, int((x + 32) // 64 * 64))
+        
+    width = round64(width)
+    height = round64(height)
+    
     return width, height
 
 def truncate_text(text: str, limit: int = 60) -> str:
