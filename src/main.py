@@ -569,8 +569,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 page = int(parts[2]) if len(parts) > 2 else 0
                 from ui.menus import adetailer_page_keyboard
                 models = await fetch_adetailer_models()
-                selected = set(s.get("adetailer_models", []))
-                kb = adetailer_page_keyboard(models, selected, page)
+                selected_order = s.get("adetailer_models", [])
+                kb = adetailer_page_keyboard(models, selected_order, page)
                 text = "🎭 Modelos ADetailer disponibles (selecciona para upscale):"
                 await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
                 await q.answer()
@@ -723,17 +723,17 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(current_list)})")
             
             models = await fetch_adetailer_models()
-            # Pass set for fast lookup in UI rendering
-            kb = adetailer_page_keyboard(models, set(current_list), page)
+            kb = adetailer_page_keyboard(models, current_list, page)
+            text = "🎭 Modelos ADetailer disponibles (selecciona para upscale):"
             try:
-                await q.edit_message_reply_markup(reply_markup=kb)
+                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
             except Exception as e:
-                logging.warning(f"Could not edit markup in adetailer toggle: {e}")
+                logging.warning(f"Could not edit text/markup in adetailer toggle: {e}")
             return
         if action == "page":
             page = int(parts[2])
             models = await fetch_adetailer_models()
-            kb = adetailer_page_keyboard(models, set(s.get("adetailer_models", [])), page)
+            kb = adetailer_page_keyboard(models, s.get("adetailer_models", []), page)
             await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
             await q.answer()
             return

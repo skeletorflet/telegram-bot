@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional
 from io import BytesIO
 from telegram import InputFile, InlineKeyboardMarkup, InlineKeyboardButton
-from services.a1111 import a1111_txt2img, a1111_get_progress, get_current_model
+from services.a1111 import a1111_txt2img, a1111_get_progress, get_current_model, set_sd_model, fetch_sd_models
 from pressets.pressets import get_preset_for_model
 from storage.users import load_user_settings
 from utils.formatting import FormatText, format_generation_complete
@@ -199,13 +199,49 @@ class JobQueue:
                 # Cambiar al modelo seleccionado por el usuario antes de generar
                 user_model = s.get("selected_model")
                 if user_model:
-                    from services.a1111 import set_sd_model
                     logging.info(f"Cambiando modelo a '{user_model}' para usuario {job.user_id}")
                     try:
-                        await set_sd_model(user_model)
-                        logging.info(f"Modelo cambiado exitosamente a '{user_model}'")
+                        ok = await set_sd_model(user_model)
+                        if ok:
+                            logging.info(f"Modelo cambiado exitosamente a '{user_model}'")
+                        else:
+                            logging.warning("Fallo al establecer el modelo seleccionado; intentando elegir uno disponible aleatoriamente")
+                            try:
+                                models = await fetch_sd_models()
+                                choices = [m.get("model_name") for m in models if m.get("model_name")]
+                                if choices:
+                                    chosen = choices[0] if len(choices) == 1 else random.choice(choices)
+                                    ok2 = await set_sd_model(chosen)
+                                    if ok2:
+                                        s["selected_model"] = chosen
+                                        from storage.users import save_user_settings
+                                        save_user_settings(job.user_id, s)
+                                        logging.info(f"Modelo alternativo establecido: '{chosen}'")
+                                    else:
+                                        logging.error("No se pudo establecer el modelo alternativo seleccionado")
+                                else:
+                                    logging.error("No hay modelos disponibles desde el endpoint /sd-models")
+                            except Exception as e2:
+                                logging.error(f"Error al obtener/establecer modelos alternativos: {e2}")
                     except Exception as e:
                         logging.error(f"Error al cambiar modelo: {e}")
+                        try:
+                            models = await fetch_sd_models()
+                            choices = [m.get("model_name") for m in models if m.get("model_name")]
+                            if choices:
+                                chosen = choices[0] if len(choices) == 1 else random.choice(choices)
+                                ok2 = await set_sd_model(chosen)
+                                if ok2:
+                                    s["selected_model"] = chosen
+                                    from storage.users import save_user_settings
+                                    save_user_settings(job.user_id, s)
+                                    logging.info(f"Modelo alternativo establecido tras excepción: '{chosen}'")
+                                else:
+                                    logging.error("No se pudo establecer el modelo alternativo tras excepción")
+                            else:
+                                logging.error("No hay modelos disponibles tras excepción")
+                        except Exception as e3:
+                            logging.error(f"Error en fallback de modelos tras excepción: {e3}")
                         # Continuar con la generación incluso si falla el cambio de modelo
                 
                 w, h = ratio_to_dims(s.get("aspect_ratio", "1:1"), s.get("base_size", 512))
@@ -285,53 +321,20 @@ class JobQueue:
                     logging.info(f"FINAL prompt: '{final_prompt}'")
                     logging.info(f"Preset '{preset.model_name}' aplicado: pre_prompt={bool(preset.pre_prompt)}, post_prompt={bool(preset.post_prompt)}, negative_prompt={bool(preset.negative_prompt)}")
                     
-                    # --- SMART VALIDATION ---
-                    # Check if current settings are compliant with the preset
-                    # Tolerance: +/- 2 for steps and CFG
-                    is_valid = True
-                    validation_reason = []
-                    
-                    # 1. Validate Sampler
-                    if sampler not in preset.samplers:
-                        is_valid = False
-                        validation_reason.append(f"Sampler '{sampler}' not in {preset.samplers}")
-                    
-                    # 2. Validate Scheduler
-                    if scheduler not in preset.schedulers:
-                        is_valid = False
-                        validation_reason.append(f"Scheduler '{scheduler}' not in {preset.schedulers}")
-                        
-                    # 3. Validate Steps (+/- 2 tolerance)
-                    min_steps = min(preset.steps) - 2
-                    max_steps = max(preset.steps) + 2
-                    if not (min_steps <= steps <= max_steps):
-                        is_valid = False
-                        validation_reason.append(f"Steps {steps} out of range [{min_steps}, {max_steps}]")
-                        
-                    # 4. Validate CFG (+/- 2 tolerance)
-                    min_cfg = min(preset.cfg) - 2.0
-                    max_cfg = max(preset.cfg) + 2.0
-                    if not (min_cfg <= cfg <= max_cfg):
-                        is_valid = False
-                        validation_reason.append(f"CFG {cfg} out of range [{min_cfg}, {max_cfg}]")
-                    
+                    # Validación estricta contra el preset: si no cumple, aplicar valores del preset
+                    is_valid = (
+                        (steps in preset.steps) and
+                        (cfg in preset.cfg) and
+                        (sampler in preset.samplers) and
+                        (scheduler in preset.schedulers)
+                    )
                     if not is_valid:
-                        logging.warning(f"⚠️ Settings validation failed: {'; '.join(validation_reason)}. Applying Auto-Config.")
-                        
-                        # Apply Auto-Config (Random valid values from preset)
-                        # NOTE: We preserve width/height/n_iter/seed as requested
-                        steps = random.choice(preset.steps)
-                        cfg = random.choice(preset.cfg)
-                        sampler = random.choice(preset.samplers)
-                        scheduler = random.choice(preset.schedulers)
-                        
-                        logging.info(f"✅ Auto-Config applied: Steps={steps}, CFG={cfg}, Sampler={sampler}, Scheduler={scheduler}")
-                        
-                        # Notify user about the optimization (optional, maybe just in logs/final message)
-                        # For now we just proceed with optimized settings
-                    else:
-                        logging.info("✅ Settings validated successfully against preset.")
-                    # ------------------------
+                        logging.warning("⚠️ Parámetros no compatibles con el preset. Aplicando valores del preset (conservando tamaño, n_iter y seed)")
+                        steps = preset.steps[0]
+                        cfg = preset.cfg[0]
+                        sampler = preset.samplers[0]
+                        scheduler = preset.schedulers[0]
+                        logging.info(f"✅ Preset aplicado: Steps={steps}, CFG={cfg}, Sampler={sampler}, Scheduler={scheduler}")
                 
                 # Store final_prompt in job so progress messages show it
                 job.final_prompt = final_prompt

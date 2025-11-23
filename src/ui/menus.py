@@ -111,23 +111,27 @@ def modifiers_page_keyboard(kind: str, modifiers: list[str], selected: set[str],
     rows.append([InlineKeyboardButton("⬅️ Volver", callback_data="menu:main"), InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")])
     return InlineKeyboardMarkup(rows)
 
-def adetailer_page_keyboard(models: list[str], selected: set[str], page: int) -> InlineKeyboardMarkup:
+def adetailer_page_keyboard(models: list[str], selected_order: list[str], page: int) -> InlineKeyboardMarkup:
     per = 10
     start = page * per
     items = models[start:start+per]
     rows = []
+    # Map selected model to its 1-based position
+    positions = {name: idx + 1 for idx, name in enumerate(selected_order or [])}
     for name in items:
-        mark = "✅" if name in selected else "⛔️"
-        rows.append([InlineKeyboardButton(f"{mark} {name}", callback_data=f"adetailer:toggle:{name}:{page}")])
-    
+        if name in positions:
+            mark = "✅"
+            pos = positions[name]
+            text = f"{mark} {pos}) {name}"
+        else:
+            text = f"⛔️ {name}"
+        rows.append([InlineKeyboardButton(text, callback_data=f"adetailer:toggle:{name}:{page}")])
     nav = []
     if start > 0:
         nav.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"menu:adetailer:{page-1}"))
     if start + per < len(models):
         nav.append(InlineKeyboardButton("Next ➡️", callback_data=f"menu:adetailer:{page+1}"))
-    
     if nav:
         rows.append(nav)
-    
     rows.append([InlineKeyboardButton("⬅️ Volver", callback_data="menu:main"), InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")])
     return InlineKeyboardMarkup(rows)
