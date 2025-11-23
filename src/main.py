@@ -567,25 +567,9 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 return
             elif kind == "adetailer":
                 page = int(parts[2]) if len(parts) > 2 else 0
-                try:
-                    await q.answer()
-                except Exception:
-                    pass
-                from ui.menus import adetailer_page_keyboard
                 models = await fetch_adetailer_models()
                 selected_order = s.get("adetailer_models", [])
-                kb = adetailer_page_keyboard(models or [], selected_order, page)
-                text = "🎭 Modelos ADetailer disponibles (selecciona para upscale):"
-                try:
-                    await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
-                except Exception as e:
-                    logging.warning(f"Failed to open ADetailer menu via edit_message_text: {e}. Falling back to sending a new message.")
-                    try:
-                        await q.message.reply_text(text, reply_markup=kb, parse_mode="HTML")
-                    except Exception as e2:
-                        logging.error(f"Failed to send ADetailer menu message: {e2}")
-                await q.answer()
-                return
+                kb = adetailer_page_keyboard(models, selected_order, page)
             else:
                 kb = submenu_keyboard_static(kind, preset)
             
@@ -732,7 +716,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             
             models = await fetch_adetailer_models()
             kb = adetailer_page_keyboard(models, current_list, page)
-            text = "🎭 Modelos ADetailer disponibles (selecciona para upscale):"
+            text = submenu_texts["adetailer"]
             try:
                 await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
             except Exception as e:
