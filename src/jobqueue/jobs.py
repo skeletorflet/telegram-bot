@@ -443,17 +443,20 @@ class JobQueue:
                         }
                         
                         if job.hr_options:
-                            kb = InlineKeyboardMarkup([
+                            rows = [
                                 [InlineKeyboardButton("🔄 Repetir", callback_data=f"job:repeat:{rid}"), 
-                                 InlineKeyboardButton("🔍 Final Upscale", callback_data=f"job:final:{rid}")],
-                                
-                            ])
+                                 InlineKeyboardButton("🔍 Final Upscale", callback_data=f"job:final:{rid}")]
+                            ]
                         else:
-                            kb = InlineKeyboardMarkup([
+                            rows = [
                                 [InlineKeyboardButton("🔄 Repetir", callback_data=f"job:repeat:{rid}"), 
-                                 InlineKeyboardButton("🔍 Upscale", callback_data=f"job:upscale:{rid}")],
-                                
-                            ])
+                                 InlineKeyboardButton("🔍 Upscale", callback_data=f"job:upscale:{rid}")]
+                            ]
+                        
+                        if s.get("auto_mode"):
+                            rows.append([InlineKeyboardButton("🛑 Detener Auto", callback_data="stop:auto")])
+                            
+                        kb = InlineKeyboardMarkup(rows)
                         
                         # Guardar el trabajo para poder recuperarlo después
                         from storage.jobs import save_job
@@ -466,8 +469,44 @@ class JobQueue:
                             job_data['file_id'] = sent_message['document']['file_id']
                             job_data['message_id'] = sent_message['message_id']
                             
-                            # Guardar el trabajo usando el message_id real del mensaje enviado
+                        # Guardar el trabajo usando el message_id real del mensaje enviado
                             save_job(sent_message['message_id'], job_data)
+                
+                # Check for auto-mode and requeue if active
+                if s.get("auto_mode"):
+                    logging.info(f"Auto-mode active for user {job.user_id}. Re-queueing job.")
+                    
+                    # Create new status message for the next job
+                    queue_message = (
+                        f"{FormatText.bold(FormatText.emoji('🔄 Auto-Generación', '✅'))}\n"
+                        f"{FormatText.bold('Prompt:')} {FormatText.code(job.prompt[:100] + '...' if len(job.prompt) > 100 else job.prompt)}\n"
+                        f"{FormatText.bold('Estado:')} {FormatText.emoji('En cola (Auto)', '⏳')}\n\n"
+                        f"{FormatText.italic('Generando automáticamente...')}"
+                    )
+                    
+                    try:
+                        status_message = await self.bot.send_message(job.chat_id, queue_message, parse_mode="HTML")
+                        
+                        # Create new job identical to current one
+                        new_job = GenJob(
+                            user_id=job.user_id,
+                            chat_id=job.chat_id,
+                            prompt=job.prompt,
+                            status_message_id=status_message.message_id,
+                            user_name=job.user_name,
+                            overrides=job.overrides,
+                            hr_options=job.hr_options,
+                            alwayson_scripts=job.alwayson_scripts,
+                            operation_type=job.operation_type,
+                            operation_metadata=job.operation_metadata
+                        )
+                        
+                        # Enqueue the new job (FIFO ensures turn-based if others are waiting)
+                        await self.enqueue(new_job)
+                        
+                    except Exception as e:
+                        logging.error(f"Failed to auto-requeue job: {e}")
+
             except Exception as e:
                 logging.error(f"Error en generación para job {job}: {str(e)}", exc_info=True)
                 error_msg = f"{FormatText.bold(FormatText.emoji('❌ Error en generación', '⚠️'))}\n{FormatText.code(str(e))}"

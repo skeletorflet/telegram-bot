@@ -18,6 +18,7 @@ DEFAULT_SETTINGS = {
     "post_value": "",
     "loras": [],
     "selected_model": None,  # Modelo seleccionado por el usuario
+    "auto_mode": False,      # Generación automática activada/desactivada
 }
 
 PRESETS_PRE = [

@@ -28,7 +28,7 @@ def main_menu_keyboard(s: dict, is_compliant: bool) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("🔢 Imagenes", callback_data="menu:niter"), InlineKeyboardButton("🎲 Pre", callback_data="menu:pre")],
         [InlineKeyboardButton("✨ Post", callback_data="menu:post"), InlineKeyboardButton("🎭 Loras", callback_data="menu:loras:0")],
         [InlineKeyboardButton("🖼️ Modelo", callback_data="menu:model:0"), InlineKeyboardButton(f"{icon} Auto Configurar", callback_data="menu:autoconfig")],
-        [InlineKeyboardButton("🎭 ADetailer", callback_data="menu:adetailer:0")],
+        [InlineKeyboardButton("🎭 ADetailer", callback_data="menu:adetailer:0"), InlineKeyboardButton(f"{'🟢' if s.get('auto_mode') else '🔴'} Auto Gen", callback_data="menu:autogen")],
         [InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")],
     ]
     return InlineKeyboardMarkup(kb)

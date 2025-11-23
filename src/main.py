@@ -441,6 +441,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         "loras": "🎭 Administra tus Loras (modelos mágicos que modifican el estilo). ✨",
         "model": "🖼️ Selecciona el checkpoint para tus generaciones. El modelo se aplicará automáticamente antes de generar imágenes.",
         "adetailer": "🎭 Modelos ADetailer disponibles (selecciona para upscale):",
+        "autogen": "🔄 Generación Automática: Si está activado, el bot repetirá automáticamente tu última petición indefinidamente hasta que lo detengas. Útil para aprovechar el GPU.",
     }
     
     # Log detallado del callback
@@ -541,6 +542,13 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             # After autoconfig, settings are compliant
             kb = main_menu_keyboard(s, is_compliant=True)
             await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
+            return
+        if kind == "autogen":
+            s["auto_mode"] = not s.get("auto_mode", False)
+            save_user_settings(user_id, s)
+            is_compliant, _ = validate_and_correct_settings(s, preset)
+            await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
+            await q.answer(f"Generación automática {'activada 🟢' if s['auto_mode'] else 'desactivada 🔴'}")
             return
         if kind == "main":
             is_compliant, _ = validate_and_correct_settings(s, preset)
@@ -765,6 +773,15 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             kb = adetailer_page_keyboard(models, s.get("adetailer_models", []), page)
             await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
             await q.answer()
+            return
+
+    if data.startswith("stop:"):
+        parts = data.split(":")
+        action = parts[1]
+        if action == "auto":
+            s["auto_mode"] = False
+            save_user_settings(user_id, s)
+            await q.answer("🛑 Generación automática detenida")
             return
 
     if data.startswith("img:") or data.startswith("job:"):
