@@ -719,9 +719,6 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             s["adetailer_models"] = current_list
             save_user_settings(user_id, s)
             
-            # Answer callback first to stop spinner
-            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(current_list)})")
-            
             models = await fetch_adetailer_models()
             kb = adetailer_page_keyboard(models, current_list, page)
             text = "🎭 Modelos ADetailer disponibles (selecciona para upscale):"
@@ -729,6 +726,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
             except Exception as e:
                 logging.warning(f"Could not edit text/markup in adetailer toggle: {e}")
+            # Answer callback after UI update to mirror Lora behavior
+            await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(current_list)})")
             return
         if action == "page":
             page = int(parts[2])
@@ -948,7 +947,19 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 always_scripts["ADetailer"] = {"args": ad_args}
                 logging.info(f"Upscale using ADetailer models: {selected_ad_models}")
             else:
-                logging.info("Upscale without ADetailer (none selected)")
+                try:
+                    from services.a1111 import fetch_adetailer_models
+                    available = await fetch_adetailer_models()
+                    defaults = ["face_yolov8n.pt", "mediapipe_face_mesh_eyes_only"]
+                    auto_models = [m for m in defaults if m in available]
+                    if auto_models:
+                        ad_args = [{"ad_model": m, "ad_confidence": 0.3} for m in auto_models]
+                        always_scripts["ADetailer"] = {"args": ad_args}
+                        logging.info(f"Upscale using default ADetailer models: {auto_models}")
+                    else:
+                        logging.info("Upscale without ADetailer defaults (not available)")
+                except Exception as e:
+                    logging.warning(f"Failed to load default ADetailer models: {e}")
 
             logging.info(f"upscale action overrides: {overrides}, hr: {hr}")
             # Enhanced upscale message

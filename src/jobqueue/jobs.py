@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional
 from io import BytesIO
 from telegram import InputFile, InlineKeyboardMarkup, InlineKeyboardButton
-from services.a1111 import a1111_txt2img, a1111_get_progress, get_current_model, set_sd_model, fetch_sd_models
+from services.a1111 import a1111_txt2img, a1111_get_progress, get_current_model, set_sd_model, fetch_sd_models, fetch_adetailer_models
 from pressets.pressets import get_preset_for_model
 from storage.users import load_user_settings
 from utils.formatting import FormatText, format_generation_complete
@@ -336,6 +336,22 @@ class JobQueue:
                         scheduler = preset.schedulers[0]
                         logging.info(f"✅ Preset aplicado: Steps={steps}, CFG={cfg}, Sampler={sampler}, Scheduler={scheduler}")
                 
+                # Prepare ADetailer defaults if none provided in job and user has none
+                alwayson_scripts_local = job.alwayson_scripts
+                if not alwayson_scripts_local:
+                    try:
+                        selected_ad = s.get("adetailer_models", []) or []
+                        if not selected_ad:
+                            available = await fetch_adetailer_models()
+                            defaults = ["face_yolov8n.pt", "mediapipe_face_mesh_eyes_only"]
+                            selected_ad = [m for m in defaults if m in available]
+                        if selected_ad:
+                            ad_args = [{"ad_model": m, "ad_confidence": 0.3} for m in selected_ad]
+                            alwayson_scripts_local = {"ADetailer": {"args": ad_args}}
+                            logging.info(f"Applying ADetailer defaults for generation: {selected_ad}")
+                    except Exception as e:
+                        logging.warning(f"Failed to prepare ADetailer defaults: {e}")
+
                 # Store final_prompt in job so progress messages show it
                 job.final_prompt = final_prompt
                 
@@ -358,7 +374,7 @@ class JobQueue:
                             seed=seed,
                             negative_prompt=negative_prompt,
                             hr_options=job.hr_options,
-                            alwayson_scripts=job.alwayson_scripts,
+                            alwayson_scripts=alwayson_scripts_local,
                         )
                     finally:
                         progress_task.cancel()
