@@ -131,6 +131,7 @@ PRESETS = {
     "juggernaut": JUGGERNAUT_PRESET,
     "prefectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # Coincide con el modelo real (tiene typo)
     "perfectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # También coincide con la escritura correcta
+    "ilustmix": ILUSTMIX_PRESET
 }
 
 def get_preset_for_model(model_name: str) -> Optional[Preset]:
