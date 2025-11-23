@@ -567,6 +567,10 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 return
             elif kind == "adetailer":
                 page = int(parts[2]) if len(parts) > 2 else 0
+                try:
+                    await q.answer()
+                except Exception:
+                    pass
                 from ui.menus import adetailer_page_keyboard
                 models = await fetch_adetailer_models()
                 selected_order = s.get("adetailer_models", [])
