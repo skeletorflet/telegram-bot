@@ -69,7 +69,7 @@ class PromptGenerator:
             values = self.replacements.get(key, [f"!{key.upper()}!"])
             
             # Randomly select up to 5 values to avoid extremely long prompts
-            max_choices = 20
+            max_choices = 33
             if len(values) > max_choices:
                 selected_values = random.sample(values, max_choices)
             else:

@@ -182,6 +182,19 @@ async def txt2img(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     except Exception as e:
         logging.error(f"Failed to fetch or validate LoRAs: {e}")
 
+    # Validate and auto-correct settings against current model preset
+    try:
+        model_name = await get_current_model()
+        preset = get_preset_for_model(model_name)
+        if preset:
+            is_compliant, corrected_settings = validate_and_correct_settings(settings, preset)
+            if not is_compliant:
+                settings = corrected_settings
+                save_user_settings(user_id, settings)
+                logging.info(f"Auto-corrected settings for user {user_id} to match model {model_name}")
+    except Exception as e:
+        logging.warning(f"Failed to validate settings against model: {e}")
+
     prompt_raw = " ".join(context.args).strip() if getattr(context, "args", None) else (update.message.text if update.message else "")
     # Parse resource keywords (f_anime, r_color, etc.) before composing final prompt
     prompt_parsed = prompt_generator.generate(prompt_raw)
@@ -271,21 +284,63 @@ def settings_summary(s: dict, model_name: str = None) -> str:
 def _truncate(text: str, limit: int = 60) -> str:
     return text if len(text) <= limit else text[:limit] + "…"
 
-def are_settings_compliant(settings: dict, preset: Preset) -> bool:
-    # Si no hay preset (sin conexión a A1111), no podemos validar
+def validate_and_correct_settings(settings: dict, preset: Preset) -> tuple[bool, dict]:
+    """
+    Validates user settings against the preset.
+    Returns (is_compliant, corrected_settings).
+    If preset is None, returns (False, settings) as we can't validate.
+    """
     if preset is None:
-        return False
-    if settings.get("steps") not in preset.steps:
-        return False
-    if settings.get("cfg_scale") not in preset.cfg:
-        return False
-    if settings.get("sampler_name") not in preset.samplers:
-        return False
-    if settings.get("scheduler") not in preset.schedulers:
-        return False
-    if settings.get("base_size") not in preset.resolutions:
-        return False
-    return True
+        return False, settings
+
+    corrected = settings.copy()
+    was_modified = False
+
+    # Validate Steps
+    if corrected.get("steps") not in preset.steps:
+        # Find nearest valid step or default to a safe value (e.g., first in list or random)
+        # For simplicity, let's pick the closest value if possible, or just the first one.
+        # Here we just pick a random one to be safe/simple as per previous logic, 
+        # or better: pick the default from preset if available, or random.
+        # Let's try to keep it close to what it was if possible? 
+        # Actually, picking a random valid one is what auto-config does. 
+        # Let's pick the first one for stability or random? 
+        # The user's plan said "nearest valid values or default".
+        # Let's use the first one as a safe default.
+        corrected["steps"] = preset.steps[0] 
+        was_modified = True
+
+    # Validate CFG
+    if corrected.get("cfg_scale") not in preset.cfg:
+        corrected["cfg_scale"] = preset.cfg[0]
+        was_modified = True
+
+    # Validate Sampler
+    if corrected.get("sampler_name") not in preset.samplers:
+        corrected["sampler_name"] = preset.samplers[0]
+        was_modified = True
+
+    # Validate Scheduler
+    if corrected.get("scheduler") not in preset.schedulers:
+        # If scheduler is empty string and "none" is in preset (or vice versa), handle that?
+        # The preset usually has "none" or specific names.
+        # If current is "", map to "none" for check? 
+        # The code uses "" for none in some places.
+        # Let's just pick the first valid one.
+        corrected["scheduler"] = preset.schedulers[0]
+        was_modified = True
+
+    # Validate Base Size
+    if corrected.get("base_size") not in preset.resolutions:
+        corrected["base_size"] = preset.resolutions[0]
+        was_modified = True
+    
+    # Validate Aspect Ratio (indirectly affects resolution, but we check base_size)
+    # Aspect ratio itself isn't strictly restricted by preset usually, 
+    # but if base_size is fixed, aspect ratio determines actual dims.
+    # We assume aspect ratio is fine if base_size is valid.
+
+    return not was_modified, corrected
 
 def _tip_for_set(key: str, s: dict) -> str:
     if key == "aspect" or key == "base":
@@ -317,7 +372,14 @@ async def settings_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         logging.warning(f"A1111 offline: {e}")
         model_name = None
         preset = None
-    is_compliant = are_settings_compliant(s, preset)
+    
+    is_compliant, corrected_s = validate_and_correct_settings(s, preset)
+    
+    # If we want to auto-correct immediately on viewing settings:
+    if not is_compliant and preset:
+        s = corrected_s
+        save_user_settings(user_id, s)
+        is_compliant = True # Now it is compliant
 
     if chat_type != "private":
         # Try to send to DM
@@ -481,7 +543,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
             return
         if kind == "main":
-            is_compliant = are_settings_compliant(s, preset)
+            is_compliant, _ = validate_and_correct_settings(s, preset)
             await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
             await q.answer()
             return
@@ -506,7 +568,8 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     kb = InlineKeyboardMarkup(rows)
                 except Exception as e:
                     text = f"Error: {e}"
-                    kb = main_menu_keyboard(s, are_settings_compliant(s, preset))
+                    is_compliant, _ = validate_and_correct_settings(s, preset)
+                    kb = main_menu_keyboard(s, is_compliant)
             elif kind == "scheduler":
                 sched = await fetch_schedulers()
                 items = sched or [{"name": "none", "label": "none"}]
@@ -605,7 +668,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 return
             else:
                 save_user_settings(user_id, s)
-                is_compliant = are_settings_compliant(s, preset)
+                is_compliant, _ = validate_and_correct_settings(s, preset)
                 await q.edit_message_text(settings_summary(s, val), reply_markup=main_menu_keyboard(s, is_compliant))
                 await q.answer(f"✅ Modelo cambiado a {val}")
                 return
@@ -618,7 +681,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             if val == "none":
                 s["post_value"] = ""
         save_user_settings(user_id, s)
-        is_compliant = are_settings_compliant(s, preset)
+        is_compliant, _ = validate_and_correct_settings(s, preset)
         await q.edit_message_text(settings_summary(s, model_name), reply_markup=main_menu_keyboard(s, is_compliant))
         
         # Enhanced settings update message with emojis
