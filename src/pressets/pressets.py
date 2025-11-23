@@ -107,6 +107,18 @@ PERFECT_ILLUSTRIOUS_PRESET = Preset(
     negative_prompt="bad quality,worst quality,worst detail,sketch,censored,watermark, signature, artist name"
 )
 
+# IlustMix Presset
+ILUSTMIX_PRESET = Preset(
+    model_name="ilustmix",
+    steps=[25, 30],
+    cfg=[3.5, 7],
+    samplers=["Euler a"],
+    schedulers=["Normal"],
+    resolutions=[1024],
+    pre_prompt="masterpiece, best quality, amazing quality, very aesthetic, detailed eyes, perfect eyes, realistic eyes",
+    negative_prompt="bad quality,worst quality,worst detail,sketch,censored,watermark, signature, artist name"
+)
+
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
 # Ejemplo: "dreamshaper" coincidirá con "dreamshaper_8_93211.safetensors"
