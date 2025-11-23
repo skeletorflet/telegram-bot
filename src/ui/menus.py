@@ -128,9 +128,9 @@ def adetailer_page_keyboard(models: list[str], selected_order: list[str], page: 
         rows.append([InlineKeyboardButton(text, callback_data=f"adetailer:toggle:{name}:{page}")])
     nav = []
     if start > 0:
-        nav.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"menu:adetailer:{page-1}"))
+        nav.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"adetailer:page:{page-1}"))
     if start + per < len(models):
-        nav.append(InlineKeyboardButton("Next ➡️", callback_data=f"menu:adetailer:{page+1}"))
+        nav.append(InlineKeyboardButton("Next ➡️", callback_data=f"adetailer:page:{page+1}"))
     if nav:
         rows.append(nav)
     rows.append([InlineKeyboardButton("⬅️ Volver", callback_data="menu:main"), InlineKeyboardButton("❌ Cerrar", callback_data="menu:close")])

@@ -700,7 +700,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             
             # Use list to preserve selection order
             current_list = s.get("adetailer_models", [])
-            # Ensure it's a list (backward compatibility if it was a set/sorted list)
+            # Ensure it's a list (backward compatibility)
             if not isinstance(current_list, list):
                 current_list = list(current_list)
             
@@ -716,12 +716,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             
             models = await fetch_adetailer_models()
             kb = adetailer_page_keyboard(models, current_list, page)
-            text = submenu_texts["adetailer"]
-            try:
-                await q.edit_message_text(text, reply_markup=kb, parse_mode="HTML")
-            except Exception as e:
-                logging.warning(f"Could not edit text/markup in adetailer toggle: {e}")
-            # Answer callback after UI update to mirror Lora behavior
+            await q.edit_message_text(submenu_texts["adetailer"], reply_markup=kb)
             await q.answer(("ADetailer + " if added else "ADetailer - ") + _truncate(name) + f" (total {len(current_list)})")
             return
         if action == "page":
