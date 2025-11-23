@@ -338,7 +338,7 @@ class JobQueue:
                 
                 # Prepare ADetailer defaults if none provided in job and user has none
                 alwayson_scripts_local = job.alwayson_scripts
-                if not alwayson_scripts_local:
+                if not alwayson_scripts_local and job.operation_type == "upscale_hr":
                     try:
                         selected_ad = s.get("adetailer_models", []) or []
                         if not selected_ad:
