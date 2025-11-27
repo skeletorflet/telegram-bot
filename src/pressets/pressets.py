@@ -133,6 +133,19 @@ CYBERREALISTICPONY_PRESET = Preset(
     negative_prompt="score_6, score_5, score_4, (worst quality:1.2), (low quality:1.2), (normal quality:1.2), lowres, bad anatomy, bad hands, signature, watermarks, ugly, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, extra limb, missing limbs"
 )
 
+# animij_v12 presset
+ANIMIJ_V12_PRESET = Preset(
+    model_name="animij_v12",
+    steps=[30],
+    cfg=[5],
+    samplers=["Euler a"],
+    schedulers=["Normal"],
+    resolutions=[1024],
+    pre_prompt="masterpiece, hig_quality, highres",
+    # post_prompt="masterpiece, best quality, very aesthetic, absurdres",
+    negative_prompt="worst_quality, bad_quality, poorly_detailed, (worst quality:1.2), (low quality:1.2), (normal quality:1.2), lowres, bad anatomy, bad hands, signature, watermarks, ugly, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, extra limb, missing limbs"
+)
+
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
 # Ejemplo: "dreamshaper" coincidirá con "dreamshaper_8_93211.safetensors"
@@ -146,7 +159,8 @@ PRESETS = {
     "prefectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # Coincide con el modelo real (tiene typo)
     "perfectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # También coincide con la escritura correcta
     "ilustmix": ILUSTMIX_PRESET,
-    "cyberrealisticpony": CYBERREALISTICPONY_PRESET
+    "cyberrealisticpony": CYBERREALISTICPONY_PRESET,
+    "animij_v12": ANIMIJ_V12_PRESET
 }
 
 def get_preset_for_model(model_name: str) -> Optional[Preset]:
