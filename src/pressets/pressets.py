@@ -119,6 +119,19 @@ ILUSTMIX_PRESET = Preset(
     negative_prompt="bad quality,worst quality,worst detail,sketch,censored,watermark, signature, artist name"
 )
 
+# cyberrealisticPony presset
+CYBERREALISTICPONY_PRESET = Preset(
+    model_name="cyberrealisticPony",
+    steps=[30, 35, 40],
+    cfg=[5],
+    samplers=["Euler a"],
+    schedulers=["Normal"],
+    resolutions=[1024],
+    pre_prompt="score_9, score_8_up, score_7_up",
+    # post_prompt="masterpiece, best quality, very aesthetic, absurdres",
+    negative_prompt="score_6, score_5, score_4, (worst quality:1.2), (low quality:1.2), (normal quality:1.2), lowres, bad anatomy, bad hands, signature, watermarks, ugly, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, extra limb, missing limbs"
+)
+
 # --- Mapeo de modelos a sus presets ---
 # La clave es una subcadena del nombre del archivo del modelo para que coincida
 # Ejemplo: "dreamshaper" coincidirá con "dreamshaper_8_93211.safetensors"
@@ -131,7 +144,8 @@ PRESETS = {
     "juggernaut": JUGGERNAUT_PRESET,
     "prefectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # Coincide con el modelo real (tiene typo)
     "perfectillustrious": PERFECT_ILLUSTRIOUS_PRESET,  # También coincide con la escritura correcta
-    "ilustmix": ILUSTMIX_PRESET
+    "ilustmix": ILUSTMIX_PRESET,
+    "cyberrealisticpony": CYBERREALISTICPONY_PRESET
 }
 
 def get_preset_for_model(model_name: str) -> Optional[Preset]:
