@@ -31,7 +31,9 @@ class PromptGenerator:
             if file_path.exists():
                 try:
                     with open(file_path, "r", encoding="utf-8-sig") as f:
-                        replacements[key] = [line.strip() for line in f if line.strip()]
+                        # Use dict.fromkeys to remove duplicates while preserving order
+                        lines = [line.strip() for line in f if line.strip()]
+                        replacements[key] = list(dict.fromkeys(lines))
                 except Exception:
                     replacements[key] = [f"!{key.upper()}!"]
             else:
@@ -54,7 +56,7 @@ class PromptGenerator:
             "r_light": ["soft lighting", "dramatic lighting", "golden hour", "neon lights"],
             "r_angle": ["front view", "side view", "back view", "aerial view", "close-up"],
         }
-        return defaults.get(key, [f"!{key.upper()}!"])
+        return list(dict.fromkeys(defaults.get(key, [f"!{key.upper()}!"])))
     
     def generate(self, template: str) -> str:
         """Generate enhanced prompt from template using A1111 choice syntax"""
@@ -68,12 +70,15 @@ class PromptGenerator:
             key = match.group(1)
             values = self.replacements.get(key, [f"!{key.upper()}!"])
             
+            # Deduplicate values while preserving order
+            unique_values = list(dict.fromkeys(values))
+            
             # Randomly select up to 5 values to avoid extremely long prompts
             max_choices = 33
-            if len(values) > max_choices:
-                selected_values = random.sample(values, max_choices)
+            if len(unique_values) > max_choices:
+                selected_values = random.sample(unique_values, max_choices)
             else:
-                selected_values = values
+                selected_values = unique_values
             
             # Create A1111 choice format: {option1|option2|option3}
             formatted_values = "|".join(selected_values)
