@@ -968,15 +968,7 @@ async def settings_menu_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                 "n_iter": 1,
             }
             hr = {
-                "hr_scale": 1.5,
-                "hr_second_pass_steps": max(1, int(overrides.get("steps", 4)) // 2),
-                "hr_upscaler": "R-ESRGAN 4x+",
-                "denoising_strength": 0.3,
-                "hr_sampler_name": sampler_p,
-                "hr_scheduler": sched_p,
-            }
-            hr = {
-                "hr_scale": 1.5,
+                "hr_scale": 1.3,
                 "hr_second_pass_steps": max(1, int(overrides.get("steps", 4)) // 2),
                 "hr_upscaler": "R-ESRGAN 4x+",
                 "denoising_strength": 0.3,
